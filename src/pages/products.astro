@@ -1,0 +1,162 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { catalogue } from '../data/products';
+import { site } from '../data/site';
+
+/** The comparison the old catalogue never offered. Buyers choose by behaviour. */
+const comparison = [
+  { slug: 'non-tactile-membrane-keypad', name: 'Non-tactile', feedback: 'None', force: '125–250 g', life: 'Up to 5M', domes: 'No', cost: 'Lowest' },
+  { slug: 'tactile-membrane-keypad', name: 'Tactile', feedback: 'Metal dome snap', force: '250–400 g', life: '1M+', domes: 'Yes', cost: 'Medium' },
+  { slug: 'embossed-membrane-keypad', name: 'Embossed', feedback: 'Positional, by touch', force: '150–400 g', life: 'Up to 5M', domes: 'Optional', cost: 'Medium' },
+  { slug: 'graphic-overlays', name: 'Graphic overlay', feedback: 'No switching', force: '—', life: '—', domes: 'No', cost: 'Lowest' },
+  { slug: 'pcb-backed-keypad', name: 'PCB-backed', feedback: 'Metal dome snap', force: '250–400 g', life: '1M+', domes: 'Yes', cost: 'Highest' },
+  { slug: 'connectors-wire-harness', name: 'Connectors & harness', feedback: '—', force: '—', life: '—', domes: '—', cost: 'Per schedule' },
+];
+---
+
+<Base
+  title={`Products | ${site.name}`}
+  description="Membrane keypads, graphic overlays, PCB-backed switch panels, embossed keypads and wire harnesses, manufactured to your drawing in Pune. Compare constructions and specifications."
+  path="/products/"
+>
+  <PageHeader
+    eyebrow="What we manufacture"
+    title="Products"
+    lede="Six constructions. Which one you need depends on what the operator has to feel, what has to sit inside the panel, and what the environment will do to it."
+  />
+
+  <section class="cmp">
+    <div class="wrap">
+      <h2 class="section-title">Compare the constructions</h2>
+      <p class="lede">Every figure here is explained in full on the <a href="/technicals/">technical page</a>.</p>
+
+      <div class="cmp__scroll">
+        <table class="cmp__table">
+          <caption class="visually-hidden">
+            AFI Technologies keypad constructions compared by operator feedback, actuation force,
+            actuation life, use of metal domes and relative cost
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Construction</th>
+              <th scope="col">Operator feedback</th>
+              <th scope="col">Actuation force</th>
+              <th scope="col">Actuation life</th>
+              <th scope="col">Metal domes</th>
+              <th scope="col">Relative cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparison.map((r) => (
+              <tr>
+                <th scope="row"><a href={`/${r.slug}/`}>{r.name}</a></th>
+                <td>{r.feedback}</td>
+                <td class="mono">{r.force}</td>
+                <td class="mono">{r.life}</td>
+                <td>{r.domes}</td>
+                <td>{r.cost}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="range">
+    <div class="wrap">
+      <h2 class="section-title">The range in detail</h2>
+
+      <ul class="range__list">
+        {catalogue.map((p, i) => (
+          <li class={`item ${i % 2 === 1 ? 'item--flip' : ''}`}>
+            <div class="item__media">
+              <Image
+                src={p.image}
+                alt={p.imageAlt}
+                width={p.image.width}
+                height={p.image.height}
+                loading={i < 2 ? 'eager' : 'lazy'}
+                sizes="(max-width: 800px) 86vw, 380px"
+              />
+            </div>
+
+            <div class="item__body">
+              <h3 class="item__name"><a href={`/${p.slug}/`}>{p.name}</a></h3>
+              <p class="item__summary">{p.summary}</p>
+              <p class="item__intro">{p.intro}</p>
+
+              <dl class="item__specs">
+                {p.keySpecs.slice(0, 3).map((s) => (
+                  <div>
+                    <dt>{s.label}</dt>
+                    <dd class="mono">{s.value}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <a class="btn btn--ghost" href={`/${p.slug}/`}>
+                Full specification
+                <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 8h11m-4.5-4.5L13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .cmp__scroll {
+    margin-top: 32px;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .cmp__table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 15.5px; }
+  .cmp__table th, .cmp__table td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line-soft); }
+  .cmp__table thead th {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+    background: var(--surface-2); border-bottom: 1px solid var(--line);
+  }
+  .cmp__table tbody th { font-weight: 600; }
+  .cmp__table tbody tr:last-child th, .cmp__table tbody tr:last-child td { border-bottom: 0; }
+  .cmp__table td { color: var(--ink-soft); }
+
+  .range { background: var(--surface); }
+  .range__list { list-style: none; margin: 40px 0 0; padding: 0; display: grid; gap: clamp(40px, 6vw, 80px); }
+
+  .item { display: grid; grid-template-columns: .75fr 1.25fr; gap: clamp(24px, 4vw, 56px); align-items: center; }
+  .item--flip .item__media { order: 2; }
+  .item__media {
+    background: var(--ground); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: clamp(18px, 3vw, 36px); display: grid; place-items: center; aspect-ratio: 4 / 3;
+  }
+  .item__media img { max-height: 100%; width: auto; object-fit: contain; }
+
+  .item__name { font-size: clamp(23px, 2.8vw, 30px); }
+  .item__name a { color: var(--ink); text-decoration: none; }
+  .item__name a:hover { color: var(--accent-ink); text-decoration: underline; }
+  .item__summary { margin-top: 12px; font-size: 17.5px; font-weight: 600; }
+  .item__intro { margin-top: 12px; color: var(--ink-soft); font-size: 16px; max-width: 60ch; }
+
+  .item__specs {
+    display: flex; flex-wrap: wrap; gap: 12px 32px;
+    margin: 22px 0 24px; padding-top: 18px; border-top: 1px solid var(--line);
+  }
+  .item__specs dt { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .item__specs dd { margin: 3px 0 0; font-size: 16px; font-weight: 600; }
+
+  @media (max-width: 800px) {
+    .item, .item--flip { grid-template-columns: 1fr; gap: 22px; }
+    .item--flip .item__media { order: 0; }
+  }
+</style>

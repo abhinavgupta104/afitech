@@ -1,0 +1,283 @@
+---
+/**
+ * Product detail pages.
+ *
+ * These sit at the site root — /tactile-membrane-keypad/ and so on — because
+ * that is where the WordPress pages lived. Nesting them under /products/ would
+ * break every inbound link and ranking the old site earned.
+ *
+ * The old versions carried ~100 words and no <h1>. These carry the full case
+ * for the construction, how it is built, and what it is used for.
+ */
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { products, getProduct } from '../data/products';
+import { site } from '../data/site';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { product: p.slug } }));
+}
+
+const { product: slug } = Astro.params;
+const product = getProduct(slug!)!;
+const related = product.compareWith
+  .map((s) => getProduct(s))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+const path = `/${product.slug}/`;
+
+const extraSchema = [
+  {
+    '@type': 'Product',
+    name: product.name,
+    description: product.summary,
+    category: 'Membrane switches and control panel components',
+    brand: { '@type': 'Brand', name: site.name },
+    manufacturer: { '@id': `${site.url}/#organization` },
+    additionalProperty: product.keySpecs.map((s) => ({
+      '@type': 'PropertyValue',
+      name: s.label,
+      value: s.value,
+    })),
+    offers: {
+      '@type': 'Offer',
+      availability: 'https://schema.org/InStock',
+      priceSpecification: {
+        '@type': 'PriceSpecification',
+        description: 'Quoted against your drawing. Send a specification for a firm price.',
+      },
+      seller: { '@id': `${site.url}/#organization` },
+    },
+  },
+];
+---
+
+<Base
+  title={`${product.name} | ${site.name}`}
+  description={product.metaDescription}
+  path={path}
+  crumbLabel={product.shortName}
+  breadcrumbs={[{ label: 'Products', href: '/products/' }]}
+  extraSchema={extraSchema}
+  ogType="product"
+>
+  <PageHeader
+    eyebrow="Product"
+    title={product.name}
+    lede={product.summary}
+    breadcrumbs={[{ label: 'Products', href: '/products/' }]}
+  />
+
+  <section class="intro">
+    <div class="wrap intro__grid">
+      <div>
+        <p class="intro__lead">{product.intro}</p>
+
+        <h2 class="intro__h2">When to specify it</h2>
+        <ul class="ticks">
+          {product.chooseWhen.map((c) => (
+            <li>
+              <svg width="17" height="17" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8.4l3.2 3.2L13 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>{c}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <figure class="intro__fig">
+        <Image
+          src={product.image}
+          alt={product.imageAlt}
+          width={product.image.width}
+          height={product.image.height}
+          loading="eager"
+          fetchpriority="high"
+          sizes="(max-width: 900px) 88vw, 440px"
+        />
+        <figcaption>{product.imageAlt}</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- At-a-glance specs -->
+  <section class="glance">
+    <div class="wrap">
+      <h2 class="glance__title">At a glance</h2>
+      <dl class="glance__row">
+        {product.keySpecs.map((s) => (
+          <div>
+            <dt>{s.label}</dt>
+            <dd class="mono">{s.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Long-form -->
+  <section class="body">
+    <div class="wrap body__grid">
+      <div class="body__prose">
+        {product.sections.map((s) => (
+          <article class="body__block">
+            <h2>{s.heading}</h2>
+            {s.body.map((para) => <p>{para}</p>)}
+          </article>
+        ))}
+      </div>
+
+      <aside class="body__side">
+        <div class="panel">
+          <h2 class="panel__title">How it is built</h2>
+          <ol class="layers">
+            {product.construction.map((l, i) => (
+              <li>
+                <span class="layers__n mono">{String(i + 1).padStart(2, '0')}</span>
+                <span class="layers__b">
+                  <b>{l.layer}</b>
+                  <span>{l.detail}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p class="panel__note">Layer order runs from the operator's fingertip downwards.</p>
+        </div>
+
+        <div class="panel">
+          <h2 class="panel__title">Typical applications</h2>
+          <ul class="panel__list">
+            {product.applications.map((a) => <li>{a}</li>)}
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="rel">
+      <div class="wrap">
+        <p class="eyebrow">Not sure this is the one</p>
+        <h2 class="section-title">Compare against</h2>
+        <ul class="rel__grid">
+          {related.map((r) => (
+            <li>
+              <a class="rel__card" href={`/${r.slug}/`}>
+                <Image src={r.image} alt="" width={r.image.width} height={r.image.height} loading="lazy" sizes="120px" />
+                <span>
+                  <b>{r.shortName}</b>
+                  <span>{r.summary}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="rel__all">
+          <a href="/technicals/">Or compare every construction on the technical page &rarr;</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <CtaBand
+    title={`Need ${product.shortName.toLowerCase()}s quoted?`}
+    body="Send the panel drawing, the key count and your annual quantity. If the construction is still open, send what you have and we will advise."
+  />
+</Base>
+
+<style>
+  .intro__grid {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: clamp(28px, 4vw, 64px);
+    align-items: start;
+  }
+  .intro__lead { font-size: 19px; line-height: 1.65; }
+  .intro__h2 { font-size: clamp(21px, 2.4vw, 26px); margin-top: 34px; }
+
+  .ticks { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 11px; }
+  .ticks li { display: grid; grid-template-columns: 17px 1fr; gap: 12px; align-items: start; color: var(--ink-soft); }
+  .ticks svg { color: var(--accent-ink); margin-top: 5px; }
+
+  .intro__fig { margin: 0; }
+  .intro__fig img {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(16px, 2.5vw, 30px);
+  }
+  .intro__fig figcaption { margin-top: 12px; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+
+  /* ---- glance ---- */
+  .glance { background: var(--ink); color: #fff; padding-block: clamp(34px, 4vw, 52px); }
+  .glance__title {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: #9AA1A6;
+  }
+  .glance__row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+    gap: 24px; margin: 24px 0 0;
+  }
+  .glance__row > div { border-left: 2px solid var(--accent); padding-left: 16px; }
+  .glance__row dt { font-size: 13px; color: #9AA1A6; }
+  .glance__row dd { margin: 5px 0 0; font-size: 19px; font-weight: 600; color: #fff; line-height: 1.25; }
+
+  /* ---- body ---- */
+  .body { background: var(--surface); }
+  .body__grid {
+    display: grid; grid-template-columns: 1.15fr .85fr;
+    gap: clamp(28px, 4vw, 64px); align-items: start;
+  }
+  .body__block + .body__block { margin-top: 44px; }
+  .body__block h2 { font-size: clamp(23px, 2.8vw, 30px); }
+  .body__block p { margin-top: 16px; color: var(--ink-soft); max-width: 64ch; }
+
+  .body__side { display: grid; gap: 20px; position: sticky; top: 92px; }
+  .panel { background: var(--ground); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .panel__title {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+  }
+  .layers { list-style: none; margin: 0; padding: 0; display: grid; gap: 13px; }
+  .layers li { display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; }
+  .layers__n { font-size: 11.5px; color: var(--accent-ink); font-weight: 500; padding-top: 4px; }
+  .layers__b { display: flex; flex-direction: column; gap: 2px; }
+  .layers__b b { font-size: 15px; }
+  .layers__b > span { font-size: 13.8px; color: var(--muted); line-height: 1.5; }
+  .panel__note {
+    margin-top: 16px; padding-top: 13px; border-top: 1px solid var(--line);
+    font-size: 13px; color: var(--muted);
+  }
+  .panel__list { margin: 0; padding-left: 18px; }
+  .panel__list li { font-size: 15px; color: var(--ink-soft); margin-bottom: 7px; }
+  .panel__list li::marker { color: var(--accent); }
+
+  /* ---- related ---- */
+  .rel__grid {
+    list-style: none; margin: 26px 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px;
+  }
+  .rel__card {
+    display: grid; grid-template-columns: 110px 1fr; gap: 18px; align-items: center;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px; text-decoration: none; color: inherit; height: 100%;
+  }
+  .rel__card:hover { border-color: var(--accent); }
+  .rel__card img { width: 100%; height: auto; background: var(--surface-2); border-radius: 2px; padding: 8px; }
+  .rel__card > span { display: flex; flex-direction: column; gap: 5px; }
+  .rel__card b { font-family: var(--font-display); font-size: 19px; font-weight: 600; }
+  .rel__card span span { font-size: 14.5px; color: var(--ink-soft); line-height: 1.45; }
+  .rel__all { margin-top: 24px; font-size: 15.5px; }
+
+  @media (max-width: 900px) {
+    .intro__grid, .body__grid { grid-template-columns: 1fr; }
+    .body__side { position: static; }
+    .intro__fig { order: -1; }
+  }
+  @media (max-width: 460px) {
+    .rel__card { grid-template-columns: 1fr; }
+    .rel__card img { max-width: 140px; }
+  }
+</style>

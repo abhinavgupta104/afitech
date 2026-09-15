@@ -1,0 +1,179 @@
+---
+/**
+ * Quality & certification.
+ *
+ * The old page was a single scanned PNG and no text, so the certificate number,
+ * the issuing body, the validity dates and the certified scope were invisible
+ * to search and to anyone skimming. All of it is now readable text; the scan
+ * stays as corroboration.
+ */
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import certImage from '../assets/products/iso-cert.png';
+
+const cert = site.certification;
+
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const details = [
+  { label: 'Standard', value: cert.standard },
+  { label: 'Certificate number', value: cert.number, mono: true },
+  { label: 'Issued by', value: cert.body },
+  { label: 'Accreditation', value: cert.accreditation },
+  { label: 'Certification body code', value: cert.bodyCode, mono: true },
+  { label: 'IAF code', value: cert.iafCode, mono: true },
+  { label: 'Initial registration', value: fmt(cert.registered) },
+  { label: 'Valid until', value: fmt(cert.expires) },
+];
+
+const whatItMeans = [
+  {
+    title: 'The process is documented, not remembered',
+    body: 'Every stage from drawing review to final inspection runs to a written procedure. The person who printed your last order does not have to be the person who prints the next one for it to come out the same.',
+  },
+  {
+    title: 'Problems are traced, not just fixed',
+    body: 'Non-conformities are recorded with a root cause and a corrective action. If a panel fails inspection, the reason is logged and the process changed — not just the part remade.',
+  },
+  {
+    title: 'It is audited by someone outside the company',
+    body: `Certification is not self-declared. Surveillance audits are scheduled for ${fmt(cert.surveillance[0])} and ${fmt(cert.surveillance[1])}, and the certificate lapses if they are not passed.`,
+  },
+];
+---
+
+<Base
+  title={`Quality &amp; ISO 9001:2015 Certification | ${site.name}`}
+  description={`AFI Technologies holds ISO 9001:2015 certificate ${cert.number}, covering manufacture of membrane keypads, PCB keypads, graphic overlays, connectors and wire harnesses.`}
+  path="/certificates/"
+  crumbLabel="Quality"
+>
+  <PageHeader
+    eyebrow="Quality"
+    title="ISO 9001:2015 certified"
+    lede="Independently audited, with a scope that covers everything we sell. Here is the certificate, what it covers, and how to check it yourself."
+  />
+
+  <section class="cert">
+    <div class="wrap cert__grid">
+      <div>
+        <h2 class="section-title cert__h2">Certificate details</h2>
+
+        <dl class="details">
+          {details.map((d) => (
+            <div>
+              <dt>{d.label}</dt>
+              <dd class={d.mono ? 'mono' : ''}>{d.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div class="scope">
+          <h3 class="scope__label">Certified scope</h3>
+          <p class="scope__text">{cert.scope}</p>
+          <p class="scope__note">
+            Note that the scope includes connectors and wire harnesses as well as keypads and
+            overlays — so a panel and the loom behind it can be built and quoted together.
+            <a href="/connectors-wire-harness/">See connectors &amp; harnesses</a>
+          </p>
+        </div>
+
+        <p class="verify">
+          Certification validity can be checked at
+          {' '}<a href={cert.verifyUrl} rel="noopener">uafaccreditation.org</a>, and re-checked
+          with the issuing body directly.
+        </p>
+      </div>
+
+      <figure class="cert__fig">
+        <a href={certImage.src} rel="noopener">
+          <Image
+            src={certImage}
+            alt={`AFI Technologies ISO 9001:2015 certificate of registration, number ${cert.number}, issued by ${cert.body}`}
+            width={certImage.width}
+            height={certImage.height}
+            loading="lazy"
+            sizes="(max-width: 900px) 88vw, 420px"
+          />
+        </a>
+        <figcaption>The certificate as issued. Select it to view full size.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="means">
+    <div class="wrap">
+      <p class="eyebrow">What it actually means</p>
+      <h2 class="section-title">A certificate is only worth what it changes</h2>
+      <p class="lede">
+        Plenty of suppliers display a logo. These are the three things certification actually
+        obliges us to do, and the ones worth asking any supplier about.
+      </p>
+
+      <ul class="means__grid">
+        {whatItMeans.map((w) => (
+          <li>
+            <h3>{w.title}</h3>
+            <p>{w.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Need the certificate for your vendor file?"
+    body="Ask and we will send a PDF copy, along with any supplier questionnaire or declaration your quality team needs."
+  />
+</Base>
+
+<style>
+  .cert { background: var(--surface); }
+  .cert__grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
+  .cert__h2 { margin-top: 0; }
+
+  .details { margin: 26px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+  .details > div { padding: 13px 0; border-top: 1px solid var(--line); }
+  .details dt { font-size: 13px; color: var(--muted); font-family: var(--font-mono); letter-spacing: .02em; }
+  .details dd { margin: 4px 0 0; font-size: 16.5px; font-weight: 500; line-height: 1.4; }
+
+  .scope {
+    margin-top: 32px; padding: 22px;
+    background: var(--accent-wash); border-left: 3px solid var(--accent); border-radius: var(--radius);
+  }
+  .scope__label {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--accent-ink);
+  }
+  .scope__text { margin-top: 10px; font-size: 17.5px; font-weight: 600; line-height: 1.45; }
+  .scope__note { margin-top: 12px; font-size: 15px; color: var(--ink-soft); }
+
+  .verify { margin-top: 24px; font-size: 15px; color: var(--ink-soft); }
+
+  .cert__fig { margin: 0; }
+  .cert__fig img {
+    width: 100%; border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .cert__fig a { display: block; }
+  .cert__fig figcaption { margin-top: 12px; font-size: 13.5px; color: var(--muted); }
+
+  .means__grid {
+    list-style: none; margin: 36px 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: clamp(24px, 3vw, 40px);
+  }
+  .means__grid li { border-top: 2px solid var(--accent); padding-top: 16px; }
+  .means__grid h3 { font-size: clamp(19px, 2.1vw, 22px); }
+  .means__grid p { margin-top: 10px; color: var(--ink-soft); font-size: 15.5px; }
+
+  @media (max-width: 900px) {
+    .cert__grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .details { grid-template-columns: 1fr; }
+  }
+</style>

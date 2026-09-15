@@ -1,0 +1,108 @@
+---
+/**
+ * Brand lockup — the single place the identity is rendered.
+ *
+ * AFI Technologies has no logo in public circulation. Checked and confirmed:
+ *   - the old site's header was plain text, no image, no `custom-logo`
+ *   - its favicon is the stock WordPress "W" (site_icon is unset)
+ *   - the YouTube channel uses Google's auto-generated letter avatar
+ *   - IndiaMART and ExportersIndia profiles carry no company logo
+ *   - the ISO 9001 certificate prints the name as type, not as a mark
+ *
+ * Until the real artwork arrives this renders a wordmark: the company name
+ * set in the site's own display face with the brand rule under "AFI". It is
+ * deliberately not a symbol — inventing one would put a mark into circulation
+ * that the company never chose.
+ *
+ * ── TO DROP IN THE REAL LOGO ────────────────────────────────────────────
+ *   1. save it to  src/assets/brand/logo.svg   (SVG preferred — any size;
+ *      otherwise PNG at 3x its display height, transparent background)
+ *   2. uncomment the import and the <Image> branch below, and flip HAS_LOGO
+ *   3. replace public/favicon.svg with a square crop of the mark
+ * The header and footer both render through this component, so that is the
+ * only edit needed.
+ * ────────────────────────────────────────────────────────────────────────
+ */
+import { site } from '../data/site';
+
+// import logo from '../assets/brand/logo.svg';
+const HAS_LOGO = false;
+
+export interface Props {
+  /** 'header' sits on graphite and carries the descriptor line. */
+  variant?: 'header' | 'footer';
+}
+const { variant = 'header' } = Astro.props;
+---
+
+<span class:list={['brand', `brand--${variant}`]}>
+  {HAS_LOGO ? (
+    /* <Image src={logo} alt={`${site.name} logo`} height={variant === 'header' ? 34 : 40} /> */
+    null
+  ) : (
+    <span class="brand__wordmark">
+      <span class="brand__afi">AFI</span><span class="brand__rest">Technologies</span>
+    </span>
+  )}
+
+  {variant === 'header' && (
+    <span class="brand__sub">Membrane keypads &amp; overlays</span>
+  )}
+</span>
+
+<style>
+  .brand {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+    line-height: 1;
+  }
+
+  .brand__wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: .34em;
+    font-family: var(--font-display);
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  /* "AFI" carries the brand rule; the rule is the only device. */
+  .brand__afi {
+    position: relative;
+    font-weight: 700;
+    letter-spacing: .04em;
+    padding-bottom: 5px;
+  }
+  .brand__afi::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+  .brand__rest {
+    font-weight: 500;
+    letter-spacing: .005em;
+    color: #E8EAEC;
+  }
+
+  .brand--header .brand__wordmark { font-size: 25px; }
+  .brand--footer .brand__wordmark { font-size: 30px; }
+
+  .brand__sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: #A8ADB4;          /* 6.4:1 on --ink */
+  }
+
+  @media (max-width: 420px) {
+    .brand--header .brand__wordmark { font-size: 21px; }
+    .brand__sub { font-size: 9px; letter-spacing: .12em; }
+  }
+</style>

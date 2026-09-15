@@ -1,0 +1,19 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# working analysis of the previous site — scraped pages, screenshots and
+# measurements. Working notes rather than site source, and ~7 MB. Kept out of
+# the repo deliberately.
+_audit/
+
+# local env / editor
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+*.log

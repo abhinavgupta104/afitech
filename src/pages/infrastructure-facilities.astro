@@ -1,0 +1,196 @@
+---
+/**
+ * Manufacturing facility.
+ *
+ * The old version of this page was entirely blank — header, ~560px of white,
+ * footer — while sitting in the main navigation and the sitemap.
+ *
+ * The process stages below are the steps required to produce the products AFI
+ * is ISO 9001:2015 certified to manufacture, so they are defensible as written.
+ * Deliberately NOT invented here: floor area, machine makes and models, press
+ * counts, headcount per shift and monthly capacity. Those are real claims that
+ * need the client's numbers — see CONTENT-TODO.md. Add them to `capacityFacts`
+ * below and the section will render itself.
+ */
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import processFlow from '../assets/products/process-flow.png';
+
+const stages = [
+  {
+    name: 'Artwork &amp; drawing review',
+    body: 'Your drawing is checked against what the process can actually hold — emboss height against key size, legend detail against screen resolution, window ink density against the LED you have specified. Anything likely to cause trouble is raised before tooling.',
+  },
+  {
+    name: 'Screen printing',
+    body: 'Overlays are printed sub-surface, on the reverse of the polyester, so the ink is sealed behind the film and cannot be worn or wiped off. Colours are matched to Pantone, RAL or a physical sample.',
+  },
+  {
+    name: 'Circuit printing',
+    body: 'Silver conductive ink is screen-printed onto polyester film to form the upper and lower circuits, with the tail routed to suit the connector system you have chosen.',
+  },
+  {
+    name: 'Embossing',
+    body: 'Keys are formed in matched tooling under heat and pressure — pillow, rim or dome — with the printed legend pre-compensated for the stretch the forming introduces.',
+  },
+  {
+    name: 'Die-cutting',
+    body: 'Overlays, spacers and adhesive layers are cut to the panel outline, with switch gaps and display windows registered to the printed artwork.',
+  },
+  {
+    name: 'Dome placement &amp; lamination',
+    body: 'Stainless domes are placed on the retainer and located over their contacts, then the stack is laminated under controlled pressure so the switch gap is consistent across the panel.',
+  },
+  {
+    name: 'Inspection &amp; electrical test',
+    body: 'Panels are checked for print registration, legend legibility and cosmetic defects, and circuits are tested for continuity and contact resistance before despatch.',
+  },
+];
+
+/**
+ * Populate from the client and this section appears automatically.
+ * Example shape: { label: 'Floor area', value: '4,500 sq ft' }
+ */
+const capacityFacts: { label: string; value: string }[] = [];
+---
+
+<Base
+  title={`Manufacturing Facility | ${site.name}`}
+  description="Inside AFI Technologies' membrane keypad manufacturing in Kondhwa, Pune: screen printing, circuit printing, embossing, die-cutting, dome placement, lamination and electrical test, all in-house."
+  path="/infrastructure-facilities/"
+  crumbLabel="Facility"
+  breadcrumbs={[{ label: 'About', href: '/about-us/' }]}
+>
+  <PageHeader
+    eyebrow="Manufacturing"
+    title="Our facility"
+    lede="Printing, tooling, forming, assembly and inspection all happen in one building in Kondhwa. That is what keeps revisions cheap and lead times short."
+    breadcrumbs={[{ label: 'About', href: '/about-us/' }]}
+  />
+
+  <section class="intro">
+    <div class="wrap intro__grid">
+      <div>
+        <p class="intro__lead">
+          A membrane keypad passes through seven distinct processes between an approved drawing and
+          a packed part. Every one of them happens here, under the quality system covered by our
+          {' '}{site.certification.standard} certificate.
+        </p>
+        <p>
+          Keeping them together matters more than it sounds. When printing, forming and assembly sit
+          with three different subcontractors, a registration problem takes weeks to diagnose and
+          nobody owns it. Here it is found at inspection and corrected the same day.
+        </p>
+      </div>
+
+      <figure class="intro__fig">
+        <Image
+          src={processFlow}
+          alt="AFI Technologies process flow diagram showing the stages a membrane keypad passes through from artwork to despatch"
+          width={processFlow.width}
+          height={processFlow.height}
+          loading="eager"
+          sizes="(max-width: 900px) 88vw, 460px"
+        />
+        <figcaption>The route a panel takes through the workshop, from drawing review to despatch.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="stages">
+    <div class="wrap">
+      <p class="eyebrow">In-house processes</p>
+      <h2 class="section-title">Seven stages, one building</h2>
+
+      <ol class="stages__list">
+        {stages.map((s, i) => (
+          <li class="stage">
+            <span class="stage__n mono">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="stage__name" set:html={s.name} />
+              <p class="stage__body">{s.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {capacityFacts.length > 0 && (
+    <section class="capacity">
+      <div class="wrap">
+        <h2 class="section-title">Capacity</h2>
+        <dl class="capacity__grid">
+          {capacityFacts.map((f) => (
+            <div>
+              <dt>{f.label}</dt>
+              <dd class="mono">{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  )}
+
+  <section class="visit">
+    <div class="wrap visit__inner">
+      <div>
+        <h2 class="section-title">Come and see it</h2>
+        <p class="lede">
+          Customers are welcome to audit the facility before placing work with us, and we would
+          rather you did. Arrange a visit and we will walk you through a panel in production.
+        </p>
+      </div>
+      <div class="visit__actions">
+        <a class="btn btn--primary" href="/contact-us/">Arrange a visit</a>
+        <a class="btn btn--ghost" href={`tel:${site.phoneHref}`}>Call {site.phone}</a>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .intro { background: var(--surface); }
+  .intro__grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
+  .intro__lead { font-size: 19.5px; line-height: 1.6; }
+  .intro__grid p + p { margin-top: 18px; color: var(--ink-soft); max-width: 60ch; }
+  .intro__fig { margin: 0; }
+  .intro__fig img {
+    width: 100%; background: var(--ground);
+    border: 1px solid var(--line); border-radius: var(--radius); padding: 14px;
+  }
+  .intro__fig figcaption { margin-top: 12px; font-size: 13.5px; color: var(--muted); }
+
+  .stages__list { list-style: none; margin: 36px 0 0; padding: 0; }
+  .stage {
+    display: grid; grid-template-columns: 52px 1fr; gap: 18px;
+    padding: 22px 0; border-top: 1px solid var(--line);
+  }
+  .stage__n { color: var(--accent-ink); font-size: 13px; padding-top: 6px; }
+  .stage__name { font-size: clamp(20px, 2.3vw, 25px); }
+  .stage__body { margin-top: 8px; color: var(--ink-soft); font-size: 16px; max-width: 68ch; }
+
+  .capacity { background: var(--surface); }
+  .capacity__grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px; margin: 28px 0 0;
+  }
+  .capacity__grid > div { border-left: 2px solid var(--accent); padding-left: 16px; }
+  .capacity__grid dt { font-size: 13px; color: var(--muted); }
+  .capacity__grid dd { margin: 4px 0 0; font-size: 24px; font-weight: 600; }
+
+  .visit { background: var(--surface); }
+  .visit__inner { display: grid; grid-template-columns: 1.4fr auto; gap: clamp(24px, 4vw, 48px); align-items: center; }
+  .visit__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 820px) {
+    .intro__grid, .visit__inner { grid-template-columns: 1fr; }
+    .stage { grid-template-columns: 1fr; gap: 4px; }
+    .stage__n { padding-top: 0; }
+  }
+</style>

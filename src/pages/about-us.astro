@@ -1,0 +1,171 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+
+const cert = site.certification;
+
+/**
+ * Values are written as commitments a customer can hold us to, rather than the
+ * seven unexplained headings the old "One Stop Solution" page carried.
+ */
+const values = [
+  {
+    title: 'We tell you what will not work',
+    body: 'An emboss too deep for the key size, a dome force wrong for the duty cycle, a window ink too dense for the LED behind it — these are cheap to fix on a drawing and expensive to fix in a tool. We raise them before quoting, not after.',
+  },
+  {
+    title: 'One part number, one supplier',
+    body: 'Overlay, switch, rigid board and the harness behind it are all within our certified scope. Sourcing them together removes the interfaces where first-article problems usually appear.',
+  },
+  {
+    title: 'The specification is public',
+    body: 'Our ratings, materials and actuation figures are published on the site so you can rule us in or out before spending time on an enquiry.',
+  },
+  {
+    title: 'Built to your drawing, not adapted from a catalogue',
+    body: 'Every panel is made for the equipment it goes into. There is no standard part we try to talk you into.',
+  },
+];
+---
+
+<Base
+  title={`About AFI Technologies | ${site.name}`}
+  description={`AFI Technologies has manufactured membrane keypads, graphic overlays and PCB-backed control panels in Kondhwa, Pune for ${site.yearsExperience} years. ISO 9001:2015 certified, certificate ${cert.number}.`}
+  path="/about-us/"
+  crumbLabel="About"
+>
+  <PageHeader
+    eyebrow="The company"
+    title="About AFI Technologies"
+    lede={`We make the part of your equipment that every user touches. For ${site.yearsExperience} years, from a workshop in Kondhwa, Pune.`}
+  />
+
+  <section class="story">
+    <div class="wrap story__grid">
+      <div class="story__prose">
+        <p class="story__lead">
+          AFI Technologies manufactures membrane keypads, graphic overlays, PCB-backed switch
+          panels and wire harnesses for equipment builders. Our parts end up on ventilators and
+          weighing terminals, on crane load indicators and laboratory analysers — the interface
+          between a machine and the person operating it.
+        </p>
+        <p>
+          It is a component most buyers think about late and then need quickly. It is also the
+          part that determines whether an instrument feels well made. A keypad that goes vague
+          after two years, or a legend that wipes off under disinfectant, undoes a great deal of
+          careful engineering behind the panel.
+        </p>
+        <p>
+          So the work is mostly detail: choosing a dome that still snaps cleanly after a million
+          presses, compensating printed artwork for the stretch that embossing introduces, matching
+          a grey to a bezel moulded by someone else five years ago. We do that work in-house —
+          screen printing, die-cutting, embossing, dome placement, assembly and inspection all
+          happen in the same building.
+        </p>
+      </div>
+
+      <aside class="factbox">
+        <h2 class="factbox__title">At a glance</h2>
+        <dl>
+          <div><dt>Founded</dt><dd class="mono">{site.founded}</dd></div>
+          <div><dt>Location</dt><dd>{site.address.locality}, {site.address.city}</dd></div>
+          <div><dt>Quality system</dt><dd>{cert.standard}</dd></div>
+          <div><dt>Certificate</dt><dd class="mono">{cert.number}</dd></div>
+          <div><dt>Certified scope</dt><dd>Membrane keypads, PCB-based keypads, graphic overlays, connectors and wire harnesses</dd></div>
+        </dl>
+        <a class="btn btn--ghost factbox__cta" href="/certificates/">See the certificate</a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="values">
+    <div class="wrap">
+      <p class="eyebrow">How we work</p>
+      <h2 class="section-title">Four things we hold ourselves to</h2>
+      <ul class="values__grid">
+        {values.map((v) => (
+          <li class="value">
+            <h3>{v.title}</h3>
+            <p>{v.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="next">
+    <div class="wrap">
+      <h2 class="section-title">Where to go next</h2>
+      <ul class="next__grid">
+        <li>
+          <a href="/infrastructure-facilities/">
+            <b>Manufacturing facility</b>
+            <span>The processes a panel passes through, from artwork to inspection.</span>
+          </a>
+        </li>
+        <li>
+          <a href="/certificates/">
+            <b>Quality &amp; certification</b>
+            <span>Our ISO 9001:2015 certificate, its scope and how to verify it.</span>
+          </a>
+        </li>
+        <li>
+          <a href="/technicals/">
+            <b>Technical specifications</b>
+            <span>Ratings, materials, tolerances and connector options.</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .story { background: var(--surface); }
+  .story__grid { display: grid; grid-template-columns: 1.3fr .7fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
+  .story__lead { font-size: 19.5px; line-height: 1.6; }
+  .story__prose p + p { margin-top: 18px; color: var(--ink-soft); max-width: 64ch; }
+
+  .factbox { background: var(--ink); color: #C6CBCF; border-radius: var(--radius); padding: clamp(20px, 3vw, 30px); }
+  .factbox__title {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: #9AA1A6; margin-bottom: 18px;
+  }
+  .factbox dl { margin: 0; }
+  .factbox dl > div { padding: 12px 0; border-top: 1px solid #2B3036; }
+  .factbox dl > div:first-child { border-top: 0; padding-top: 0; }
+  .factbox dt { font-size: 13px; color: #9AA1A6; }
+  .factbox dd { margin: 3px 0 0; color: #fff; font-size: 15.5px; line-height: 1.45; }
+  .factbox__cta { margin-top: 22px; color: #fff; border-color: rgba(255,255,255,.35); width: 100%; }
+  .factbox__cta:hover { border-color: #fff; background: rgba(255,255,255,.08); color: #fff; }
+
+  .values__grid {
+    list-style: none; margin: 36px 0 0; padding: 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 3.5vw, 44px);
+  }
+  .value { border-top: 2px solid var(--accent); padding-top: 16px; }
+  .value h3 { font-size: clamp(19px, 2.2vw, 23px); }
+  .value p { margin-top: 10px; color: var(--ink-soft); font-size: 16px; }
+
+  .next { background: var(--surface); }
+  .next__grid {
+    list-style: none; margin: 28px 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px;
+  }
+  .next__grid a {
+    display: flex; flex-direction: column; gap: 7px; height: 100%;
+    background: var(--ground); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px; text-decoration: none; color: inherit;
+  }
+  .next__grid a:hover { border-color: var(--accent); }
+  .next__grid b { font-family: var(--font-display); font-size: 20px; font-weight: 600; }
+  .next__grid span { font-size: 15px; color: var(--ink-soft); }
+
+  @media (max-width: 820px) {
+    .story__grid, .values__grid { grid-template-columns: 1fr; }
+  }
+</style>

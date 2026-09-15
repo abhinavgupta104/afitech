@@ -1,0 +1,164 @@
+---
+/**
+ * Contact.
+ *
+ * The old page carried 13 words, no <h1>, a partial address, a phone number and
+ * email that were plain text rather than links, and the same four-field form as
+ * the quote page — whose submit button also said "Get Quote".
+ */
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { site } from '../data/site';
+
+const a = site.address;
+const waText = encodeURIComponent(
+  'Hello AFI Technologies — I would like to enquire about a membrane keypad.'
+);
+const mapQuery = encodeURIComponent(
+  `${a.line1}, ${a.line2}, ${a.locality}, ${a.city} ${a.postalCode}, ${a.region}, India`
+);
+---
+
+<Base
+  title={`Contact Us | ${site.name}`}
+  description={`Contact AFI Technologies in Kondhwa, Pune. Call ${site.phone}, email ${site.email}, or message us on WhatsApp. Full address, opening hours and directions.`}
+  path="/contact-us/"
+  crumbLabel="Contact"
+>
+  <PageHeader
+    eyebrow="Get in touch"
+    title="Contact us"
+    lede="Call, email or message us. For anything that needs a price, the quote form collects what we need to answer properly the first time."
+  />
+
+  <section class="contact">
+    <div class="wrap contact__grid">
+      <!-- Direct contact, tappable. The old site linked none of these. -->
+      <ul class="methods">
+        <li class="method">
+          <h2 class="method__label">Phone</h2>
+          <a class="method__value" href={`tel:${site.phoneHref}`}>{site.phone}</a>
+          <p class="method__note">{site.hours}</p>
+        </li>
+
+        <li class="method">
+          <h2 class="method__label">Email</h2>
+          <a class="method__value method__value--sm" href={`mailto:${site.email}`}>{site.email}</a>
+          <p class="method__note">We reply to most emails within one working day.</p>
+        </li>
+
+        <li class="method">
+          <h2 class="method__label">WhatsApp</h2>
+          <a class="method__value method__value--sm" href={`https://wa.me/${site.whatsapp}?text=${waText}`} rel="noopener">
+            Message {site.phone}
+          </a>
+          <p class="method__note">Useful for sending a photo of an existing panel.</p>
+        </li>
+
+        <li class="method">
+          <h2 class="method__label">Request a quote</h2>
+          <a class="btn btn--primary method__cta" href="/get-quote/">Open the quote form</a>
+          <p class="method__note">Collects the drawing, quantity and specification we need to price the job.</p>
+        </li>
+      </ul>
+
+      <div class="visitcard">
+        <h2 class="visitcard__title">Visit us</h2>
+        <address class="visitcard__addr">
+          <strong>{site.name}</strong><br />
+          {a.line1}<br />
+          {a.line2}<br />
+          {a.locality}, {a.city} &ndash; {a.postalCode}<br />
+          {a.region}, {a.countryName}
+        </address>
+
+        <a class="btn btn--ghost visitcard__map"
+           href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
+           rel="noopener">
+          Open in Google Maps
+          <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3h7v7m0-7L6.5 9.5M11 9.5V13H3V5h3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <div class="visitcard__note">
+          <h3>Auditing us before you order?</h3>
+          <p>
+            Customers are welcome to inspect the facility. Call ahead and we will walk you
+            through a panel in production.
+          </p>
+          <a href="/infrastructure-facilities/">See the facility &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="quality">
+    <div class="wrap quality__inner">
+      <div>
+        <h2 class="section-title">For quality and vendor teams</h2>
+        <p class="lede">
+          If you need our {site.certification.standard} certificate for a vendor file, a supplier
+          questionnaire completed, or a declaration of materials, email us and say what format
+          you need it in.
+        </p>
+      </div>
+      <a class="btn btn--ghost" href="/certificates/">Certificate details</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact { background: var(--surface); }
+  .contact__grid {
+    display: grid; grid-template-columns: 1.1fr .9fr;
+    gap: clamp(28px, 4vw, 64px); align-items: start;
+  }
+
+  .methods { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .method { padding: 22px 0; border-top: 1px solid var(--line); }
+  .method:first-child { border-top: 0; padding-top: 0; }
+  .method__label {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  }
+  .method__value {
+    display: inline-block; margin-top: 8px;
+    font-family: var(--font-display); font-size: clamp(25px, 3.2vw, 33px); font-weight: 600;
+    color: var(--ink); text-decoration: none; letter-spacing: -.01em;
+  }
+  .method__value--sm { font-size: clamp(19px, 2.3vw, 24px); word-break: break-word; }
+  .method__value:hover { color: var(--accent-ink); text-decoration: underline; }
+  .method__note { margin-top: 6px; font-size: 15px; color: var(--muted); }
+  .method__cta { margin-top: 10px; }
+
+  .visitcard {
+    background: var(--ink); color: #C6CBCF;
+    border-radius: var(--radius); padding: clamp(22px, 3vw, 32px);
+  }
+  .visitcard__title {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: #9AA1A6;
+  }
+  .visitcard__addr {
+    font-style: normal; margin-top: 14px; font-size: 17px; line-height: 1.65; color: #fff;
+  }
+  .visitcard__addr strong { font-family: var(--font-display); font-size: 20px; font-weight: 600; }
+  .visitcard__map {
+    margin-top: 22px; width: 100%;
+    color: #fff; border-color: rgba(255,255,255,.35);
+  }
+  .visitcard__map:hover { border-color: #fff; background: rgba(255,255,255,.08); color: #fff; }
+
+  .visitcard__note { margin-top: 26px; padding-top: 20px; border-top: 1px solid #2B3036; }
+  .visitcard__note h3 { font-size: 18px; color: #fff; }
+  .visitcard__note p { margin-top: 8px; font-size: 15px; }
+  .visitcard__note a { display: inline-block; margin-top: 10px; color: var(--accent); font-size: 15px; }
+
+  .quality__inner {
+    display: grid; grid-template-columns: 1.4fr auto;
+    gap: clamp(24px, 4vw, 48px); align-items: center;
+  }
+
+  @media (max-width: 860px) {
+    .contact__grid, .quality__inner { grid-template-columns: 1fr; }
+  }
+</style>

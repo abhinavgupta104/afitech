@@ -1,0 +1,80 @@
+---
+/**
+ * Interior page masthead. Owns the visible breadcrumb; BaseLayout owns the
+ * matching BreadcrumbList markup, so the two are declared from the same trail.
+ */
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  breadcrumbs?: { label: string; href: string }[];
+}
+const { eyebrow, title, lede, breadcrumbs = [] } = Astro.props;
+---
+
+<section class="ph">
+  <div class="wrap">
+    <nav class="ph__crumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        {breadcrumbs.map((c) => (
+          <li><a href={c.href}>{c.label}</a></li>
+        ))}
+        <li><span aria-current="page">{title}</span></li>
+      </ol>
+    </nav>
+
+    {eyebrow && <p class="eyebrow eyebrow--on-dark">{eyebrow}</p>}
+    <h1 class="ph__title">{title}</h1>
+    {lede && <p class="ph__lede">{lede}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .ph {
+    background: var(--ink);
+    color: #fff;
+    border-bottom: 3px solid var(--accent);
+    padding-block: clamp(36px, 5vw, 64px) clamp(44px, 6vw, 72px);
+  }
+  .ph__title {
+    font-size: clamp(30px, 4.6vw, 48px);
+    color: #fff;
+    margin-top: 12px;
+  }
+  .ph__lede {
+    max-width: 62ch;
+    margin-top: 18px;
+    font-size: clamp(17px, 1.6vw, 19px);
+    color: #C6CBCF;
+  }
+
+  .ph__crumbs ol {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+  .ph__crumbs li + li::before {
+    content: '/';
+    margin-right: 10px;
+    color: #5A6166;
+  }
+  /* WCAG 2.5.8 wants 24px; the bare text link was 16px tall. Breadcrumbs are
+     navigation, so the inline-text exception does not cover them. */
+  .ph__crumbs a {
+    color: #9AA1A6;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding-inline: 2px;
+  }
+  .ph__crumbs a:hover { color: #fff; text-decoration: underline; }
+  .ph__crumbs [aria-current='page'] { color: #E2E5E7; }
+</style>

@@ -1,0 +1,274 @@
+---
+/**
+ * RFQ form.
+ *
+ * The old site served the identical four-field form on both Contact and Get
+ * Quote — name, email, contact number, company — with no message box, no
+ * quantity and no way to attach a drawing. A buyer literally could not say what
+ * they wanted made. This form asks for what a quote actually needs.
+ */
+import { products } from '../data/products';
+import { rfqChecklist } from '../data/specs';
+import { site } from '../data/site';
+
+export interface Props {
+  /** Preselects the product when the form is embedded on a product page. */
+  preselect?: string;
+  /** Drops the guidance panel when the page already carries it. */
+  compact?: boolean;
+}
+const { preselect = '', compact = false } = Astro.props;
+
+/**
+ * SET BEFORE GOING LIVE — see CONTENT-TODO.md.
+ * The site is static, so the form posts to a hosted endpoint (Formspree,
+ * Web3Forms, Netlify Forms). The service must accept multipart/form-data for
+ * the drawing upload, and should deliver to a domain mailbox rather than the
+ * current Gmail address. Until it is set, the form posts to the mail client so
+ * an enquiry is never silently dropped.
+ */
+const FORM_ENDPOINT = '';
+const action = FORM_ENDPOINT || `mailto:${site.email}`;
+---
+
+<div class={`qf ${compact ? 'qf--compact' : ''}`}>
+  <form
+    class="qf__form"
+    id="quote-form"
+    action={action}
+    method="post"
+    enctype="multipart/form-data"
+    novalidate
+  >
+    {!FORM_ENDPOINT && <input type="hidden" name="_subject" value="Website quote request" />}
+
+    <div class="qf__grid">
+      <p class="field">
+        <label for="qf-name">Your name <span class="req" aria-hidden="true">*</span></label>
+        <input id="qf-name" name="name" type="text" autocomplete="name" required />
+      </p>
+
+      <p class="field">
+        <label for="qf-company">Company <span class="req" aria-hidden="true">*</span></label>
+        <input id="qf-company" name="company" type="text" autocomplete="organization" required />
+      </p>
+
+      <p class="field">
+        <label for="qf-email">Work email <span class="req" aria-hidden="true">*</span></label>
+        <input id="qf-email" name="email" type="email" autocomplete="email" inputmode="email" required />
+      </p>
+
+      <p class="field">
+        <!-- type="tel", not type="number" — the old field rejected +, spaces and brackets -->
+        <label for="qf-phone">Phone <span class="req" aria-hidden="true">*</span></label>
+        <input id="qf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required />
+      </p>
+
+      <p class="field">
+        <label for="qf-product">Product</label>
+        <select id="qf-product" name="product">
+          <option value="">Not sure yet — please advise</option>
+          {products.map((p) => (
+            <option value={p.name} selected={p.slug === preselect}>{p.shortName}</option>
+          ))}
+        </select>
+      </p>
+
+      <p class="field">
+        <label for="qf-quantity">Annual quantity</label>
+        <input id="qf-quantity" name="quantity" type="text" placeholder="e.g. 500/year, 100 first order" />
+      </p>
+
+      <p class="field">
+        <label for="qf-keys">Number of keys</label>
+        <input id="qf-keys" name="keys" type="text" inputmode="numeric" placeholder="e.g. 16" />
+      </p>
+
+      <p class="field">
+        <label for="qf-size">Panel size (mm)</label>
+        <input id="qf-size" name="size" type="text" placeholder="e.g. 180 × 120" />
+      </p>
+
+      <fieldset class="field field--full qf__fieldset">
+        <legend>Feedback required</legend>
+        <span class="qf__radios">
+          <label class="radio"><input type="radio" name="feedback" value="Tactile (metal dome)" /> Tactile (metal dome)</label>
+          <label class="radio"><input type="radio" name="feedback" value="Non-tactile" /> Non-tactile</label>
+          <label class="radio"><input type="radio" name="feedback" value="Embossed, no dome" /> Embossed, no dome</label>
+          <label class="radio"><input type="radio" name="feedback" value="Not sure" checked /> Not sure</label>
+        </span>
+      </fieldset>
+
+      <p class="field field--full">
+        <label for="qf-message">What do you need made? <span class="req" aria-hidden="true">*</span></label>
+        <textarea
+          id="qf-message"
+          name="message"
+          rows="6"
+          required
+          placeholder="The application, the environment it works in, LEDs or a display window, connector type, colours to match, and your target lead time."
+        ></textarea>
+      </p>
+
+      <p class="field field--full">
+        <label for="qf-file">Drawing or sample photo</label>
+        <input id="qf-file" name="drawing" type="file" multiple
+               accept=".pdf,.dxf,.dwg,.step,.stp,.png,.jpg,.jpeg,.zip" />
+        <span class="hint">PDF, DXF, DWG, STEP or a photo, up to 10&nbsp;MB. A drawing gets you a firm price instead of an estimate.</span>
+      </p>
+    </div>
+
+    <div class="qf__submit">
+      <button class="btn btn--primary" type="submit">Send enquiry</button>
+      <p class="hint">
+        We reply to most enquiries within one working day. Your drawing is treated as
+        confidential and is not shared outside AFI&nbsp;Technologies.
+      </p>
+    </div>
+
+    <p class="qf__status" id="qf-status" role="status" aria-live="polite"></p>
+  </form>
+
+  {!compact && (
+    <aside class="qf__aside">
+      <h2 class="qf__asideTitle">What to send</h2>
+      <p>The more of this you include, the closer the first number will be to the final one.</p>
+      <ul>
+        {rfqChecklist.map((item) => <li>{item}</li>)}
+      </ul>
+      <p class="qf__asideNote">
+        No drawing yet? Send a photo of the panel you are replacing, or a sketch with
+        dimensions. We will work from either.
+      </p>
+    </aside>
+  )}
+</div>
+
+<style>
+  .qf {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: clamp(24px, 3.5vw, 48px);
+    align-items: start;
+  }
+  .qf--compact { grid-template-columns: 1fr; }
+
+  .qf__form {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(20px, 3vw, 36px);
+  }
+  .qf__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+
+  .field { display: flex; flex-direction: column; gap: 7px; margin: 0; min-width: 0; }
+  .field--full { grid-column: 1 / -1; }
+  .qf__fieldset { border: 0; padding: 0; }
+
+  label, legend { font-size: 14.5px; font-weight: 600; color: var(--ink); padding: 0; }
+  .req { color: #C42B1C; }
+
+  input[type='text'], input[type='email'], input[type='tel'], select, textarea {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    width: 100%;
+    min-height: 50px;
+  }
+  textarea { resize: vertical; line-height: 1.55; }
+  input:hover, select:hover, textarea:hover { border-color: #BEC1B9; }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  [aria-invalid='true'] { border-color: #C42B1C !important; }
+
+  input[type='file'] {
+    font-size: 14.5px;
+    padding: 12px;
+    border: 1.5px dashed var(--line);
+    border-radius: var(--radius);
+    background: var(--ground);
+    width: 100%;
+  }
+
+  .qf__radios { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 4px; }
+  .radio { display: inline-flex; align-items: center; gap: 8px; font-weight: 400; font-size: 15.5px; cursor: pointer; }
+  .radio input { width: 18px; height: 18px; min-height: 0; accent-color: var(--accent); }
+
+  .hint { font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .qf__submit { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+  .qf__submit .btn { align-self: flex-start; }
+  .qf__status { margin-top: 16px; font-size: 15px; font-weight: 600; }
+  .qf__status[data-state='error'] { color: #C42B1C; }
+
+  .qf__aside {
+    background: var(--ink);
+    color: #C6CBCF;
+    border-radius: var(--radius);
+    padding: clamp(20px, 3vw, 32px);
+    font-size: 15px;
+    line-height: 1.6;
+    position: sticky;
+    top: 92px;
+  }
+  .qf__asideTitle { color: #fff; font-size: 21px; margin-bottom: 10px; }
+  .qf__aside ul { margin: 16px 0 0; padding-left: 18px; }
+  .qf__aside li { margin-bottom: 10px; }
+  .qf__aside li::marker { color: var(--accent); }
+  .qf__asideNote {
+    margin-top: 22px; padding-top: 16px;
+    border-top: 1px solid #2B3036;
+    color: #9AA1A6; font-size: 14px;
+  }
+
+  @media (max-width: 900px) {
+    .qf { grid-template-columns: 1fr; }
+    .qf__aside { position: static; }
+  }
+  @media (max-width: 560px) {
+    .qf__grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('quote-form') as HTMLFormElement | null;
+  const status = document.getElementById('qf-status');
+
+  if (form && status) {
+    form.addEventListener('submit', (event) => {
+      // Validated here rather than by the browser bubble so the message names
+      // the field and is announced by the live region.
+      const required = Array.from(
+        form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]')
+      );
+      const problems: string[] = [];
+
+      for (const el of required) {
+        el.removeAttribute('aria-invalid');
+        const label =
+          form.querySelector(`label[for="${el.id}"]`)?.textContent?.replace('*', '').trim() ?? 'This field';
+
+        if (!el.value.trim()) {
+          el.setAttribute('aria-invalid', 'true');
+          problems.push(`${label} is required.`);
+        } else if (el.getAttribute('type') === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value)) {
+          el.setAttribute('aria-invalid', 'true');
+          problems.push('That email address does not look right.');
+        }
+      }
+
+      if (problems.length > 0) {
+        event.preventDefault();
+        status.dataset.state = 'error';
+        status.textContent = problems[0];
+        form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+        return;
+      }
+
+      status.dataset.state = '';
+      status.textContent = 'Sending…';
+    });
+  }
+</script>

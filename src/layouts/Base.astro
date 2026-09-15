@@ -1,0 +1,153 @@
+---
+/**
+ * Base document shell.
+ *
+ * Fixes carried in from the audit:
+ *   - one <h1> per page, owned by the page, never by this layout
+ *   - a real per-page title and description (the old site auto-generated
+ *     descriptions like "CERTIFICATIONS" and a bare YouTube URL)
+ *   - Organization + LocalBusiness structured data instead of marking the
+ *     homepage up as an Article written by "admin"
+ *   - fonts self-hosted through Astro's font pipeline would be better still;
+ *     until then they are preconnected and display-swapped
+ */
+import { site } from '../data/site';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Path including trailing slash, e.g. "/products/" */
+  path?: string;
+  /** Trail between Home and the current page. Emits BreadcrumbList markup. */
+  breadcrumbs?: { label: string; href: string }[];
+  /** Page-specific JSON-LD nodes — Product, FAQPage and so on. */
+  extraSchema?: Record<string, unknown>[];
+  /** Label for the current page in the breadcrumb trail; defaults to `title`. */
+  crumbLabel?: string;
+  ogType?: string;
+}
+
+const {
+  title,
+  description,
+  path = '/',
+  breadcrumbs = [],
+  extraSchema = [],
+  crumbLabel,
+  ogType = 'website',
+} = Astro.props;
+
+const canonical = new URL(path, site.url).href;
+
+const addr = site.address;
+
+/* The old site published no BreadcrumbList at all. Built from the trail the
+   page declares, so it can never drift from the visible breadcrumb. */
+const trail = [
+  { label: 'Home', href: '/' },
+  ...breadcrumbs,
+  { label: crumbLabel ?? title, href: path },
+];
+const breadcrumbSchema =
+  trail.length > 1
+    ? [
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: trail.map((c, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: c.label,
+            item: new URL(c.href, site.url).href,
+          })),
+        },
+      ]
+    : [];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['Organization', 'LocalBusiness', 'Manufacturer'],
+      '@id': `${site.url}/#organization`,
+      name: site.name,
+      url: site.url,
+      description: site.tagline,
+      telephone: site.phone,
+      email: site.email,
+      foundingDate: String(site.founded),
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: `${addr.line1}, ${addr.line2}`,
+        addressLocality: `${addr.locality}, ${addr.city}`,
+        addressRegion: addr.region,
+        postalCode: addr.postalCode,
+        addressCountry: addr.country,
+      },
+      openingHours: 'Mo-Sa 09:30-18:30',
+      sameAs: [site.social.youtube, site.social.linkedin],
+      hasCredential: {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'certification',
+        name: site.certification.standard,
+        identifier: site.certification.number,
+        recognizedBy: { '@type': 'Organization', name: site.certification.body },
+        validIn: { '@type': 'Country', name: 'India' },
+        expires: site.certification.expires,
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${site.url}/#website`,
+      url: site.url,
+      name: site.name,
+      publisher: { '@id': `${site.url}/#organization` },
+      inLanguage: 'en-IN',
+    },
+    ...breadcrumbSchema,
+    ...extraSchema,
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_IN" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#15181B" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

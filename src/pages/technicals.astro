@@ -1,0 +1,226 @@
+---
+/**
+ * Technical specifications.
+ *
+ * The old page published these as a single column of ALL-CAPS lines with a
+ * units error and two spelling mistakes, and its meta description was the
+ * whole thing run together ("2-25mAVOLTAGE RATING"). Same numbers, structured
+ * as tables a buyer can scan and compare.
+ */
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { specGroups, switchOptions, connectorSystems, rfqChecklist } from '../data/specs';
+import { site } from '../data/site';
+
+const faq = [
+  {
+    q: 'What is the minimum order quantity?',
+    a: 'There is no fixed minimum. Tooling is the practical constraint: a first order of 25–50 pieces is common for a new panel, and unit cost drops steeply above a few hundred. Tell us your annual volume and the first order separately and we will quote both.',
+  },
+  {
+    q: 'How long does the first article take?',
+    a: 'Artwork and drawing approval usually takes a few days of back-and-forth. Once approved, a first article typically follows within two to three weeks depending on tooling. Repeat orders are faster. Confirm current lead times with your enquiry.',
+  },
+  {
+    q: 'Can you match an existing keypad?',
+    a: 'Yes, and sending a physical sample is far more reliable than sending a specification. A sample lets us measure the dome force, match the colour under the right finish, and copy the tail and connector exactly.',
+  },
+  {
+    q: 'Do you supply the connector as well?',
+    a: 'Yes. Connectors and wire harnesses are inside our ISO 9001:2015 certified scope, so the keypad and the loom it plugs into can be quoted and built together.',
+  },
+];
+
+const extraSchema = [
+  {
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<Base
+  title={`Technical Specifications | ${site.name}`}
+  description="Membrane keypad specifications: operating voltage, contact resistance, actuation forces, temperature range, LED ratings, connector systems and materials. Published, not hidden behind a form."
+  path="/technicals/"
+  crumbLabel="Technical"
+  extraSchema={extraSchema}
+>
+  <PageHeader
+    eyebrow="Engineering"
+    title="Technical specifications"
+    lede="Everything you need to check a construction against your specification before you spend time on an enquiry. If a figure you need is missing, ask and we will publish it."
+  />
+
+  <section class="specs">
+    <div class="wrap">
+      {specGroups.map((g) => (
+        <div class="specgroup">
+          <h2 class="specgroup__title">{g.title}</h2>
+          {g.intro && <p class="specgroup__intro">{g.intro}</p>}
+
+          <div class="specgroup__scroll">
+            <table class="spectable">
+              <caption class="visually-hidden">{g.title} specifications</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Parameter</th>
+                  <th scope="col">Value</th>
+                  <th scope="col">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {g.rows.map((r) => (
+                  <tr>
+                    <th scope="row">{r.parameter}</th>
+                    <td class="mono">{r.value}</td>
+                    <td class="spectable__note">{r.note ?? ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="options">
+    <div class="wrap">
+      <h2 class="section-title">Switch and connector options</h2>
+      <p class="lede">
+        Both are decisions worth settling at drawing stage rather than at first article.
+      </p>
+
+      <div class="options__grid">
+        <div>
+          <h3 class="options__head">Switch options</h3>
+          <dl class="optlist">
+            {switchOptions.map((o) => (
+              <div>
+                <dt>{o.name}</dt>
+                <dd>{o.detail}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div>
+          <h3 class="options__head">Connector systems</h3>
+          <dl class="optlist">
+            {connectorSystems.map((o) => (
+              <div>
+                <dt>{o.name}</dt>
+                <dd>{o.detail}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rfq">
+    <div class="wrap rfq__grid">
+      <div>
+        <p class="eyebrow eyebrow--on-dark">Before you enquire</p>
+        <h2 class="section-title rfq__title">What we need to quote</h2>
+        <p class="rfq__lede">
+          A drawing gets you a firm price. Without one we can still estimate, but the number will
+          carry more caveats than either of us wants.
+        </p>
+      </div>
+      <ol class="rfq__list">
+        {rfqChecklist.map((item, i) => (
+          <li>
+            <span class="rfq__n mono">{String(i + 1).padStart(2, '0')}</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="wrap">
+      <h2 class="section-title">Common questions</h2>
+      <dl class="faq__list">
+        {faq.map((f) => (
+          <div class="faq__item">
+            <dt>{f.q}</dt>
+            <dd>{f.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Does this fit your application?"
+    body="If a specification here rules us in, send the drawing. If something rules us out, tell us what — the list above is not the limit of what we can build."
+  />
+</Base>
+
+<style>
+  .specs { background: var(--surface); }
+  .specgroup + .specgroup { margin-top: clamp(40px, 5vw, 64px); }
+  .specgroup__title { font-size: clamp(23px, 2.8vw, 30px); }
+  .specgroup__intro { margin-top: 10px; color: var(--ink-soft); max-width: 64ch; }
+
+  .specgroup__scroll {
+    margin-top: 20px;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .spectable { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 15.5px; }
+  .spectable th, .spectable td { text-align: left; padding: 13px 18px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  .spectable thead th {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+    background: var(--surface-2); border-bottom: 1px solid var(--line);
+  }
+  .spectable tbody th { font-weight: 500; width: 34%; }
+  .spectable tbody td:nth-child(2) { width: 30%; font-size: 15px; }
+  .spectable tbody tr:last-child th, .spectable tbody tr:last-child td { border-bottom: 0; }
+  .spectable__note { color: var(--muted); font-size: 14px; }
+
+  .options__grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 4vw, 56px); margin-top: 40px;
+  }
+  .options__head {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  }
+  .optlist { margin: 18px 0 0; }
+  .optlist > div { padding: 16px 0; border-top: 1px solid var(--line); }
+  .optlist dt { font-family: var(--font-display); font-size: 19px; font-weight: 600; }
+  .optlist dd { margin: 5px 0 0; color: var(--ink-soft); font-size: 15.5px; }
+
+  .rfq { background: var(--ink); color: #fff; }
+  .rfq__grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
+  .rfq__title { color: #fff; }
+  .rfq__lede { margin-top: 16px; color: #C6CBCF; font-size: 17px; max-width: 48ch; }
+  .rfq__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .rfq__list li {
+    display: grid; grid-template-columns: 34px 1fr; gap: 14px;
+    padding: 14px 0; border-top: 1px solid #2B3036; color: #C6CBCF; font-size: 16px;
+  }
+  .rfq__n { color: var(--accent); font-size: 12.5px; padding-top: 4px; }
+
+  .faq { background: var(--surface); }
+  .faq__list { margin: 32px 0 0; display: grid; gap: 0; }
+  .faq__item { padding: 24px 0; border-top: 1px solid var(--line); }
+  .faq__item dt { font-family: var(--font-display); font-size: clamp(19px, 2.2vw, 23px); font-weight: 600; }
+  .faq__item dd { margin: 10px 0 0; color: var(--ink-soft); max-width: 68ch; }
+
+  @media (max-width: 820px) {
+    .options__grid, .rfq__grid { grid-template-columns: 1fr; }
+  }
+</style>

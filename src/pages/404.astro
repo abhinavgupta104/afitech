@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import { catalogue } from '../data/products';
+---
+
+<Base
+  title={`Page not found | ${site.name}`}
+  description="That page does not exist. Find our membrane keypads, graphic overlays, technical specifications or contact details here."
+  path="/404/"
+  crumbLabel="Not found"
+>
+  <section class="nf">
+    <div class="wrap">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="nf__title">That page does not exist</h1>
+      <p class="lede">
+        It may have moved, or the link may be wrong. Everything the site holds is below.
+      </p>
+
+      <div class="nf__cols">
+        <nav class="nf__col" aria-label="Products">
+          <h2>Products</h2>
+          <ul>
+            {catalogue.map((p) => (
+              <li><a href={`/${p.slug}/`}>{p.shortName}</a></li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav class="nf__col" aria-label="Company and engineering">
+          <h2>Everything else</h2>
+          <ul>
+            <li><a href="/products/">All products</a></li>
+            <li><a href="/technicals/">Technical specifications</a></li>
+            <li><a href="/industries-we-serve/">Industries we serve</a></li>
+            <li><a href="/about-us/">About AFI Technologies</a></li>
+            <li><a href="/infrastructure-facilities/">Manufacturing facility</a></li>
+            <li><a href="/certificates/">Quality &amp; certification</a></li>
+            <li><a href="/why-us/">Why choose us</a></li>
+            <li><a href="/contact-us/">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="nf__actions">
+        <a class="btn btn--primary" href="/">Back to the homepage</a>
+        <a class="btn btn--ghost" href={`tel:${site.phoneHref}`}>Call {site.phone}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { background: var(--surface); }
+  .nf__title { font-size: clamp(30px, 4.6vw, 48px); margin-top: 12px; }
+  .nf__cols {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 4vw, 56px); margin-top: 40px;
+  }
+  .nf__col h2 {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+    padding-bottom: 12px; border-bottom: 1px solid var(--line);
+  }
+  .nf__col ul { list-style: none; margin: 14px 0 0; padding: 0; }
+  .nf__col li { padding: 7px 0; }
+  .nf__col a { font-size: 16.5px; }
+  .nf__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+
+  @media (max-width: 620px) { .nf__cols { grid-template-columns: 1fr; } }
+</style>

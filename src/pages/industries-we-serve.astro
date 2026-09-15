@@ -1,0 +1,116 @@
+---
+/**
+ * Industries.
+ *
+ * Replaces a page that carried two bullet lists and 33 words. Each sector now
+ * says what it demands of a front panel and which construction answers it, so
+ * the page is worth landing on from "membrane keypad for medical equipment".
+ */
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { industries } from '../data/industries';
+import { site } from '../data/site';
+---
+
+<Base
+  title={`Industries We Serve | ${site.name}`}
+  description="Membrane keypads for medical equipment, industrial control, test and measurement, automotive, access control, telecoms, aviation, automation and vending. What each sector demands of a panel."
+  path="/industries-we-serve/"
+  crumbLabel="Industries"
+>
+  <PageHeader
+    eyebrow="Applications"
+    title="Industries we serve"
+    lede="A keypad for a ventilator and a keypad for a crane both have to last, but almost nothing else about them is the same. Here is what each sector asks of a front panel, and which construction answers it."
+  />
+
+  <section class="ind">
+    <div class="wrap">
+      <ul class="ind__list">
+        {industries.map((ind, i) => (
+          <li class="ind__item">
+            <span class="ind__n mono">{String(i + 1).padStart(2, '0')}</span>
+
+            <div class="ind__body">
+              <h2 class="ind__name">{ind.name}</h2>
+
+              <div class="ind__cols">
+                <div>
+                  <h3 class="ind__label">What it demands</h3>
+                  <p>{ind.demand}</p>
+                </div>
+                <div>
+                  <h3 class="ind__label">How we answer it</h3>
+                  <p>{ind.answer}</p>
+                </div>
+              </div>
+
+              <p class="ind__link">
+                Usually specified: <a href={`/${ind.typical}/`}>{ind.typicalLabel}</a>
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="notlisted">
+    <div class="wrap notlisted__inner">
+      <div>
+        <h2 class="section-title">Not on the list?</h2>
+        <p class="lede">
+          The list describes where our panels have ended up, not the limit of what we build.
+          The questions we ask are the same whatever the sector: how hard is it pressed, how often,
+          what cleans it, and what happens if a key fails.
+        </p>
+      </div>
+      <a class="btn btn--primary" href="/get-quote/">Tell us about your application</a>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .ind { background: var(--surface); }
+  .ind__list { list-style: none; margin: 0; padding: 0; }
+  .ind__item {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 20px;
+    padding: clamp(28px, 3.5vw, 44px) 0;
+    border-top: 1px solid var(--line);
+  }
+  .ind__item:first-child { border-top: 0; padding-top: 0; }
+  .ind__n { color: var(--accent-ink); font-size: 13px; padding-top: 9px; }
+
+  .ind__name { font-size: clamp(24px, 3vw, 32px); }
+  .ind__cols {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: clamp(20px, 3vw, 44px); margin-top: 20px;
+  }
+  .ind__label {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .ind__cols p { color: var(--ink-soft); font-size: 16px; }
+  .ind__link {
+    margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line-soft);
+    font-size: 15px; color: var(--muted);
+  }
+
+  .notlisted__inner {
+    display: grid; grid-template-columns: 1.4fr auto;
+    gap: clamp(24px, 4vw, 48px); align-items: center;
+  }
+
+  @media (max-width: 760px) {
+    .ind__item { grid-template-columns: 1fr; gap: 6px; }
+    .ind__n { padding-top: 0; }
+    .ind__cols { grid-template-columns: 1fr; gap: 18px; }
+    .notlisted__inner { grid-template-columns: 1fr; }
+  }
+</style>

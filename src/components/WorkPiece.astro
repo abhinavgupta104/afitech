@@ -28,9 +28,9 @@ const KEYS = [
 <svg viewBox="0 0 300 232" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
   <!-- 1 · the drawing. Stays as a faint underlay for the rest of the build. -->
   <g class="wp wp--1">
-    <rect x="20" y="12" width="260" height="156" rx="5" fill="none" stroke="#93806F" stroke-width="1.2" stroke-dasharray="6 4" />
+    <rect x="20" y="12" width="260" height="156" rx="5" fill="none" stroke="#B87246" stroke-width="1.2" stroke-dasharray="6 4" />
     {KEYS.map((k) => (
-      <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill="none" stroke="#7B6A5B" stroke-width="1" stroke-dasharray="4 3" />
+      <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill="none" stroke="#A35F33" stroke-width="1" stroke-dasharray="4 3" />
     ))}
     <g stroke="#F08820" stroke-width="1">
       <line x1="20" y1="186" x2="280" y2="186" />
@@ -41,8 +41,8 @@ const KEYS = [
 
   <!-- 2 · artwork: the printed face and its registration marks -->
   <g class="wp wp--2">
-    <rect x="20" y="12" width="260" height="156" rx="5" fill="#2E251E" stroke="#7B6A5B" stroke-width="1.2" />
-    <rect x="60" y="24" width="180" height="22" rx="2" fill="#120C09" stroke="#645548" stroke-width="1" />
+    <rect x="20" y="12" width="260" height="156" rx="5" fill="#5A270E" stroke="#A35F33" stroke-width="1.2" />
+    <rect x="60" y="24" width="180" height="22" rx="2" fill="#4A1E08" stroke="#874421" stroke-width="1" />
     {[[30, 22], [270, 22], [30, 158], [270, 158]].map(([x, y]) => (
       <g stroke="#F08820" stroke-width="1" opacity=".8">
         <circle cx={x} cy={y} r="4" fill="none" />
@@ -55,8 +55,8 @@ const KEYS = [
   <g class="wp wp--3">
     {KEYS.map((k) => (
       <g>
-        <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill={k.c} stroke="#AB9887" stroke-width=".8" />
-        <rect x={k.x - 9} y={k.y - 3} width="18" height="2.2" rx="1.1" fill="#F7F3ED" opacity=".92" />
+        <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill={k.c} stroke="#C98A5C" stroke-width=".8" />
+        <rect x={k.x - 9} y={k.y - 3} width="18" height="2.2" rx="1.1" fill="#FAEBD7" opacity=".92" />
       </g>
     ))}
   </g>
@@ -64,9 +64,9 @@ const KEYS = [
   <!-- 4 · circuit printing, seen through the face -->
   <g class="wp wp--4" opacity=".62">
     {KEYS.map((k) => (
-      <circle cx={k.x} cy={k.y} r="15" fill="none" stroke="#C2B2A0" stroke-width="1.4" stroke-dasharray="3 2.4" />
+      <circle cx={k.x} cy={k.y} r="15" fill="none" stroke="#D9A176" stroke-width="1.4" stroke-dasharray="3 2.4" />
     ))}
-    <path d="M88 79h124M88 139h124M150 79v60" stroke="#C2B2A0" stroke-width="1.4" />
+    <path d="M88 79h124M88 139h124M150 79v60" stroke="#D9A176" stroke-width="1.4" />
   </g>
 
   <!-- 5 · die-cutting: the outline becomes a real cut edge -->
@@ -76,17 +76,17 @@ const KEYS = [
 
   <!-- 6 · lamination: the stack gains thickness -->
   <g class="wp wp--6">
-    <path d="M22 170h256M24 174h252M27 178h246" stroke="#645548" stroke-width="2.4" stroke-linecap="round" />
-    <path d="M22 170h256" stroke="#93806F" stroke-width="1" />
+    <path d="M22 170h256M24 174h252M27 178h246" stroke="#874421" stroke-width="2.4" stroke-linecap="round" />
+    <path d="M22 170h256" stroke="#B87246" stroke-width="1" />
   </g>
 
   <!-- 7 · the tail goes on and the panel is tested -->
   <g class="wp wp--7">
-    <path d="M130 178h40v34h-40z" fill="#241C16" stroke="#93806F" stroke-width="1.1" />
+    <path d="M130 178h40v34h-40z" fill="#5A270E" stroke="#B87246" stroke-width="1.1" />
     {[135, 142, 149, 156, 163].map((x) => (
-      <rect x={x} y="178" width="2.4" height="28" fill="#D6C9B9" />
+      <rect x={x} y="178" width="2.4" height="28" fill="#EECBA8" />
     ))}
-    <rect x="128" y="206" width="44" height="11" rx="2" fill="#120C09" stroke="#AB9887" stroke-width="1.1" />
+    <rect x="128" y="206" width="44" height="11" rx="2" fill="#4A1E08" stroke="#C98A5C" stroke-width="1.1" />
     <g transform="translate(236 176)">
       <circle cx="14" cy="14" r="13" fill="none" stroke="#2FB86E" stroke-width="1.8" />
       <path d="M7.5 14.5l4.5 4.5 9-9.5" fill="none" stroke="#2FB86E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />

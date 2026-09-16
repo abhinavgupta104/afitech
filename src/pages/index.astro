@@ -24,6 +24,8 @@ import CtaBand from '../components/CtaBand.astro';
 import LayerArt from '../components/LayerArt.astro';
 import StepArt from '../components/StepArt.astro';
 import WorkPiece from '../components/WorkPiece.astro';
+import WearSection from '../components/WearSection.astro';
+import RouteBoard from '../components/RouteBoard.astro';
 
 import screenPrinting from '../assets/process/screen-printing.jpg';
 import circuitPrint from '../assets/process/circuit-print.jpg';
@@ -45,6 +47,15 @@ import { opening, act1, stack, durability, choice, process, proof } from '../dat
 import heroImage from '../assets/products/hero-alt.png';
 
 const cert = site.certification;
+
+/* Chapter six: nine sectors converge on five constructions. Built once and
+   shared by the circuit drawing and the detail list, so the two cannot
+   disagree about which sector routes where. */
+const routes = [...industries.reduce((m, ind) => {
+  if (!m.has(ind.typical)) m.set(ind.typical, { slug: ind.typical, label: ind.typicalLabel, items: [] as typeof industries });
+  m.get(ind.typical)!.items.push(ind);
+  return m;
+}, new Map<string, { slug: string; label: string; items: typeof industries }>()).values()];
 const n = stack.layers.length;
 
 const title = 'Membrane Keypad Manufacturer in Pune | AFI Technologies';
@@ -151,35 +162,31 @@ const description =
   <section class="dura">
     <div class="wrap">
       <p class="chapter"><span class="chapter__rule" aria-hidden="true"></span>{durability.chapter}<span class="chapter__ghost" aria-hidden="true">03</span></p>
-      <h2 class="dura__h2 reveal">{durability.heading}</h2>
-      <div class="dura__lede">
-        {durability.body.map((p) => <p class="reveal">{p}</p>)}
+      <div class="dura__top">
+        <h2 class="dura__h2 reveal">{durability.heading}</h2>
+        <div class="dura__lede">
+          {durability.body.map((p) => <p class="reveal">{p}</p>)}
+        </div>
       </div>
 
       <div class="wear">
-        <div class="wear__card wear__card--label">
-          <p class="wear__kind mono">{durability.mechanism.contrast[0].label}</p>
-          <div class="wear__panel">
-            <span class="wear__legend wear__legend--abrades">START</span>
-            <span class="wear__ink mono">ink on the outside</span>
-          </div>
-          <p class="wear__note">{durability.mechanism.contrast[0].detail}</p>
-        </div>
-
-        <div class="wear__card wear__card--sub">
-          <p class="wear__kind mono">{durability.mechanism.contrast[1].label}</p>
-          <div class="wear__panel wear__panel--sub">
-            <span class="wear__film" aria-hidden="true"></span>
-            <span class="wear__legend">START</span>
-            <span class="wear__ink mono">ink on the inside</span>
-          </div>
-          <p class="wear__note">{durability.mechanism.contrast[1].detail}</p>
-        </div>
+        <WearSection
+          kind="label"
+          fig="Fig. 3a"
+          title={durability.mechanism.contrast[0].label}
+          note={durability.mechanism.contrast[0].detail}
+        />
+        <WearSection
+          kind="overlay"
+          fig="Fig. 3b"
+          title={durability.mechanism.contrast[1].label}
+          note={durability.mechanism.contrast[1].detail}
+        />
       </div>
 
-      <div class="mech reveal">
-        <h3 class="mech__h3">{durability.mechanism.heading}</h3>
-        <p class="mech__p">{durability.mechanism.body}</p>
+      <div class="mech">
+        <h3 class="mech__h3 reveal">{durability.mechanism.heading}</h3>
+        <p class="mech__p reveal">{durability.mechanism.body}</p>
       </div>
 
       <ul class="figs">
@@ -272,25 +279,40 @@ const description =
   <section class="proof">
     <div class="wrap">
       <p class="chapter"><span class="chapter__rule" aria-hidden="true"></span>{proof.chapter}<span class="chapter__ghost" aria-hidden="true">06</span></p>
-      <h2 class="proof__h2 reveal">{proof.heading}</h2>
-      <p class="proof__body reveal">{proof.body}</p>
+      <div class="proof__top">
+        <h2 class="proof__h2 reveal">{proof.heading}</h2>
+        <p class="proof__body reveal">{proof.body}</p>
+      </div>
 
-      <ul class="inds">
-        {industries.map((ind) => (
-          <li class="ind">
-            <h3 class="ind__name">{ind.name}</h3>
-            <p class="ind__demand">{ind.demand}</p>
-            <a class="ind__link" href={`/${ind.typical}/`}>{ind.typicalLabel}</a>
-          </li>
+      <RouteBoard groups={routes} />
+
+      <div class="routes">
+        {routes.map((g) => (
+          <div class="route">
+            <div class="route__head">
+              <span class="route__pin" aria-hidden="true"></span>
+              <h3 class="route__name"><a href={`/${g.slug}/`}>{g.label}</a></h3>
+              <p class="route__count mono">{g.items.length} {g.items.length === 1 ? 'sector' : 'sectors'}</p>
+            </div>
+            <ul class="route__sectors">
+              {g.items.map((ind) => (
+                <li class="sector">
+                  <h4 class="sector__name">{ind.name}</h4>
+                  <p class="sector__line"><span class="sector__k mono">Demand</span>{ind.demand}</p>
+                  <p class="sector__line sector__line--answer"><span class="sector__k mono">Answer</span>{ind.answer}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
-      </ul>
+      </div>
 
       <div class="tally">
-        {site.stats.map((s) => (
+        {site.stats.map((st) => (
           <div class="tally__i">
-            <span class="tally__clip"><span class="tally__v mono">{s.value}</span></span>
+            <span class="tally__clip"><span class="tally__v mono">{st.value}</span></span>
             <span class="tally__rule" aria-hidden="true"></span>
-            <span class="tally__l">{s.label}</span>
+            <span class="tally__l">{st.label}</span>
           </div>
         ))}
         <div class="tally__i tally__i--cert">
@@ -347,9 +369,9 @@ const description =
     pointer-events: none;
     z-index: 0;
     color: transparent;
-    -webkit-text-stroke: 1.5px rgba(36, 28, 22,.10);
+    -webkit-text-stroke: 1.5px rgba(74, 30, 8,.10);
   }
-  .chapter--dark .chapter__ghost { -webkit-text-stroke-color: rgba(255,255,255,.12); }
+  .chapter--dark .chapter__ghost { -webkit-text-stroke-color: rgba(255, 236, 214,.12); }
 
   .rail { position: fixed; inset: 0 0 auto; height: 3px; z-index: 60; pointer-events: none; }
   .rail__fill { display: block; height: 100%; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; }
@@ -381,14 +403,14 @@ const description =
     z-index: 0;
     opacity: .85;
     background-image:
-      repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0 1px, transparent 1px 76px),
-      repeating-linear-gradient(0deg,  rgba(255,255,255,.04)  0 1px, transparent 1px 76px),
+      repeating-linear-gradient(90deg, rgba(255, 236, 214,.055) 0 1px, transparent 1px 76px),
+      repeating-linear-gradient(0deg,  rgba(255, 236, 214,.04)  0 1px, transparent 1px 76px),
       radial-gradient(circle at 18% 22%, rgba(240, 136, 32,.30) 0 5px, transparent 6px),
       radial-gradient(circle at 76% 34%, rgba(240, 136, 32,.22) 0 4px, transparent 5px),
       radial-gradient(circle at 42% 78%, rgba(240, 136, 32,.18) 0 4px, transparent 5px),
-      radial-gradient(circle at 88% 74%, rgba(255,255,255,.10) 0 3px, transparent 4px);
-    -webkit-mask-image: radial-gradient(120% 90% at 50% 40%, #000 35%, transparent 78%);
-    mask-image: radial-gradient(120% 90% at 50% 40%, #000 35%, transparent 78%);
+      radial-gradient(circle at 88% 74%, rgba(255, 236, 214,.10) 0 3px, transparent 4px);
+    -webkit-mask-image: radial-gradient(120% 90% at 50% 40%, #4A1E08 35%, transparent 78%);
+    mask-image: radial-gradient(120% 90% at 50% 40%, #4A1E08 35%, transparent 78%);
   }
   .open__grid { position: relative; z-index: 1; }
 
@@ -398,14 +420,14 @@ const description =
     background-color: var(--ink);
     background-image:
       var(--grain),
-      radial-gradient(112% 128% at 76% -8%, #2E251E 0%, #241C16 42%, var(--ink) 74%);
-    color: #D6C9B9;
+      radial-gradient(112% 128% at 76% -8%, #5A270E 0%, #5A270E 42%, var(--ink) 74%);
+    color: #EECBA8;
     padding-block: clamp(52px, 7vw, 104px) clamp(56px, 7vw, 104px);
   }
   .open__h1 { color: #fff; }
   /* the ghost button is drawn for light grounds; restate it for this one */
-  .open .btn--ghost { color: #fff; border-color: rgba(255,255,255,.34); background: transparent; }
-  .open .btn--ghost:hover { border-color: #fff; background: rgba(255,255,255,.08); }
+  .open .btn--ghost { color: #fff; border-color: rgba(255, 236, 214,.34); background: transparent; }
+  .open .btn--ghost:hover { border-color: #fff; background: rgba(255, 236, 214,.08); }
   .open .eyebrow { color: var(--accent); }
   .open__grid {
     display: grid;
@@ -426,7 +448,7 @@ const description =
     max-width: 54ch;
     margin-top: 20px;
     font-size: clamp(17px, 1.7vw, 20px);
-    color: #C2B2A0;            /* was --ink-soft: dark text on the dark ground */
+    color: #D9A176;            /* was --ink-soft: dark text on the dark ground */
   }
   .open__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
   .open__cue {
@@ -434,7 +456,7 @@ const description =
     margin-top: 34px;
     font-family: var(--font-mono);
     font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase;
-    color: #AB9887;            /* was --muted: too dark on the dark ground */
+    color: #C98A5C;            /* was --muted: too dark on the dark ground */
   }
   .open__cueline { display: block; width: 46px; height: 1px; background: var(--accent); }
   .open__media {
@@ -455,7 +477,7 @@ const description =
     width: 116%;
     max-width: none;
     height: auto;
-    filter: drop-shadow(0 34px 44px rgba(0,0,0,.55));
+    filter: drop-shadow(0 34px 44px rgba(74, 30, 8,.55));
   }
 
   /* ───────── act one ───────── */
@@ -479,11 +501,11 @@ const description =
   }
 
   /* ───────── act two — the stack ───────── */
-  .stack { color: #E4DACE; padding-block: clamp(64px, 9vw, 120px); }
+  .stack { color: #F2D6B8; padding-block: clamp(64px, 9vw, 120px); }
   .stack__grid { display: grid; gap: clamp(28px, 4vw, 44px); }
   .stack__intro { max-width: 60ch; }
   .stack__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; color: #fff; margin-top: 4px; }
-  .stack__body { position: relative; z-index: 1; margin-top: 16px; font-size: clamp(17px, 1.6vw, 19px); color: #D6C9B9; }
+  .stack__body { position: relative; z-index: 1; margin-top: 16px; font-size: clamp(17px, 1.6vw, 19px); color: #EECBA8; }
 
   /* The 3D scene is decorative and desktop-only; it stays out of the document
      until the choreography block below turns it on. */
@@ -499,67 +521,79 @@ const description =
 
   .stack-out { padding-block: clamp(24px, 3vw, 40px) clamp(56px, 8vw, 96px); }
 
-  .stack__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.13); border-radius: var(--radius); overflow: hidden; }
+  .stack__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: rgba(255, 236, 214,.13); border: 1px solid rgba(255, 236, 214,.13); border-radius: var(--radius); overflow: hidden; }
   .lyr { background: var(--ink); display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; padding: 18px 20px; }
   .lyr__n { color: var(--accent); font-size: 13px; font-weight: 500; padding-top: 3px; }
   .lyr__name { font-size: 19px; font-weight: 600; color: #fff; }
-  .lyr__spec { font-size: 12.5px; color: #AB9887; margin-top: 3px; }
-  .lyr__role { font-size: 15px; color: #D6C9B9; margin-top: 8px; max-width: 56ch; }
+  .lyr__spec { font-size: 12.5px; color: #C98A5C; margin-top: 3px; }
+  .lyr__role { font-size: 15px; color: #EECBA8; margin-top: 8px; max-width: 56ch; }
 
   .stack__closing {
     display: block;
     margin-top: 0;
     font-size: clamp(16px, 1.6vw, 18px);
-    color: #AB9887;
+    color: #C98A5C;
     max-width: 62ch;
   }
 
   /* ───────── act three — durability ───────── */
-  .dura { background: var(--surface); padding-block: clamp(64px, 9vw, 128px); }
+  /* Chapter three is argued with engineering drawings, so it sits on drafting
+     paper: the warm ground with a faint setting-out grid, and the figures
+     on white sheets laid over it. */
+  .dura {
+    background-color: var(--ground);
+    background-image:
+      repeating-linear-gradient(90deg, rgba(163, 95, 51,.07) 0 1px, transparent 1px 40px),
+      repeating-linear-gradient(0deg,  rgba(163, 95, 51,.07) 0 1px, transparent 1px 40px);
+    padding-block: clamp(64px, 9vw, 128px);
+  }
+  .dura__top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 64px);
+    align-items: end;
+  }
+  /* With the lede in the right-hand column, the display numeral lands directly
+     under its first lines. Same call as the pinned stack in chapter two: no
+     room for it here, so it only appears once the layout goes single-column. */
+  @media (min-width: 901px) {
+    .dura .chapter__ghost { display: none; }
+  }
   .dura__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; max-width: 18ch; }
-  .dura__lede { position: relative; z-index: 1; margin-top: 20px; display: grid; gap: 16px; }
+  .dura__lede { position: relative; z-index: 1; display: grid; gap: 14px; padding-bottom: 6px; }
   .dura__lede p { max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: var(--ink-soft); }
 
-  .wear { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: clamp(34px, 4vw, 52px); }
-  .wear__card { border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; background: var(--ground); }
-  .wear__kind { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-  .wear__panel {
-    position: relative;
-    height: 128px;
-    margin: 14px 0 16px;
-    border-radius: 2px;
-    /* Explicit colour under the gradient: a gradient alone leaves the computed
-       background-color transparent, which breaks contrast tooling and leaves
-       nothing behind the text if the gradient ever fails to paint. */
-    background-color: #2E251E;
-    background-image: linear-gradient(170deg, #3B3028, #1B140F);
+  .wear {
     display: grid;
-    place-items: center;
-    overflow: hidden;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: clamp(16px, 2vw, 24px);
+    margin-top: clamp(36px, 4.5vw, 60px);
   }
-  .wear__legend {
-    font-family: var(--font-display);
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: .1em;
-    color: #F7F3ED;
-  }
-  .wear__ink { position: absolute; bottom: 8px; left: 10px; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: #AB9887; }
-  .wear__film {
-    position: absolute; inset: 0;
-    background: linear-gradient(150deg, rgba(255,255,255,.16), rgba(255,255,255,.02) 42%, rgba(255,255,255,.10));
-    border-bottom: 1px solid rgba(255,255,255,.14);
-    pointer-events: none;
-  }
-  .wear__note { font-size: 14.6px; color: var(--ink-soft); line-height: 1.55; }
 
   .mech {
-    margin-top: clamp(30px, 4vw, 46px);
-    border-left: 3px solid var(--accent);
-    padding: 4px 0 4px 22px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    gap: clamp(20px, 4vw, 64px);
+    align-items: start;
+    margin-top: clamp(48px, 6vw, 88px);
+    padding-top: clamp(28px, 3.5vw, 44px);
+    border-top: 2px solid var(--ink);
   }
-  .mech__h3 { font-size: clamp(21px, 2.6vw, 28px); font-weight: 600; max-width: 22ch; }
-  .mech__p { margin-top: 12px; max-width: 62ch; font-size: 17px; color: var(--ink-soft); }
+  .mech__h3 {
+    position: relative; z-index: 1;
+    font-size: clamp(30px, 4.6vw, 56px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -.028em;
+    max-width: 14ch;
+  }
+  .mech__p {
+    position: relative; z-index: 1;
+    font-size: clamp(16px, 1.5vw, 18px);
+    color: var(--ink-soft);
+    line-height: 1.6;
+    padding-top: 6px;
+  }
 
   .figs {
     list-style: none;
@@ -581,22 +615,22 @@ const description =
   .fig__n { font-size: 14.4px; color: var(--muted); line-height: 1.45; }
 
   /* ───────── act four — the choice ───────── */
-  .choice { color: #E4DACE; padding-block: clamp(64px, 9vw, 128px); }
+  .choice { color: #F2D6B8; padding-block: clamp(64px, 9vw, 128px); }
   .choice__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; color: #fff; max-width: 20ch; }
-  .choice__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #D6C9B9; }
+  .choice__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #EECBA8; }
 
   .opts { list-style: none; margin: clamp(34px, 4vw, 52px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
-  .opt { border: 1px solid rgba(255,255,255,.16); border-radius: var(--radius); background: #241C16; transition: border-color .18s ease, transform .18s ease; }
+  .opt { border: 1px solid rgba(255, 236, 214,.16); border-radius: var(--radius); background: #5A270E; transition: border-color .18s ease, transform .18s ease; }
   .opt:hover { border-color: var(--accent); }
   .opt__link { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 22px; text-decoration: none; color: inherit; }
   .opt__product { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
   .opt__name { font-size: 25px; font-weight: 600; color: #fff; }
-  .opt__when { font-size: 15px; color: #D6C9B9; line-height: 1.55; }
-  .opt__specs { margin: 6px 0 0; display: flex; gap: 26px; border-top: 1px solid rgba(255,255,255,.14); padding-top: 13px; }
-  .opt__specs dt { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #AB9887; }
+  .opt__when { font-size: 15px; color: #EECBA8; line-height: 1.55; }
+  .opt__specs { margin: 6px 0 0; display: flex; gap: 26px; border-top: 1px solid rgba(255, 236, 214,.14); padding-top: 13px; }
+  .opt__specs dt { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #D9A176; }
   .opt__specs dd { margin: 3px 0 0; font-size: 14.5px; color: #fff; }
   .opt__more { margin-top: auto; padding-top: 14px; font-size: 14.5px; font-weight: 600; color: var(--accent); }
-  .choice__foot { margin-top: 24px; font-size: 16px; color: #AB9887; max-width: 58ch; }
+  .choice__foot { margin-top: 24px; font-size: 16px; color: #C98A5C; max-width: 58ch; }
 
   /* ───────── act five — the process ───────── */
   /* Chapter five is the workshop chapter, so it gets a bench rather than the
@@ -604,14 +638,14 @@ const description =
      of light where the part sits. It also makes the factory photographs read
      far better than they do on white. */
   .proc {
-    background-color: #1B140F;
+    background-color: #4A1E08;
     background-image:
       var(--grain),
       radial-gradient(52% 46% at 74% 30%, rgba(240, 136, 32,.16) 0%, rgba(240, 136, 32,0) 68%),
-      repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 64px),
-      repeating-linear-gradient(0deg,  rgba(255,255,255,.028) 0 1px, transparent 1px 64px),
-      linear-gradient(180deg, #1B140F 0%, #1B140F 46%, #120C09 100%);
-    color: #D6C9B9;
+      repeating-linear-gradient(90deg, rgba(255, 236, 214,.035) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(0deg,  rgba(255, 236, 214,.028) 0 1px, transparent 1px 64px),
+      linear-gradient(180deg, #4A1E08 0%, #4A1E08 46%, #4A1E08 100%);
+    color: #EECBA8;
     padding-block: clamp(64px, 9vw, 128px);
     position: relative;
   }
@@ -634,7 +668,7 @@ const description =
     background: radial-gradient(52% 48% at 50% 46%, rgba(255, 238, 214,.14) 0%, rgba(255, 238, 214,0) 72%);
     pointer-events: none;
   }
-  .proc__piece :global(svg) { position: relative; filter: drop-shadow(0 22px 26px rgba(0,0,0,.6)); }
+  .proc__piece :global(svg) { position: relative; filter: drop-shadow(0 22px 26px rgba(74, 30, 8,.6)); }
   .cap-build { display: none; }
   .proc__piececap {
     position: relative;
@@ -642,17 +676,17 @@ const description =
     font-size: 10.5px;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: #93806F;
+    color: #D9A176;            /* 6.3:1 on the espresso bench */
     text-align: center;
   }
   /* The gauge is a scroll read-out; with no scroll timeline it says nothing. */
   .gauge { display: none; }
   .gauge__seg { position: relative; list-style: none; }
   .proc__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; max-width: 20ch; }
-  .proc__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #C2B2A0; }
+  .proc__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #D9A176; }
 
   .steps { position: relative; list-style: none; margin: clamp(34px, 4vw, 52px) 0 0; padding: 0; display: grid; gap: 2px; }
-  .steps__line { position: absolute; left: 65px; top: 10px; bottom: 10px; width: 2px; background: rgba(255,255,255,.16); }
+  .steps__line { position: absolute; left: 65px; top: 10px; bottom: 10px; width: 2px; background: rgba(255, 236, 214,.16); }
   .steps__fill { display: block; width: 100%; height: 100%; background: var(--accent); transform: scaleY(1); transform-origin: 50% 0; }
   .step { position: relative; display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 20px; padding: 18px 0; align-items: start; }
   .step__media {
@@ -660,8 +694,8 @@ const description =
     aspect-ratio: 16 / 10;
     border-radius: var(--radius);
     overflow: hidden;
-    background: #120C09;
-    border: 1px solid rgba(255,255,255,.14);
+    background: #4A1E08;
+    border: 1px solid rgba(255, 236, 214,.14);
   }
   .step__media :global(img),
   .step__media :global(svg) { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -687,57 +721,106 @@ const description =
     margin-bottom: 6px;
   }
   .step__name { font-size: 20px; font-weight: 600; color: #fff; }
-  .step__detail { margin-top: 7px; font-size: 15.6px; color: #C2B2A0; max-width: 62ch; line-height: 1.55; }
+  .step__detail { margin-top: 7px; font-size: 15.6px; color: #D9A176; max-width: 62ch; line-height: 1.55; }
 
   /* ───────── act six — proof ───────── */
-  .proof { background: var(--surface); padding-block: clamp(64px, 9vw, 128px); }
-  .proof__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; }
-  .proof__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: var(--ink-soft); }
-
-  .inds {
-    list-style: none;
-    margin: clamp(34px, 4vw, 56px) 0 0;
-    padding: 0;
-    border-top: 1px solid var(--line);
-  }
-  .ind {
+  .proof { background: var(--ground); padding-block: clamp(64px, 9vw, 128px); }
+  .proof__top {
     display: grid;
-    grid-template-columns: minmax(180px, 1fr) minmax(0, 2.1fr) minmax(140px, auto);
-    gap: 10px clamp(20px, 3vw, 48px);
-    align-items: baseline;
-    padding: 22px 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 64px);
+    align-items: end;
+  }
+  .proof__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; }
+  .proof__body { position: relative; z-index: 1; max-width: 46ch; font-size: clamp(17px, 1.6vw, 19px); color: var(--ink-soft); padding-bottom: 6px; }
+  /* numeral would sit under the body text in the two-column header */
+  @media (min-width: 901px) { .proof .chapter__ghost { display: none; } }
+
+  .proof :global(.board) { margin-top: clamp(34px, 4.5vw, 60px); }
+
+  /* ── the detail, grouped the way the board routes it ── */
+  .routes { margin-top: clamp(40px, 5vw, 72px); border-top: 2px solid var(--ink); }
+  .route {
+    display: grid;
+    grid-template-columns: minmax(200px, .75fr) minmax(0, 2.25fr);
+    gap: 18px clamp(24px, 4vw, 60px);
+    padding-block: clamp(22px, 3vw, 34px);
     border-bottom: 1px solid var(--line);
-    transition: background-color .18s ease, padding-inline .18s ease;
   }
-  .ind:hover { background: var(--surface); padding-inline: 16px; }
-  .ind__name {
-    font-size: clamp(19px, 2vw, 25px);
-    font-weight: 600;
-    letter-spacing: -.012em;
+  .route__head { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; align-content: start; }
+  .route__pin {
+    grid-row: span 2;
+    width: 14px; height: 22px;
+    margin-top: 4px;
+    border-radius: 2px;
+    background: var(--accent);
+    box-shadow: inset 0 0 0 2px rgba(74, 30, 8, .18);
   }
-  .ind__demand { font-size: 15.2px; color: var(--muted); line-height: 1.55; }
-  .ind__link {
-    justify-self: end;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: .1em;
+  .route__name { font-size: clamp(21px, 2.2vw, 27px); font-weight: 600; letter-spacing: -.014em; line-height: 1.1; }
+  .route__name a { color: var(--ink); text-decoration: none; background-image: linear-gradient(var(--accent), var(--accent)); background-size: 0 2px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .2s ease; padding-bottom: 2px; }
+  .route__name a:hover, .route__name a:focus-visible { background-size: 100% 2px; }
+  .route__count { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-ink); }
+
+  .route__sectors {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px clamp(20px, 3vw, 44px);
+  }
+  .sector { display: grid; gap: 8px; align-content: start; }
+  .sector__name { font-size: 19px; font-weight: 600; letter-spacing: -.01em; color: var(--ink); }
+  .sector__line { font-size: 14.8px; line-height: 1.55; color: var(--ink-soft); }
+  .sector__k {
+    display: inline-block;
+    min-width: 62px;
+    margin-right: 8px;
+    font-size: 10.5px;
+    letter-spacing: .13em;
     text-transform: uppercase;
-    font-weight: 500;
-    text-decoration: none;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    min-height: 26px;
-    padding-block: 5px;
+    color: var(--muted);
   }
-  .ind__link:hover { text-decoration: underline; }
+  .sector__line--answer .sector__k { color: var(--accent-ink); }
+
+  /* The board's labels are unreadable at phone width, so the list draws the
+     circuit itself: a trace drops from each construction's pin and branches
+     to every sector it serves. Each piece is a pseudo-element of the block it
+     sits beside, so no length has to be measured — the head bridges the gap
+     below it, each sector bridges the gap below itself, and the last sector's
+     trace stops at its own branch. */
   @media (max-width: 760px) {
-    .ind { grid-template-columns: 1fr; }
-    .ind__link { justify-self: start; }
+    .proof :global(.board) { display: none; }
+    .route { grid-template-columns: 1fr; row-gap: 16px; }
+    .route__sectors { grid-template-columns: 1fr; row-gap: 24px; }
+
+    .route__head { position: relative; }
+    .route__head::after,
+    .sector::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      width: 2px;
+      background: var(--accent);
+      transform-origin: 50% 0;
+    }
+    .route__head::after { top: 26px; bottom: -16px; }   /* pin bottom → first sector */
+    .sector { position: relative; padding-left: 30px; }
+    .sector::before { top: 0; bottom: -24px; }          /* on through the row gap */
+    .sector:last-child::before { bottom: auto; height: 11px; }
+    .sector::after {                                    /* branch + pad */
+      content: '';
+      position: absolute;
+      left: 6px; top: 7px;
+      width: 18px; height: 8px;
+      background:
+        radial-gradient(circle at calc(100% - 4px) 50%, var(--accent) 3px, transparent 3.5px),
+        linear-gradient(var(--accent), var(--accent)) 0 50% / calc(100% - 6px) 2px no-repeat;
+      transform-origin: 0 50%;
+    }
+  }
+  @media (max-width: 900px) {
+    .proof__top { grid-template-columns: 1fr; }
   }
 
-  /* Left as the only boxed thing on the page once the lists were de-carded,
-     this row read as an orphan. The rule under each figure is enough. */
   .tally {
     margin-top: clamp(40px, 5vw, 64px);
     padding-top: clamp(28px, 3.5vw, 44px);
@@ -757,6 +840,7 @@ const description =
 
   /* ───────── responsive ───────── */
   @media (max-width: 900px) {
+    .dura__top, .mech { grid-template-columns: 1fr; }
     .open__grid { grid-template-columns: 1fr; min-height: 0; }
     /* the overhang is a nice device on a wide screen, but at phone width it
        was slicing the left-hand keypad in half */
@@ -1005,29 +1089,6 @@ const description =
 
       }
 
-      /* ── abrasion: the printed label loses its legend, the overlay keeps it ── */
-      .wear__legend--abrades {
-        will-change: opacity, filter, transform;
-        animation: abrade var(--ease-in-out) both;
-        animation-timeline: view();
-        animation-range: entry 40% cover 62%;
-      }
-      @keyframes abrade {
-        from { opacity: 1; filter: blur(0);     transform: scale(1); }
-        to   { opacity: .08; filter: blur(3px); transform: scale(1.06); }
-      }
-      .wear__card--label .wear__panel::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(112deg, transparent 42%, rgba(255,255,255,.13) 50%, transparent 58%);
-        transform: translateX(-120%);
-        animation: swipe linear both;
-        animation-timeline: view();
-        animation-range: entry 40% cover 62%;
-      }
-      @keyframes swipe { to { transform: translateX(120%); } }
-
       /* ── the process line draws itself ── */
       .steps__fill {
         transform: scaleY(0);
@@ -1083,7 +1144,7 @@ const description =
         }
         .cap-rest { display: none; }
         .cap-build { display: inline; }
-        .proc__piececap { text-align: right; margin-top: 10px; color: #93806F; }
+        .proc__piececap { text-align: right; margin-top: 10px; color: #D9A176; }
 
         /* seven segments, one per step, filling with the track */
         .gauge {
@@ -1104,8 +1165,8 @@ const description =
           width: 100%;
           height: 4px;
           border-radius: 2px;
-          background: rgba(255,255,255,.14);
-          box-shadow: inset 0 1px 1px rgba(0,0,0,.5);
+          background: rgba(255, 236, 214,.14);
+          box-shadow: inset 0 1px 1px rgba(74, 30, 8,.5);
           position: relative;
           overflow: hidden;
         }
@@ -1121,15 +1182,15 @@ const description =
         .gauge__n {
           font-size: 10px;
           letter-spacing: .1em;
-          color: #93806F;
+          color: #D9A176;          /* 6.3:1; was 3.7:1 at the old tan */
         }
         .proc__h2 { font-size: clamp(28px, 3.4vw, 42px); }
         .proc__body { margin-top: 14px; font-size: 17px; }
 
         .proc__viewport {
           overflow: hidden;
-          -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
-          mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+          -webkit-mask-image: linear-gradient(90deg, transparent 0, #4A1E08 5%, #4A1E08 95%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #4A1E08 5%, #4A1E08 95%, transparent 100%);
         }
 
         .steps {
@@ -1188,18 +1249,18 @@ const description =
           flex-direction: column;
           gap: 0;
           padding: 0 0 18px;
-          background: linear-gradient(180deg, #241C16 0%, #1B140F 100%);
-          border: 1px solid rgba(255,255,255,.13);
+          background: linear-gradient(180deg, #5A270E 0%, #4A1E08 100%);
+          border: 1px solid rgba(255, 236, 214,.13);
           border-radius: var(--radius);
           overflow: hidden;
-          box-shadow: 0 18px 34px -24px rgba(0,0,0,.9);
+          box-shadow: 0 18px 34px -24px rgba(74, 30, 8,.9);
           position: relative;
           opacity: 1;
         }
         .step__media {
           aspect-ratio: 16 / 10;
           border: 0;
-          border-bottom: 1px solid rgba(255,255,255,.13);
+          border-bottom: 1px solid rgba(255, 236, 214,.13);
           border-radius: 0;
           width: 100%;
         }
@@ -1258,7 +1319,7 @@ const description =
       }
 
       /* ── tiles rise as their row arrives ── */
-      .fig, .opt, .ind, .tally__i {
+      .fig, .opt, .sector, .tally__i {
         animation: tile-in var(--ease-out) both;
         animation-timeline: view();
         animation-range: cover 3% cover 32%;
@@ -1266,6 +1327,21 @@ const description =
       @keyframes tile-in {
         from { opacity: 0; transform: translate3d(0, 14px, 0); }
         to   { opacity: 1; transform: translate3d(0, 0, 0); }
+      }
+
+      /* ── phone-width circuit: trunk drops, then the branch reaches the pad ── */
+      @media (max-width: 760px) {
+        .route__head { view-timeline: --rhead block; }
+        .sector { view-timeline: --rsec block; }
+        .route__head::after, .sector::before, .sector::after {
+          animation: route-drop linear both;
+          animation-timeline: --rsec;
+        }
+        .route__head::after { animation-timeline: --rhead; animation-range: cover 4% cover 14%; }
+        .sector::before { animation-range: cover 10% cover 22%; }
+        .sector::after  { animation-name: route-reach; animation-range: cover 18% cover 28%; }
+        @keyframes route-drop  { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+        @keyframes route-reach { from { transform: scaleX(0); } to { transform: scaleX(1); } }
       }
     }
   }

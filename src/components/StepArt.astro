@@ -25,24 +25,24 @@ const KEYS = [
 ---
 
 <svg viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-  <rect width="300" height="210" fill="#1B140F" />
+  <rect width="300" height="210" fill="#4A1E08" />
 
   {/* drafting grid, common to all three */}
   <g opacity=".5">
     {[30, 60, 90, 120, 150, 180, 210, 240, 270].map((x) => (
-      <line x1={x} y1="0" x2={x} y2="210" stroke="#2E251E" stroke-width="1" />
+      <line x1={x} y1="0" x2={x} y2="210" stroke="#5A270E" stroke-width="1" />
     ))}
     {[30, 60, 90, 120, 150, 180].map((y) => (
-      <line x1="0" y1={y} x2="300" y2={y} stroke="#2E251E" stroke-width="1" />
+      <line x1="0" y1={y} x2="300" y2={y} stroke="#5A270E" stroke-width="1" />
     ))}
   </g>
 
   {kind === 'drawing' && (
     <g>
       {/* the customer drawing: outline, key pitch and a tolerance callout */}
-      <rect x="20" y="12" width="260" height="156" rx="5" fill="none" stroke="#93806F" stroke-width="1.4" />
+      <rect x="20" y="12" width="260" height="156" rx="5" fill="none" stroke="#B87246" stroke-width="1.4" />
       {KEYS.map((k) => (
-        <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill="none" stroke="#7B6A5B" stroke-width="1" stroke-dasharray="4 3" />
+        <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill="none" stroke="#A35F33" stroke-width="1" stroke-dasharray="4 3" />
       ))}
       {/* overall width dimension */}
       <g stroke="#F08820" stroke-width="1.1">
@@ -58,17 +58,17 @@ const KEYS = [
       </g>
       <text x="119" y="33" fill="#F08820" font-family="monospace" font-size="9" text-anchor="middle">62.0</text>
       {/* tail exit witness line */}
-      <line x1="150" y1="168" x2="150" y2="176" stroke="#7B6A5B" stroke-width="1" stroke-dasharray="3 3" />
+      <line x1="150" y1="168" x2="150" y2="176" stroke="#A35F33" stroke-width="1" stroke-dasharray="3 3" />
     </g>
   )}
 
   {kind === 'artwork' && (
     <g>
       {/* colour separations plus registration marks — one screen per colour */}
-      <rect x="20" y="12" width="260" height="156" rx="5" fill="#241C16" stroke="#7B6A5B" stroke-width="1.1" />
-      <rect x="60" y="24" width="180" height="22" rx="2" fill="#120C09" stroke="#645548" stroke-width="1" />
+      <rect x="20" y="12" width="260" height="156" rx="5" fill="#5A270E" stroke="#A35F33" stroke-width="1.1" />
+      <rect x="60" y="24" width="180" height="22" rx="2" fill="#4A1E08" stroke="#874421" stroke-width="1" />
       {KEYS.map((k) => (
-        <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill="#3B3028" stroke="#7B6A5B" stroke-width="1" />
+        <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill="#6B3115" stroke="#A35F33" stroke-width="1" />
       ))}
       {/* registration crosshairs at the corners */}
       {[[30, 22], [270, 22], [30, 158], [270, 158]].map(([x, y]) => (
@@ -78,10 +78,10 @@ const KEYS = [
         </g>
       ))}
       {/* ink sequence */}
-      {[['#F08820', 40], ['#E4DACE', 66], ['#00A050', 92], ['#2FB86E', 118]].map(([c, x]) => (
+      {[['#F08820', 40], ['#F2D6B8', 66], ['#00A050', 92], ['#2FB86E', 118]].map(([c, x]) => (
         <rect x={x} y="186" width="22" height="9" rx="1.5" fill={c} />
       ))}
-      <text x="150" y="205" fill="#93806F" font-family="monospace" font-size="8" text-anchor="middle">4 SCREENS · SUB-SURFACE</text>
+      <text x="150" y="205" fill="#B87246" font-family="monospace" font-size="8" text-anchor="middle">4 SCREENS · SUB-SURFACE</text>
     </g>
   )}
 
@@ -89,18 +89,18 @@ const KEYS = [
     <g>
       {/* the six layers seen edge-on, pressed together in register */}
       {[
-        { y: 58, fill: '#3B3028', label: 'overlay' },
+        { y: 58, fill: '#6B3115', label: 'overlay' },
         { y: 74, fill: '#F08820', label: 'adhesive' },
-        { y: 88, fill: '#7B6A5B', label: 'upper circuit' },
-        { y: 104, fill: '#D6C9B9', label: 'spacer' },
-        { y: 120, fill: '#7B6A5B', label: 'lower circuit' },
+        { y: 88, fill: '#A35F33', label: 'upper circuit' },
+        { y: 104, fill: '#EECBA8', label: 'spacer' },
+        { y: 120, fill: '#A35F33', label: 'lower circuit' },
         { y: 134, fill: '#F08820', label: 'adhesive' },
       ].map((l, i) => (
-        <rect x="52" y={l.y} width="196" height={i === 3 ? 10 : 7} rx="2" fill={l.fill} fill-opacity={l.fill === '#F08820' ? '.55' : '.95'} stroke="#93806F" stroke-width=".7" />
+        <rect x="52" y={l.y} width="196" height={i === 3 ? 10 : 7} rx="2" fill={l.fill} fill-opacity={l.fill === '#F08820' ? '.55' : '.95'} stroke="#B87246" stroke-width=".7" />
       ))}
       {/* platens closing on the stack */}
-      <path d="M40 40h220v10H40z" fill="#2E251E" stroke="#93806F" stroke-width="1" />
-      <path d="M40 152h220v10H40z" fill="#2E251E" stroke="#93806F" stroke-width="1" />
+      <path d="M40 40h220v10H40z" fill="#5A270E" stroke="#B87246" stroke-width="1" />
+      <path d="M40 152h220v10H40z" fill="#5A270E" stroke="#B87246" stroke-width="1" />
       <g stroke="#F08820" stroke-width="1.4">
         <path d="M150 22v12M150 34l-4-5M150 34l4-5" />
         <path d="M150 180v-12M150 168l-4 5M150 168l4 5" />
@@ -112,9 +112,9 @@ const KEYS = [
   {kind === 'diecut' && (
     <g>
       {/* spacer on the cutting die: waste outside the rule, holes dropped out */}
-      <rect x="20" y="12" width="260" height="156" rx="5" fill="#D6C9B9" fill-opacity=".9" stroke="#AB9887" stroke-width="1.1" />
+      <rect x="20" y="12" width="260" height="156" rx="5" fill="#EECBA8" fill-opacity=".9" stroke="#C98A5C" stroke-width="1.1" />
       {KEYS.map((k) => (
-        <circle cx={k.x} cy={k.y} r="17" fill="#1B140F" stroke="#AB9887" stroke-width="1" />
+        <circle cx={k.x} cy={k.y} r="17" fill="#4A1E08" stroke="#C98A5C" stroke-width="1" />
       ))}
       {/* the cutting rule, offset outside the part */}
       <rect x="12" y="4" width="276" height="172" rx="7" fill="none" stroke="#F08820" stroke-width="1.4" stroke-dasharray="7 4" />

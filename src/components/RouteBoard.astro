@@ -1,0 +1,142 @@
+---
+/**
+ * Chapter six's overview, drawn as a membrane circuit: each sector is a pad on
+ * the left, and its trace routes across the board to a connector pin labelled
+ * with the construction that sector usually specifies.
+ *
+ * The chapter's point is convergence — nine sectors, five constructions. The
+ * previous version was nine identical text rows with the product repeated on
+ * each one, which hid exactly that. Here it is the shape of the drawing.
+ *
+ * Sectors are ordered by the construction they route to, so each pair of
+ * traces merges symmetrically into its pin and no two traces cross.
+ *
+ * Traces are thin rectangles grown from the correct end with scaleX/scaleY, so
+ * the "drawing" effect is transform-only. Each segment's scroll window comes
+ * from --r, set per element below. At rest — no scroll timelines, reduced
+ * motion — every trace is shown fully routed.
+ *
+ * Decorative: the same information, with the actual copy and the links, is the
+ * grouped list that follows it in the page.
+ */
+export interface Group {
+  slug: string;
+  label: string;
+  items: { name: string }[];
+}
+export interface Props { groups: Group[] }
+const { groups } = Astro.props;
+
+const TOP = 92, STEP = 48;          // sector rows
+const PAD_X = 312, LANE_X = 548, PIN_X = 706;
+const W = 1000;
+
+// lay out rows and pins
+let row = 0;
+const laid = groups.map((g) => {
+  const ys = g.items.map(() => TOP + STEP * row++);
+  const pinY = ys.reduce((a, b) => a + b, 0) / ys.length;
+  return { ...g, ys, pinY };
+});
+const H = TOP + STEP * (row - 1) + 92;
+
+// scroll windows: one band per group across the pinned-ish range
+const START = 22, BAND = 8;
+const win = (gi: number, from: number, to: number) => {
+  const a = START + gi * BAND;
+  return `--r: cover ${(a + BAND * from).toFixed(1)}% cover ${(a + BAND * to).toFixed(1)}%`;
+};
+---
+
+<figure class="board" aria-hidden="true">
+  <svg viewBox={`0 0 ${W} ${H}`} fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+    <rect x="8" y="8" width={W - 16} height={H - 16} rx="18" fill="#4A1E08" stroke="#7D3C1C" stroke-width="2" />
+    {[[40, 40], [W - 40, 40], [40, H - 40], [W - 40, H - 40]].map(([x, y]) => (
+      <g>
+        <circle cx={x} cy={y} r="10" fill="#5A270E" stroke="#874421" stroke-width="2" />
+        <circle cx={x} cy={y} r="4" fill="#4A1E08" />
+      </g>
+    ))}
+
+    <text class="silk" x={PAD_X - 22} y="52" text-anchor="end">SECTOR</text>
+    <text class="silk" x={PIN_X} y="52">CONSTRUCTION</text>
+    <text class="silk silk--dim" x={W / 2} y={H - 30} text-anchor="middle">9 SECTORS · 5 CONSTRUCTIONS</text>
+
+    {laid.map((g, gi) => (
+      <g>
+        {g.items.map((it, k) => {
+          const y = g.ys[k];
+          const up = y > g.pinY;          // trace climbs to the pin
+          const vh = Math.abs(g.pinY - y);
+          return (
+            <g>
+              <text class="sector" x={PAD_X - 22} y={y + 6} text-anchor="end">{it.name}</text>
+
+              {/* dim underlay: the routing, always visible */}
+              <rect x={PAD_X} y={y - 1.5} width={LANE_X - PAD_X} height="3" fill="#7D3C1C" />
+              {vh > 0 && <rect x={LANE_X - 1.5} y={Math.min(y, g.pinY)} width="3" height={vh} fill="#7D3C1C" />}
+
+              {/* lit overlay: grows along the route on scroll */}
+              <rect class="seg seg--h" x={PAD_X} y={y - 1.5} width={LANE_X - PAD_X} height="3" fill="#F08820" style={win(gi, 0, .42)} />
+              {vh > 0 && (
+                <rect class:list={['seg', up ? 'seg--up' : 'seg--down']} x={LANE_X - 1.5} y={Math.min(y, g.pinY)} width="3" height={vh} fill="#F08820" style={win(gi, .42, .68)} />
+              )}
+
+              <circle cx={PAD_X} cy={y} r="7" fill="#5A270E" stroke="#D9A176" stroke-width="2" />
+              <circle class="lit" cx={PAD_X} cy={y} r="3.5" fill="#FFA24D" style={win(gi, 0, .2)} />
+            </g>
+          );
+        })}
+
+        {/* shared run from the junction into the connector pin */}
+        <rect x={LANE_X} y={g.pinY - 1.5} width={PIN_X - LANE_X} height="3" fill="#7D3C1C" />
+        <rect class="seg seg--h" x={LANE_X} y={g.pinY - 1.5} width={PIN_X - LANE_X} height="3" fill="#F08820" style={win(gi, .68, .92)} />
+        {g.items.length > 1 && <circle class="lit" cx={LANE_X} cy={g.pinY} r="5" fill="#FFA24D" style={win(gi, .62, .72)} />}
+
+        <rect x={PIN_X} y={g.pinY - 13} width="30" height="26" rx="3" fill="#874421" stroke="#C98A5C" stroke-width="1.5" />
+        <rect class="lit" x={PIN_X} y={g.pinY - 13} width="30" height="26" rx="3" fill="#F08820" style={win(gi, .86, 1)} />
+        <text class="pin" x={PIN_X + 46} y={g.pinY + 2}>{g.label}</text>
+        <text class="count" x={PIN_X + 46} y={g.pinY + 22}>{g.items.length} {g.items.length === 1 ? 'SECTOR' : 'SECTORS'}</text>
+      </g>
+    ))}
+  </svg>
+</figure>
+
+<style>
+  .board {
+    margin: 0;
+    view-timeline-name: --route;
+    view-timeline-axis: block;
+  }
+  .board svg { width: 100%; height: auto; display: block; }
+
+  .silk   { font-family: var(--font-mono); font-size: 14px; letter-spacing: .16em; fill: #D9A176; }
+  .silk--dim { fill: #C98A5C; font-size: 13px; }
+  .sector { font-family: var(--font-display); font-size: 19px; font-weight: 600; fill: #FBEAD4; }
+  .pin    { font-family: var(--font-display); font-size: 20px; font-weight: 600; fill: #FBEAD4; }
+  .count  { font-family: var(--font-mono); font-size: 13px; letter-spacing: .12em; fill: #D9A176; }
+
+  /* at rest: fully routed */
+  .seg { transform-box: fill-box; transform: none; }
+  .seg--h    { transform-origin: 0 50%; }
+  .seg--down { transform-origin: 50% 0; }
+  .seg--up   { transform-origin: 50% 100%; }
+  .lit { opacity: 1; }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .seg, .lit {
+        animation-timeline: --route;
+        animation-range: var(--r);
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+      }
+      .seg--h { animation-name: route-x; }
+      .seg--down, .seg--up { animation-name: route-y; }
+      .lit { animation-name: route-lit; }
+      @keyframes route-x   { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+      @keyframes route-y   { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+      @keyframes route-lit { from { opacity: 0; } to { opacity: 1; } }
+    }
+  }
+</style>

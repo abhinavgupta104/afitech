@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Placeholder: the company's initials in the brand colours. Replace with a
-       square crop of the real mark when the artwork arrives. -->
-  <rect width="64" height="64" rx="10" fill="#15181B"/>
-  <text x="32" y="38" text-anchor="middle"
-        font-family="Barlow Condensed, Barlow, Arial Narrow, Helvetica, sans-serif"
-        font-size="30" font-weight="700" letter-spacing="1" fill="#FFFFFF">AFI</text>
-  <rect x="17" y="43" width="30" height="4" rx="2" fill="#E4661A"/>
-</svg>

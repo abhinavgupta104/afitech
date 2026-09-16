@@ -347,7 +347,7 @@ const description =
     pointer-events: none;
     z-index: 0;
     color: transparent;
-    -webkit-text-stroke: 1.5px rgba(21,24,27,.10);
+    -webkit-text-stroke: 1.5px rgba(36, 28, 22,.10);
   }
   .chapter--dark .chapter__ghost { -webkit-text-stroke-color: rgba(255,255,255,.12); }
 
@@ -383,9 +383,9 @@ const description =
     background-image:
       repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0 1px, transparent 1px 76px),
       repeating-linear-gradient(0deg,  rgba(255,255,255,.04)  0 1px, transparent 1px 76px),
-      radial-gradient(circle at 18% 22%, rgba(228,102,26,.30) 0 5px, transparent 6px),
-      radial-gradient(circle at 76% 34%, rgba(228,102,26,.22) 0 4px, transparent 5px),
-      radial-gradient(circle at 42% 78%, rgba(228,102,26,.18) 0 4px, transparent 5px),
+      radial-gradient(circle at 18% 22%, rgba(240, 136, 32,.30) 0 5px, transparent 6px),
+      radial-gradient(circle at 76% 34%, rgba(240, 136, 32,.22) 0 4px, transparent 5px),
+      radial-gradient(circle at 42% 78%, rgba(240, 136, 32,.18) 0 4px, transparent 5px),
       radial-gradient(circle at 88% 74%, rgba(255,255,255,.10) 0 3px, transparent 4px);
     -webkit-mask-image: radial-gradient(120% 90% at 50% 40%, #000 35%, transparent 78%);
     mask-image: radial-gradient(120% 90% at 50% 40%, #000 35%, transparent 78%);
@@ -398,8 +398,8 @@ const description =
     background-color: var(--ink);
     background-image:
       var(--grain),
-      radial-gradient(112% 128% at 76% -8%, #262D34 0%, #191E23 42%, var(--ink) 74%);
-    color: #C3CAD0;
+      radial-gradient(112% 128% at 76% -8%, #2E251E 0%, #241C16 42%, var(--ink) 74%);
+    color: #D6C9B9;
     padding-block: clamp(52px, 7vw, 104px) clamp(56px, 7vw, 104px);
   }
   .open__h1 { color: #fff; }
@@ -426,7 +426,7 @@ const description =
     max-width: 54ch;
     margin-top: 20px;
     font-size: clamp(17px, 1.7vw, 20px);
-    color: #B4BCC3;            /* was --ink-soft: dark text on the dark ground */
+    color: #C2B2A0;            /* was --ink-soft: dark text on the dark ground */
   }
   .open__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
   .open__cue {
@@ -434,7 +434,7 @@ const description =
     margin-top: 34px;
     font-family: var(--font-mono);
     font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase;
-    color: #97A0A8;            /* was --muted: too dark on the dark ground */
+    color: #AB9887;            /* was --muted: too dark on the dark ground */
   }
   .open__cueline { display: block; width: 46px; height: 1px; background: var(--accent); }
   .open__media {
@@ -447,7 +447,7 @@ const description =
     content: '';
     position: absolute;
     inset: 4% -10% -6% -10%;
-    background: radial-gradient(58% 54% at 50% 48%, rgba(228,102,26,.20) 0%, rgba(228,102,26,0) 70%);
+    background: radial-gradient(58% 54% at 50% 48%, rgba(240, 136, 32,.20) 0%, rgba(240, 136, 32,0) 70%);
     pointer-events: none;
   }
   .open__media :global(img) {
@@ -479,11 +479,11 @@ const description =
   }
 
   /* ───────── act two — the stack ───────── */
-  .stack { color: #D3D7DA; padding-block: clamp(64px, 9vw, 120px); }
+  .stack { color: #E4DACE; padding-block: clamp(64px, 9vw, 120px); }
   .stack__grid { display: grid; gap: clamp(28px, 4vw, 44px); }
   .stack__intro { max-width: 60ch; }
   .stack__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; color: #fff; margin-top: 4px; }
-  .stack__body { position: relative; z-index: 1; margin-top: 16px; font-size: clamp(17px, 1.6vw, 19px); color: #C0C5C9; }
+  .stack__body { position: relative; z-index: 1; margin-top: 16px; font-size: clamp(17px, 1.6vw, 19px); color: #D6C9B9; }
 
   /* The 3D scene is decorative and desktop-only; it stays out of the document
      until the choreography block below turns it on. */
@@ -503,14 +503,14 @@ const description =
   .lyr { background: var(--ink); display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; padding: 18px 20px; }
   .lyr__n { color: var(--accent); font-size: 13px; font-weight: 500; padding-top: 3px; }
   .lyr__name { font-size: 19px; font-weight: 600; color: #fff; }
-  .lyr__spec { font-size: 12.5px; color: #9BA1A8; margin-top: 3px; }
-  .lyr__role { font-size: 15px; color: #C0C5C9; margin-top: 8px; max-width: 56ch; }
+  .lyr__spec { font-size: 12.5px; color: #AB9887; margin-top: 3px; }
+  .lyr__role { font-size: 15px; color: #D6C9B9; margin-top: 8px; max-width: 56ch; }
 
   .stack__closing {
     display: block;
     margin-top: 0;
     font-size: clamp(16px, 1.6vw, 18px);
-    color: #9BA1A8;
+    color: #AB9887;
     max-width: 62ch;
   }
 
@@ -531,8 +531,8 @@ const description =
     /* Explicit colour under the gradient: a gradient alone leaves the computed
        background-color transparent, which breaks contrast tooling and leaves
        nothing behind the text if the gradient ever fails to paint. */
-    background-color: #1F2329;
-    background-image: linear-gradient(170deg, #2A2F35, #15181B);
+    background-color: #2E251E;
+    background-image: linear-gradient(170deg, #3B3028, #1B140F);
     display: grid;
     place-items: center;
     overflow: hidden;
@@ -542,9 +542,9 @@ const description =
     font-size: 32px;
     font-weight: 700;
     letter-spacing: .1em;
-    color: #F2F4F5;
+    color: #F7F3ED;
   }
-  .wear__ink { position: absolute; bottom: 8px; left: 10px; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: #9AA2AA; }
+  .wear__ink { position: absolute; bottom: 8px; left: 10px; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: #AB9887; }
   .wear__film {
     position: absolute; inset: 0;
     background: linear-gradient(150deg, rgba(255,255,255,.16), rgba(255,255,255,.02) 42%, rgba(255,255,255,.10));
@@ -581,22 +581,22 @@ const description =
   .fig__n { font-size: 14.4px; color: var(--muted); line-height: 1.45; }
 
   /* ───────── act four — the choice ───────── */
-  .choice { color: #D3D7DA; padding-block: clamp(64px, 9vw, 128px); }
+  .choice { color: #E4DACE; padding-block: clamp(64px, 9vw, 128px); }
   .choice__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; color: #fff; max-width: 20ch; }
-  .choice__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #C0C5C9; }
+  .choice__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #D6C9B9; }
 
   .opts { list-style: none; margin: clamp(34px, 4vw, 52px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
-  .opt { border: 1px solid rgba(255,255,255,.16); border-radius: var(--radius); background: #1B1F23; transition: border-color .18s ease, transform .18s ease; }
+  .opt { border: 1px solid rgba(255,255,255,.16); border-radius: var(--radius); background: #241C16; transition: border-color .18s ease, transform .18s ease; }
   .opt:hover { border-color: var(--accent); }
   .opt__link { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 22px; text-decoration: none; color: inherit; }
   .opt__product { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
   .opt__name { font-size: 25px; font-weight: 600; color: #fff; }
-  .opt__when { font-size: 15px; color: #C0C5C9; line-height: 1.55; }
+  .opt__when { font-size: 15px; color: #D6C9B9; line-height: 1.55; }
   .opt__specs { margin: 6px 0 0; display: flex; gap: 26px; border-top: 1px solid rgba(255,255,255,.14); padding-top: 13px; }
-  .opt__specs dt { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8D948E; }
+  .opt__specs dt { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #AB9887; }
   .opt__specs dd { margin: 3px 0 0; font-size: 14.5px; color: #fff; }
   .opt__more { margin-top: auto; padding-top: 14px; font-size: 14.5px; font-weight: 600; color: var(--accent); }
-  .choice__foot { margin-top: 24px; font-size: 16px; color: #9BA1A8; max-width: 58ch; }
+  .choice__foot { margin-top: 24px; font-size: 16px; color: #AB9887; max-width: 58ch; }
 
   /* ───────── act five — the process ───────── */
   /* Chapter five is the workshop chapter, so it gets a bench rather than the
@@ -604,14 +604,14 @@ const description =
      of light where the part sits. It also makes the factory photographs read
      far better than they do on white. */
   .proc {
-    background-color: #0F1318;
+    background-color: #1B140F;
     background-image:
       var(--grain),
-      radial-gradient(52% 46% at 74% 30%, rgba(228,102,26,.16) 0%, rgba(228,102,26,0) 68%),
+      radial-gradient(52% 46% at 74% 30%, rgba(240, 136, 32,.16) 0%, rgba(240, 136, 32,0) 68%),
       repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 64px),
       repeating-linear-gradient(0deg,  rgba(255,255,255,.028) 0 1px, transparent 1px 64px),
-      linear-gradient(180deg, #141920 0%, #0F1318 46%, #0C1015 100%);
-    color: #C3CAD0;
+      linear-gradient(180deg, #1B140F 0%, #1B140F 46%, #120C09 100%);
+    color: #D6C9B9;
     padding-block: clamp(64px, 9vw, 128px);
     position: relative;
   }
@@ -631,7 +631,7 @@ const description =
     content: '';
     position: absolute;
     inset: -6% -2% -2%;
-    background: radial-gradient(52% 48% at 50% 46%, rgba(255,236,214,.14) 0%, rgba(255,236,214,0) 72%);
+    background: radial-gradient(52% 48% at 50% 46%, rgba(255, 238, 214,.14) 0%, rgba(255, 238, 214,0) 72%);
     pointer-events: none;
   }
   .proc__piece :global(svg) { position: relative; filter: drop-shadow(0 22px 26px rgba(0,0,0,.6)); }
@@ -642,14 +642,14 @@ const description =
     font-size: 10.5px;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: #7E8A94;
+    color: #93806F;
     text-align: center;
   }
   /* The gauge is a scroll read-out; with no scroll timeline it says nothing. */
   .gauge { display: none; }
   .gauge__seg { position: relative; list-style: none; }
   .proc__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; max-width: 20ch; }
-  .proc__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #B4BCC3; }
+  .proc__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #C2B2A0; }
 
   .steps { position: relative; list-style: none; margin: clamp(34px, 4vw, 52px) 0 0; padding: 0; display: grid; gap: 2px; }
   .steps__line { position: absolute; left: 65px; top: 10px; bottom: 10px; width: 2px; background: rgba(255,255,255,.16); }
@@ -660,7 +660,7 @@ const description =
     aspect-ratio: 16 / 10;
     border-radius: var(--radius);
     overflow: hidden;
-    background: #0B0E12;
+    background: #120C09;
     border: 1px solid rgba(255,255,255,.14);
   }
   .step__media :global(img),
@@ -683,11 +683,11 @@ const description =
     font-size: 10.5px;
     letter-spacing: .13em;
     text-transform: uppercase;
-    color: #FF8A3D;
+    color: #FFA24D;
     margin-bottom: 6px;
   }
   .step__name { font-size: 20px; font-weight: 600; color: #fff; }
-  .step__detail { margin-top: 7px; font-size: 15.6px; color: #AEB6BD; max-width: 62ch; line-height: 1.55; }
+  .step__detail { margin-top: 7px; font-size: 15.6px; color: #C2B2A0; max-width: 62ch; line-height: 1.55; }
 
   /* ───────── act six — proof ───────── */
   .proof { background: var(--surface); padding-block: clamp(64px, 9vw, 128px); }
@@ -1083,7 +1083,7 @@ const description =
         }
         .cap-rest { display: none; }
         .cap-build { display: inline; }
-        .proc__piececap { text-align: right; margin-top: 10px; color: #7E8A94; }
+        .proc__piececap { text-align: right; margin-top: 10px; color: #93806F; }
 
         /* seven segments, one per step, filling with the track */
         .gauge {
@@ -1113,15 +1113,15 @@ const description =
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(90deg, var(--accent), #FF8A3D);
-          box-shadow: 0 0 10px rgba(228,102,26,.65);
+          background: linear-gradient(90deg, var(--accent), #FFA24D);
+          box-shadow: 0 0 10px rgba(240, 136, 32,.65);
           transform: scaleX(0);
           transform-origin: left center;
         }
         .gauge__n {
           font-size: 10px;
           letter-spacing: .1em;
-          color: #79828A;
+          color: #93806F;
         }
         .proc__h2 { font-size: clamp(28px, 3.4vw, 42px); }
         .proc__body { margin-top: 14px; font-size: 17px; }
@@ -1172,7 +1172,7 @@ const description =
           animation: gauge-lit linear both;
           animation-timeline: --proc;
         }
-        @keyframes gauge-lit { to { color: #FF8A3D; } }
+        @keyframes gauge-lit { to { color: #FFA24D; } }
         .gauge__seg:nth-child(1) .gauge__n { animation-range: cover 25% cover 31%; }
         .gauge__seg:nth-child(2) .gauge__n { animation-range: cover 32% cover 38%; }
         .gauge__seg:nth-child(3) .gauge__n { animation-range: cover 39% cover 45%; }
@@ -1188,7 +1188,7 @@ const description =
           flex-direction: column;
           gap: 0;
           padding: 0 0 18px;
-          background: linear-gradient(180deg, #1A2028 0%, #151A21 100%);
+          background: linear-gradient(180deg, #241C16 0%, #1B140F 100%);
           border: 1px solid rgba(255,255,255,.13);
           border-radius: var(--radius);
           overflow: hidden;

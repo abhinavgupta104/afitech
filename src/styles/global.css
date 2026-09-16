@@ -1,9 +1,9 @@
 /*
  * AFI Technologies — design tokens and base styles.
  *
- * The old site ran two parallel colour systems (four unrelated blues in CSS,
- * Elementor's untouched factory palette underneath) and showed a fifth set on
- * screen. Everything visual is defined once, here.
+ * One palette, defined once, derived from the company logo — a warm brown ink
+ * with the logo's orange and green. The previous site ran two parallel colour
+ * systems and showed a third on screen.
  *
  * Contrast decisions worth keeping:
  *   - White on the brand orange measures 3.38:1 and fails AA. The old header
@@ -17,25 +17,30 @@
   color-scheme: light;
 
   /* Ink — the black polyester an overlay is actually printed on */
-  --ink:        #15181B;
-  --ink-soft:   #2B3036;
-  --muted:      #5C6169;
-  --muted-soft: #858B93;
+  --ink:        #1B140F;
+  --ink-soft:   #3B3028;
+  --muted:      #645548;
+  --muted-soft: #93806F;
 
   /* Grounds */
-  --ground:     #F5F5F3;
+  --ground:     #F7F3ED;
   --surface:    #FFFFFF;
-  --surface-2:  #ECEDE9;
-  --line:       #DEDFDA;
-  --line-soft:  #E9EAE6;
+  --surface-2:  #EFE8DF;
+  --line:       #E4DACE;
+  --line-soft:  #EFE8DF;
 
   /* Brand orange, carried over from the old site and disciplined */
-  --accent:      #E4661A;
-  --accent-ink:  #A8420A;  /* orange that passes AA as text on light */
-  --accent-press:#C2530F;
-  --accent-wash: #FDF1E9;
+  --accent:      #F08820;
+  --accent-ink:  #9A5207;  /* orange that passes AA as text on light */
+  --accent-press:#CC7010;
+  --accent-wash: #FDF2E4;
 
-  --ok: #2F7D32;
+  /* Taken from the supplied logo: orange #F88820, green #00A050, brown
+     #682800. --ink is that brown deepened for use as a page ground. There is
+     no black and no blue anywhere in the palette. */
+  --green:     #00A050;   /* the dot over the "i" */
+  --green-ink: #0A7A41;   /* green that passes AA as text on light */
+  --ok: var(--green);
 
   --font-display: "Barlow Condensed", "Barlow", system-ui, sans-serif;
   --font-body:    "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -56,7 +61,7 @@
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");
 
   --radius: 3px;
-  --shadow-card: 0 1px 2px rgba(21, 24, 27, .05), 0 8px 24px -16px rgba(21, 24, 27, .3);
+  --shadow-card: 0 1px 2px rgba(36, 28, 22, .05), 0 8px 24px -16px rgba(36, 28, 22, .3);
 }
 
 *, *::before, *::after { box-sizing: border-box; }

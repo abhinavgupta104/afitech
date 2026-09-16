@@ -166,7 +166,7 @@ const action = FORM_ENDPOINT || `mailto:${site.email}`;
   .qf__fieldset { border: 0; padding: 0; }
 
   label, legend { font-size: 14.5px; font-weight: 600; color: var(--ink); padding: 0; }
-  .req { color: #C42B1C; }
+  .req { color: #B33A1B; }
 
   input[type='text'], input[type='email'], input[type='tel'], select, textarea {
     font-family: var(--font-body);
@@ -180,9 +180,9 @@ const action = FORM_ENDPOINT || `mailto:${site.email}`;
     min-height: 50px;
   }
   textarea { resize: vertical; line-height: 1.55; }
-  input:hover, select:hover, textarea:hover { border-color: #BEC1B9; }
+  input:hover, select:hover, textarea:hover { border-color: #C2B2A0; }
   input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-  [aria-invalid='true'] { border-color: #C42B1C !important; }
+  [aria-invalid='true'] { border-color: #B33A1B !important; }
 
   input[type='file'] {
     font-size: 14.5px;
@@ -201,11 +201,11 @@ const action = FORM_ENDPOINT || `mailto:${site.email}`;
   .qf__submit { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
   .qf__submit .btn { align-self: flex-start; }
   .qf__status { margin-top: 16px; font-size: 15px; font-weight: 600; }
-  .qf__status[data-state='error'] { color: #C42B1C; }
+  .qf__status[data-state='error'] { color: #B33A1B; }
 
   .qf__aside {
     background: var(--ink);
-    color: #C6CBCF;
+    color: #D6C9B9;
     border-radius: var(--radius);
     padding: clamp(20px, 3vw, 32px);
     font-size: 15px;
@@ -219,8 +219,8 @@ const action = FORM_ENDPOINT || `mailto:${site.email}`;
   .qf__aside li::marker { color: var(--accent); }
   .qf__asideNote {
     margin-top: 22px; padding-top: 16px;
-    border-top: 1px solid #2B3036;
-    color: #9AA1A6; font-size: 14px;
+    border-top: 1px solid #3B3028;
+    color: #AB9887; font-size: 14px;
   }
 
   @media (max-width: 900px) {

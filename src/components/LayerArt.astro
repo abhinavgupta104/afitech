@@ -39,7 +39,7 @@ const KEYS = [
 <svg viewBox="0 0 300 210" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
   <defs>
     <pattern id={`hatch-${tone}`} width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <line x1="0" y1="0" x2="0" y2="11" stroke="#E4661A" stroke-width="1.5" opacity=".55" />
+      <line x1="0" y1="0" x2="0" y2="11" stroke="#F08820" stroke-width="1.5" opacity=".55" />
     </pattern>
   </defs>
 
@@ -47,14 +47,14 @@ const KEYS = [
     <g>
       {/* printed polyester face — legends are on the underside, so the film
           reads as a single continuous surface with no cut key edges */}
-      <rect x="20" y="12" width="260" height="156" rx="5" fill="#23282E" stroke="#6B747D" stroke-width="1.2" />
-      <rect x="26" y="18" width="248" height="144" rx="3" fill="none" stroke="#3C444C" stroke-width="1" />
+      <rect x="20" y="12" width="260" height="156" rx="5" fill="#2E251E" stroke="#7B6A5B" stroke-width="1.2" />
+      <rect x="26" y="18" width="248" height="144" rx="3" fill="none" stroke="#4E4137" stroke-width="1" />
       {/* display window left unprinted */}
-      <rect x="60" y="24" width="180" height="22" rx="2" fill="#0E1114" stroke="#59636D" stroke-width="1" />
+      <rect x="60" y="24" width="180" height="22" rx="2" fill="#120C09" stroke="#645548" stroke-width="1" />
       {KEYS.map((k) => (
         <g>
-          <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill="#31383F" stroke="#69737D" stroke-width="1" />
-          <rect x={k.x - 9} y={k.y - 4} width="18" height="2.4" rx="1.2" fill="#AEB7C0" />
+          <rect x={k.x - 21} y={k.y - 15} width="42" height="30" rx="4" fill="#3B3028" stroke="#7B6A5B" stroke-width="1" />
+          <rect x={k.x - 9} y={k.y - 4} width="18" height="2.4" rx="1.2" fill="#C2B2A0" />
         </g>
       ))}
     </g>
@@ -66,7 +66,7 @@ const KEYS = [
           is cut out; the key areas are not — the adhesive is continuous there */}
       <path
         d="M20 17a5 5 0 0 1 5-5h250a5 5 0 0 1 5 5v146a5 5 0 0 1-5 5H25a5 5 0 0 1-5-5Z M60 26a2 2 0 0 1 2-2h176a2 2 0 0 1 2 2v18a2 2 0 0 1-2 2H62a2 2 0 0 1-2-2Z"
-        fill="#E4661A"
+        fill="#F08820"
         fill-opacity=".14"
         fill-rule="evenodd"
       />
@@ -75,8 +75,8 @@ const KEYS = [
         fill={`url(#hatch-${tone})`}
         fill-rule="evenodd"
       />
-      <rect x="20" y="12" width="260" height="156" rx="5" fill="none" stroke="#E4661A" stroke-width="1.3" opacity=".75" />
-      <rect x="60" y="24" width="180" height="22" rx="2" fill="none" stroke="#E4661A" stroke-width="1" opacity=".6" />
+      <rect x="20" y="12" width="260" height="156" rx="5" fill="none" stroke="#F08820" stroke-width="1.3" opacity=".75" />
+      <rect x="60" y="24" width="180" height="22" rx="2" fill="none" stroke="#F08820" stroke-width="1" opacity=".6" />
       {tone === 'backing' && (
         <rect x="128" y="168" width="44" height="12" fill={`url(#hatch-${tone})`} opacity=".8" />
       )}
@@ -86,18 +86,18 @@ const KEYS = [
   {tone === 'circuit' && (
     <g>
       {/* upper circuit: solid silver shorting pads that bridge the pair below */}
-      <rect x="20" y="12" width="260" height="156" rx="5" fill="#252C33" fill-opacity=".9" stroke="#7C858E" stroke-width="1.1" />
+      <rect x="20" y="12" width="260" height="156" rx="5" fill="#2E251E" fill-opacity=".9" stroke="#93806F" stroke-width="1.1" />
       {KEYS.map((k) => (
         <g>
-          <circle cx={k.x} cy={k.y} r="17" fill="#D7DEE5" />
-          <circle cx={k.x} cy={k.y} r="17" fill="none" stroke="#9AA4AE" stroke-width="1" />
+          <circle cx={k.x} cy={k.y} r="17" fill="#E4DACE" />
+          <circle cx={k.x} cy={k.y} r="17" fill="none" stroke="#AB9887" stroke-width="1" />
         </g>
       ))}
       {/* row buses running to the tail exit */}
-      <path d="M88 79v14h124V79" stroke="#C3CBD3" stroke-width="2.4" />
-      <path d="M88 139v10h124v-10" stroke="#C3CBD3" stroke-width="2.4" />
-      <path d="M150 93v46" stroke="#C3CBD3" stroke-width="2.4" />
-      <path d="M150 149v19" stroke="#C3CBD3" stroke-width="2.6" />
+      <path d="M88 79v14h124V79" stroke="#D6C9B9" stroke-width="2.4" />
+      <path d="M88 139v10h124v-10" stroke="#D6C9B9" stroke-width="2.4" />
+      <path d="M150 93v46" stroke="#D6C9B9" stroke-width="2.4" />
+      <path d="M150 149v19" stroke="#D6C9B9" stroke-width="2.6" />
     </g>
   )}
 
@@ -105,24 +105,24 @@ const KEYS = [
     <g>
       {/* lower circuit: interdigitated pairs, plus the tail that leaves the
           stack and terminates in the connector */}
-      <rect x="20" y="12" width="260" height="156" rx="5" fill="#1C2226" fill-opacity=".94" stroke="#7C858E" stroke-width="1.1" />
+      <rect x="20" y="12" width="260" height="156" rx="5" fill="#241C16" fill-opacity=".94" stroke="#93806F" stroke-width="1.1" />
       {KEYS.map((k) => (
         <g>
-          <circle cx={k.x} cy={k.y} r="17" fill="#141A1E" stroke="#5E6871" stroke-width=".8" />
+          <circle cx={k.x} cy={k.y} r="17" fill="#1B140F" stroke="#7B6A5B" stroke-width=".8" />
           {[-10, -4, 2, 8].map((o) => (
-            <rect x={k.x + o} y={k.y - 11} width="2.6" height="22" rx="1.3" fill="#D7DEE5" />
+            <rect x={k.x + o} y={k.y - 11} width="2.6" height="22" rx="1.3" fill="#E4DACE" />
           ))}
-          <rect x={k.x - 13.5} y={k.y - 11} width="2.6" height="22" rx="1.3" fill="#8FA0AE" />
+          <rect x={k.x - 13.5} y={k.y - 11} width="2.6" height="22" rx="1.3" fill="#AB9887" />
         </g>
       ))}
-      <path d="M88 84h124M88 144h124" stroke="#C3CBD3" stroke-width="2.2" />
-      <path d="M150 84v60" stroke="#C3CBD3" stroke-width="2.2" />
+      <path d="M88 84h124M88 144h124" stroke="#D6C9B9" stroke-width="2.2" />
+      <path d="M150 84v60" stroke="#D6C9B9" stroke-width="2.2" />
       {/* the tail */}
-      <path d="M128 168h44v30h-44z" fill="#1C2226" stroke="#7C858E" stroke-width="1.1" />
+      <path d="M128 168h44v30h-44z" fill="#241C16" stroke="#93806F" stroke-width="1.1" />
       {[134, 141, 148, 155, 162].map((x) => (
-        <rect x={x} y="168" width="2.6" height="24" fill="#C3CBD3" />
+        <rect x={x} y="168" width="2.6" height="24" fill="#D6C9B9" />
       ))}
-      <rect x="126" y="192" width="48" height="12" rx="2" fill="#0E1114" stroke="#8FA0AE" stroke-width="1.2" />
+      <rect x="126" y="192" width="48" height="12" rx="2" fill="#120C09" stroke="#AB9887" stroke-width="1.2" />
     </g>
   )}
 
@@ -132,16 +132,16 @@ const KEYS = [
           vent channels — without them the stack pumps air and keys feel dead */}
       <path
         d={`M20 17a5 5 0 0 1 5-5h250a5 5 0 0 1 5 5v146a5 5 0 0 1-5 5H25a5 5 0 0 1-5-5Z ${KEYS.map((k) => `M${k.x - 17} ${k.y}a17 17 0 1 0 34 0a17 17 0 1 0-34 0Z`).join(' ')}`}
-        fill="#CBD2D8"
+        fill="#D6C9B9"
         fill-opacity=".95"
         fill-rule="evenodd"
-        stroke="#AEB4BA"
+        stroke="#C2B2A0"
         stroke-width="1.1"
       />
       {KEYS.map((k) => (
-        <rect x={k.x - 1.6} y={k.y > 90 ? k.y + 17 : k.y - 20} width="3.2" height="3" fill="#A9B2BA" />
+        <rect x={k.x - 1.6} y={k.y > 90 ? k.y + 17 : k.y - 20} width="3.2" height="3" fill="#C2B2A0" />
       ))}
-      <path d="M88 79h124M88 139h124" stroke="#AFB7BE" stroke-width="1.6" stroke-linecap="round" />
+      <path d="M88 79h124M88 139h124" stroke="#C2B2A0" stroke-width="1.6" stroke-linecap="round" />
     </g>
   )}
 </svg>

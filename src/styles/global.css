@@ -1,9 +1,9 @@
 /*
  * AFI Technologies — design tokens and base styles.
  *
- * One palette, defined once, derived from the company logo — a warm brown ink
- * with the logo's orange and green. The previous site ran two parallel colour
- * systems and showed a third on screen.
+ * One palette, defined once: black and white, with the logo's orange as the
+ * only accent and its green for status. The previous site ran two parallel
+ * colour systems and showed a third on screen.
  *
  * Contrast decisions worth keeping:
  *   - White on the brand orange measures 3.38:1 and fails AA. The old header
@@ -17,27 +17,26 @@
   color-scheme: light;
 
   /* Ink — the black polyester an overlay is actually printed on */
-  --ink:        #4A1E08;
-  --ink-soft:   #6B3115;
-  --muted:      #874421;
-  --muted-soft: #B87246;
+  --ink:        #141414;
+  --ink-soft:   #2E2E2E;
+  --muted:      #5A5A5A;
+  --muted-soft: #838383;
 
   /* Grounds */
-  --ground:     #FAEBD7;
+  --ground:     #F5F5F3;
   --surface:    #FFFFFF;
-  --surface-2:  #FBEAD4;
-  --line:       #F2D6B8;
-  --line-soft:  #FBEAD4;
+  --surface-2:  #EDEDEB;
+  --line:       #DEDEDC;
+  --line-soft:  #EDEDEB;
 
   /* Brand orange, carried over from the old site and disciplined */
   --accent:      #F08820;
   --accent-ink:  #9A5207;  /* orange that passes AA as text on light */
   --accent-press:#CC7010;
-  --accent-wash: #FCE4C8;
+  --accent-wash: #FDF1E9;
 
-  /* Taken from the supplied logo: orange #F88820, green #00A050, brown
-     #682800. --ink is that brown deepened for use as a page ground. There is
-     no black and no blue anywhere in the palette. */
+  /* From the supplied logo: orange #F88820 and the green dot #00A050. The
+     greys are neutral; there is no blue anywhere in the palette. */
   --green:     #00A050;   /* the dot over the "i" */
   --green-ink: #08703B;   /* green that passes AA as text on light */
   --ok: var(--green);
@@ -58,10 +57,10 @@
 
   /* Fine film grain, used as a background layer so it never needs a
      positioned overlay element or a z-index. */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .29 0 0 0 0 .12 0 0 0 0 .03 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
 
   --radius: 3px;
-  --shadow-card: 0 1px 2px rgba(74, 30, 8, .05), 0 8px 24px -16px rgba(74, 30, 8, .3);
+  --shadow-card: 0 1px 2px rgba(20, 20, 20, .05), 0 8px 24px -16px rgba(20, 20, 20, .3);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -182,9 +181,9 @@ section { padding-block: clamp(56px, 7vw, 96px); }
 .btn--on-dark {
   background: transparent;
   color: #fff;
-  border-color: rgba(255, 236, 214,.35);
+  border-color: rgba(255, 255, 255,.35);
 }
-.btn--on-dark:hover { border-color: #fff; background: rgba(255, 236, 214,.08); color: #fff; }
+.btn--on-dark:hover { border-color: #fff; background: rgba(255, 255, 255,.08); color: #fff; }
 
 .btn svg { flex: none; }
 

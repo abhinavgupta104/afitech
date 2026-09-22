@@ -1,0 +1,191 @@
+---
+/**
+ * Replacement key sheets, soft keys and overlays for CNC machine panels.
+ *
+ * Buyers of these arrive with a part number printed on a worn sheet, so the
+ * page is organised around the number: grouped cards to browse, and a plain
+ * index table at the foot to scan or search with the browser's find.
+ */
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import CncCard from '../../components/CncCard.astro';
+import { cncParts, cncGroups, cncTitle, inr, cncTrademarkNote } from '../../data/cnc-parts';
+import { site } from '../../data/site';
+
+const groups = cncGroups.map((g) => ({ ...g, parts: cncParts.filter((p) => p.group === g.id) }));
+const low = Math.min(...cncParts.map((p) => p.price));
+const high = Math.max(...cncParts.map((p) => p.price));
+
+const waText = encodeURIComponent(
+  'Hello AFI Technologies, I need a replacement key sheet. The part number on the panel is: '
+);
+
+const extraSchema = [
+  {
+    '@type': 'ItemList',
+    name: 'Replacement CNC key sheets and overlays',
+    numberOfItems: cncParts.length,
+    itemListElement: cncParts.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: cncTitle(p),
+      url: new URL(`/cnc-key-sheets/${p.slug}/`, site.url).href,
+    })),
+  },
+];
+---
+
+<Base
+  title={`CNC Key Sheets & Overlays for FANUC, Doosan, Hwacheon | ${site.name}`}
+  description={`Replacement membrane key sheets, soft keys and panel overlays for FANUC, Doosan and Hwacheon CNC machines. ${cncParts.length} parts listed by part number, ${inr(low)}–${inr(high)} per piece.`}
+  path="/cnc-key-sheets/"
+  crumbLabel="CNC key sheets"
+  breadcrumbs={[{ label: 'Products', href: '/products/' }]}
+  extraSchema={extraSchema}
+>
+  <PageHeader
+    eyebrow="Replacement parts"
+    title="CNC key sheets and overlays"
+    lede="Replacement key sheets, soft keys and panel overlays for FANUC, Doosan and Hwacheon machine controls, listed by part number with the price per piece."
+    breadcrumbs={[{ label: 'Products', href: '/products/' }]}
+  >
+    <ul class="jump">
+      {groups.map((g) => (
+        <li>
+          <a href={`#${g.id}`}>
+            <span class="jump__n mono">{g.parts.length}</span>
+            <span>{g.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </PageHeader>
+
+  {groups.map((g, gi) => (
+    <section class:list={['grp', gi % 2 === 1 && 'grp--alt']} id={g.id} aria-labelledby={`${g.id}-h`}>
+      <div class="wrap">
+        <div class="grp__head">
+          <h2 class="grp__title" id={`${g.id}-h`}>{g.title}</h2>
+          <p class="grp__lede">{g.lede}</p>
+        </div>
+        <ul class="grid">
+          {g.parts.map((p, i) => (
+            <li><CncCard part={p} loading={gi === 0 && i < 4 ? 'eager' : 'lazy'} /></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <section class="index" aria-labelledby="index-h">
+    <div class="wrap index__grid">
+      <div>
+        <h2 class="index__title" id="index-h">Part number index</h2>
+        <p class="index__lede">Every part on one table. Use your browser's find (Ctrl+F) with the number printed on your panel.</p>
+        <p class="index__missing">
+          Not listed? <a href={`https://wa.me/${site.whatsapp}?text=${waText}`} rel="noopener">Send a photo of the panel on WhatsApp</a> with the number printed on the sheet.
+        </p>
+        <p class="index__tm">{cncTrademarkNote}</p>
+      </div>
+
+      <div class="index__scroll">
+        <table class="index__table" role="table">
+          <caption class="visually-hidden">Replacement CNC parts with the machine control they fit, price per piece and minimum order quantity</caption>
+          <thead role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader">Part</th>
+              <th scope="col" role="columnheader">Fits</th>
+              <th scope="col" role="columnheader" class="num">Price</th>
+              <th scope="col" role="columnheader" class="num">MOQ</th>
+            </tr>
+          </thead>
+          <tbody role="rowgroup">
+            {cncParts.map((p) => (
+              <tr role="row">
+                <th scope="row" role="rowheader">
+                  <a href={`/cnc-key-sheets/${p.slug}/`}>
+                    {p.partNumber ? <span class="mono">{p.partNumber}</span> : null}
+                    <span class="index__kind">{p.partNumber ? p.kind : `${p.kind[0].toUpperCase()}${p.kind.slice(1)}`}</span>
+                  </a>
+                </th>
+                <td role="cell">{p.system}</td>
+                <td role="cell" class="num mono">{p.priceFrom ? 'from ' : ''}{inr(p.price)}</td>
+                <td role="cell" class="num mono" data-label="MOQ">{p.moq}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Part number not on the list?"
+    body="Send a photo of the panel and the number printed on the key sheet, with the quantity you need."
+  />
+</Base>
+
+<style>
+  .jump { list-style: none; margin: 28px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .jump a {
+    display: inline-flex; align-items: center; gap: 10px;
+    min-height: 44px; padding: 8px 16px 8px 8px;
+    border: 1px solid rgba(255, 255, 255, .28); border-radius: var(--radius);
+    color: #EDEDEB; text-decoration: none; font-size: 15px;
+    transition: border-color .15s ease, background-color .15s ease;
+  }
+  .jump a:hover { border-color: var(--accent); background: rgba(255, 255, 255, .06); color: #fff; }
+  .jump__n {
+    display: grid; place-items: center; min-width: 30px; height: 28px; padding: 0 6px;
+    background: var(--accent); color: var(--ink); border-radius: 2px; font-size: 13px; font-weight: 600;
+  }
+
+  .grp { background: var(--ground); }
+  .grp--alt { background: var(--surface-2); }
+  .grp__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px; }
+  .grp__title { font-size: clamp(26px, 3.4vw, 38px); letter-spacing: -.015em; }
+  .grp__lede { color: var(--ink-soft); max-width: 52ch; }
+
+  .grid {
+    list-style: none; margin: 28px 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 18px;
+  }
+
+  .index { background: var(--surface); }
+  .index__grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.6fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
+  .index__title { font-size: clamp(26px, 3.2vw, 36px); }
+  .index__lede { margin-top: 14px; color: var(--ink-soft); }
+  .index__missing { margin-top: 18px; padding: 14px 16px; background: var(--accent-wash); border-left: 3px solid var(--accent); font-size: 15.5px; }
+  .index__tm { margin-top: 22px; font-size: 13px; line-height: 1.55; color: var(--muted); }
+
+  .index__scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+  .index__table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 15px; }
+  .index__table th, .index__table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: baseline; }
+  .index__table thead th {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); background: var(--surface-2); border-bottom: 1px solid var(--line);
+  }
+  .index__table tbody th { font-weight: 600; }
+  .index__table tbody th a { display: flex; flex-wrap: wrap; gap: 2px 10px; min-height: 24px; align-items: baseline; color: var(--ink); text-decoration: none; }
+  .index__table tbody th a:hover .mono { color: var(--accent-ink); text-decoration: underline; }
+  .index__kind { font-weight: 400; color: var(--muted); }
+  .index__table td { color: var(--ink-soft); }
+  .index__table .num { text-align: right; white-space: nowrap; }
+  .index__table tbody tr:last-child > * { border-bottom: 0; }
+
+  /* phones: the part on its own line, then system, price and MOQ beneath it */
+  @media (max-width: 560px) {
+    .index__table { min-width: 0; }
+    .index__table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .index__table, .index__table tbody, .index__table tr, .index__table th, .index__table td { display: block; }
+    .index__table tbody tr { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; padding: 11px 14px; border-bottom: 1px solid var(--line-soft); }
+    .index__table tbody tr:last-child { border-bottom: 0; }
+    .index__table tbody th { flex-basis: 100%; }
+    .index__table th, .index__table td { padding: 0; border: 0; }
+    .index__table .num { text-align: left; }
+    .index__table td[data-label]::before { content: attr(data-label) " "; content: attr(data-label) " " / ""; color: var(--muted); }
+  }
+
+  @media (max-width: 900px) { .index__grid { grid-template-columns: 1fr; } }
+</style>

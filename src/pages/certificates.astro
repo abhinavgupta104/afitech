@@ -48,7 +48,7 @@ const whatItMeans = [
 
 <Base
   title={`Quality &amp; ISO 9001:2015 Certification | ${site.name}`}
-  description={`AFI Technologies holds ISO 9001:2015 certificate ${cert.number}, covering manufacture of membrane keypads, PCB keypads, graphic overlays, connectors and wire harnesses.`}
+  description={`AFI Technologies holds ISO 9001:2015 certificate ${cert.number}, covering the manufacture of membrane keypads, PCB keypads and graphic overlays.`}
   path="/certificates/"
   crumbLabel="Quality"
 >
@@ -75,11 +75,6 @@ const whatItMeans = [
         <div class="scope">
           <h3 class="scope__label">Certified scope</h3>
           <p class="scope__text">{cert.scope}</p>
-          <p class="scope__note">
-            Note that the scope includes connectors and wire harnesses as well as keypads and
-            overlays — so a panel and the loom behind it can be built and quoted together.
-            <a href="/connectors-wire-harness/">See connectors &amp; harnesses</a>
-          </p>
         </div>
 
         <p class="verify">
@@ -150,7 +145,6 @@ const whatItMeans = [
     letter-spacing: .14em; text-transform: uppercase; color: var(--accent-ink);
   }
   .scope__text { margin-top: 10px; font-size: 17.5px; font-weight: 600; line-height: 1.45; }
-  .scope__note { margin-top: 12px; font-size: 15px; color: var(--ink-soft); }
 
   .verify { margin-top: 24px; font-size: 15px; color: var(--ink-soft); }
 

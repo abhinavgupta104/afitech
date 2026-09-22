@@ -78,6 +78,9 @@
 
   # The default WordPress post that was still published
   RewriteRule ^hello-world/?$ / [R=301,L]
+
+  # Connectors and wire harnesses are no longer listed as a product
+  RewriteRule ^connectors-wire-harness/?$ /products/ [R=301,L]
 </IfModule>
 
 # ---------------------------------------------------------------------------

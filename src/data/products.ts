@@ -378,61 +378,7 @@ export const products: Product[] = [
       'Automotive and vehicle electronics',
       'Equipment consolidating keypad and driver electronics',
     ],
-    compareWith: ['tactile-membrane-keypad', 'connectors-wire-harness'],
-  },
-
-  {
-    slug: 'connectors-wire-harness',
-    name: 'Connectors & Wire Harnesses',
-    shortName: 'Connectors & harnesses',
-    summary:
-      'Assembled cable looms and connector terminations, within our ISO 9001:2015 certified scope.',
-    metaDescription:
-      'Custom wire harnesses and connector assemblies manufactured in Pune, within AFI Technologies\' ISO 9001:2015 certified scope. Built to your wiring schedule.',
-    // TODO(photo): needs a real harness photo. Using the tac-no-tac panel
-    // because its tail and connector termination are clearly visible, and
-    // because reusing the PCB-backed shot put two identical images side by
-    // side in the catalogue grid.
-    image: tacNoTac,
-    imageAlt:
-      'Membrane panel with its flexible tail terminated into a multi-way connector, ready for board mounting',
-    intro:
-      'Connectors and wire harnesses fall inside our ISO 9001:2015 certified scope alongside keypads and overlays. Where a keypad has to reach a board on the other side of an enclosure, or where an instrument needs a loom built to a wiring schedule, we assemble and test it here rather than leaving it to be sourced separately.',
-    chooseWhen: [
-      'A keypad tail has to terminate into something other than a bare flex',
-      'You would rather buy the panel and its loom as one part from one supplier',
-      'The harness needs to be built to a documented wiring schedule and tested',
-      'You are consolidating suppliers across a product\'s interface parts',
-    ],
-    construction: [
-      { layer: 'Termination', detail: 'Crimped, soldered or IDC to your connector specification' },
-      { layer: 'Conductors', detail: 'To the gauge and insulation called out on your schedule' },
-      { layer: 'Protection', detail: 'Sleeving, braid or spiral wrap as specified' },
-      { layer: 'Identification', detail: 'Printed or applied markers per circuit' },
-      { layer: 'Test', detail: 'Continuity checked against the schedule before despatch' },
-    ],
-    keySpecs: [
-      { label: 'ISO scope', value: 'Covered by certificate 25UQLX26' },
-      { label: 'Termination', value: 'Crimp, solder, IDC' },
-      { label: 'Build standard', value: 'To customer wiring schedule' },
-      { label: 'Testing', value: 'Continuity verified per assembly' },
-    ],
-    sections: [
-      {
-        heading: 'Buying the panel and the loom together',
-        body: [
-          'The interface between a keypad tail and the loom it plugs into is a common source of first-article problems: a pitch mismatch, a tail cut to the wrong length, a connector that fouls the enclosure. Sourcing both parts from the same supplier removes that interface from the project.',
-          'Send the wiring schedule with the keypad drawing and we will quote the pair together.',
-        ],
-      },
-    ],
-    applications: [
-      'Keypad-to-board interconnects',
-      'Instrument internal looms',
-      'Panel and enclosure wiring',
-      'Equipment sub-assembly harnesses',
-    ],
-    compareWith: ['pcb-backed-keypad', 'non-tactile-membrane-keypad'],
+    compareWith: ['tactile-membrane-keypad', 'non-tactile-membrane-keypad'],
   },
 ];
 

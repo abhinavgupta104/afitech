@@ -316,7 +316,8 @@ const description =
           </div>
         ))}
         <div class="tally__i tally__i--cert">
-          <span class="tally__v tally__v--sm">{cert.standard}</span>
+          {/* clipped like the figures, or the wipe slides it over the line below */}
+          <span class="tally__clip"><span class="tally__v tally__v--sm">{cert.standard}</span></span>
           <span class="tally__l">Certificate <span class="mono">{cert.number}</span>, valid to 15 December 2028</span>
         </div>
       </div>
@@ -369,9 +370,9 @@ const description =
     pointer-events: none;
     z-index: 0;
     color: transparent;
-    -webkit-text-stroke: 1.5px rgba(74, 30, 8,.10);
+    -webkit-text-stroke: 1.5px rgba(20, 20, 20,.10);
   }
-  .chapter--dark .chapter__ghost { -webkit-text-stroke-color: rgba(255, 236, 214,.12); }
+  .chapter--dark .chapter__ghost { -webkit-text-stroke-color: rgba(255, 255, 255,.12); }
 
   .rail { position: fixed; inset: 0 0 auto; height: 3px; z-index: 60; pointer-events: none; }
   .rail__fill { display: block; height: 100%; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; }
@@ -403,14 +404,14 @@ const description =
     z-index: 0;
     opacity: .85;
     background-image:
-      repeating-linear-gradient(90deg, rgba(255, 236, 214,.055) 0 1px, transparent 1px 76px),
-      repeating-linear-gradient(0deg,  rgba(255, 236, 214,.04)  0 1px, transparent 1px 76px),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255,.055) 0 1px, transparent 1px 76px),
+      repeating-linear-gradient(0deg,  rgba(255, 255, 255,.04)  0 1px, transparent 1px 76px),
       radial-gradient(circle at 18% 22%, rgba(240, 136, 32,.30) 0 5px, transparent 6px),
       radial-gradient(circle at 76% 34%, rgba(240, 136, 32,.22) 0 4px, transparent 5px),
       radial-gradient(circle at 42% 78%, rgba(240, 136, 32,.18) 0 4px, transparent 5px),
-      radial-gradient(circle at 88% 74%, rgba(255, 236, 214,.10) 0 3px, transparent 4px);
-    -webkit-mask-image: radial-gradient(120% 90% at 50% 40%, #4A1E08 35%, transparent 78%);
-    mask-image: radial-gradient(120% 90% at 50% 40%, #4A1E08 35%, transparent 78%);
+      radial-gradient(circle at 88% 74%, rgba(255, 255, 255,.10) 0 3px, transparent 4px);
+    -webkit-mask-image: radial-gradient(120% 90% at 50% 40%, #141414 35%, transparent 78%);
+    mask-image: radial-gradient(120% 90% at 50% 40%, #141414 35%, transparent 78%);
   }
   .open__grid { position: relative; z-index: 1; }
 
@@ -420,14 +421,14 @@ const description =
     background-color: var(--ink);
     background-image:
       var(--grain),
-      radial-gradient(112% 128% at 76% -8%, #5A270E 0%, #5A270E 42%, var(--ink) 74%);
-    color: #EECBA8;
+      radial-gradient(112% 128% at 76% -8%, #1F1F1F 0%, #1F1F1F 42%, var(--ink) 74%);
+    color: #D1D1D1;
     padding-block: clamp(52px, 7vw, 104px) clamp(56px, 7vw, 104px);
   }
   .open__h1 { color: #fff; }
   /* the ghost button is drawn for light grounds; restate it for this one */
-  .open .btn--ghost { color: #fff; border-color: rgba(255, 236, 214,.34); background: transparent; }
-  .open .btn--ghost:hover { border-color: #fff; background: rgba(255, 236, 214,.08); }
+  .open .btn--ghost { color: #fff; border-color: rgba(255, 255, 255,.34); background: transparent; }
+  .open .btn--ghost:hover { border-color: #fff; background: rgba(255, 255, 255,.08); }
   .open .eyebrow { color: var(--accent); }
   .open__grid {
     display: grid;
@@ -448,7 +449,7 @@ const description =
     max-width: 54ch;
     margin-top: 20px;
     font-size: clamp(17px, 1.7vw, 20px);
-    color: #D9A176;            /* was --ink-soft: dark text on the dark ground */
+    color: #ADADAD;            /* was --ink-soft: dark text on the dark ground */
   }
   .open__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
   .open__cue {
@@ -456,9 +457,11 @@ const description =
     margin-top: 34px;
     font-family: var(--font-mono);
     font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase;
-    color: #C98A5C;            /* was --muted: too dark on the dark ground */
+    color: #989898;            /* was --muted: too dark on the dark ground */
   }
-  .open__cueline { display: block; width: 46px; height: 1px; background: var(--accent); }
+  /* the pulse below scales the line to 1.65× from its left edge; the margin
+     reserves that growth so it never runs into the text */
+  .open__cueline { display: block; flex: none; width: 46px; height: 1px; margin-right: 30px; background: var(--accent); }
   .open__media {
     display: grid;
     place-items: center;
@@ -477,7 +480,7 @@ const description =
     width: 116%;
     max-width: none;
     height: auto;
-    filter: drop-shadow(0 34px 44px rgba(74, 30, 8,.55));
+    filter: drop-shadow(0 34px 44px rgba(20, 20, 20,.55));
   }
 
   /* ───────── act one ───────── */
@@ -501,11 +504,11 @@ const description =
   }
 
   /* ───────── act two — the stack ───────── */
-  .stack { color: #F2D6B8; padding-block: clamp(64px, 9vw, 120px); }
+  .stack { color: #DEDEDC; padding-block: clamp(64px, 9vw, 120px); }
   .stack__grid { display: grid; gap: clamp(28px, 4vw, 44px); }
   .stack__intro { max-width: 60ch; }
   .stack__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; color: #fff; margin-top: 4px; }
-  .stack__body { position: relative; z-index: 1; margin-top: 16px; font-size: clamp(17px, 1.6vw, 19px); color: #EECBA8; }
+  .stack__body { position: relative; z-index: 1; margin-top: 16px; font-size: clamp(17px, 1.6vw, 19px); color: #D1D1D1; }
 
   /* The 3D scene is decorative and desktop-only; it stays out of the document
      until the choreography block below turns it on. */
@@ -521,18 +524,18 @@ const description =
 
   .stack-out { padding-block: clamp(24px, 3vw, 40px) clamp(56px, 8vw, 96px); }
 
-  .stack__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: rgba(255, 236, 214,.13); border: 1px solid rgba(255, 236, 214,.13); border-radius: var(--radius); overflow: hidden; }
+  .stack__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: rgba(255, 255, 255,.13); border: 1px solid rgba(255, 255, 255,.13); border-radius: var(--radius); overflow: hidden; }
   .lyr { background: var(--ink); display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; padding: 18px 20px; }
   .lyr__n { color: var(--accent); font-size: 13px; font-weight: 500; padding-top: 3px; }
   .lyr__name { font-size: 19px; font-weight: 600; color: #fff; }
-  .lyr__spec { font-size: 12.5px; color: #C98A5C; margin-top: 3px; }
-  .lyr__role { font-size: 15px; color: #EECBA8; margin-top: 8px; max-width: 56ch; }
+  .lyr__spec { font-size: 12.5px; color: #989898; margin-top: 3px; }
+  .lyr__role { font-size: 15px; color: #D1D1D1; margin-top: 8px; max-width: 56ch; }
 
   .stack__closing {
     display: block;
     margin-top: 0;
     font-size: clamp(16px, 1.6vw, 18px);
-    color: #C98A5C;
+    color: #ADADAD;            /* 6.3:1 on the ink */
     max-width: 62ch;
   }
 
@@ -543,8 +546,8 @@ const description =
   .dura {
     background-color: var(--ground);
     background-image:
-      repeating-linear-gradient(90deg, rgba(163, 95, 51,.07) 0 1px, transparent 1px 40px),
-      repeating-linear-gradient(0deg,  rgba(163, 95, 51,.07) 0 1px, transparent 1px 40px);
+      repeating-linear-gradient(90deg, rgba(112, 112, 112,.07) 0 1px, transparent 1px 40px),
+      repeating-linear-gradient(0deg,  rgba(112, 112, 112,.07) 0 1px, transparent 1px 40px);
     padding-block: clamp(64px, 9vw, 128px);
   }
   .dura__top {
@@ -615,22 +618,22 @@ const description =
   .fig__n { font-size: 14.4px; color: var(--muted); line-height: 1.45; }
 
   /* ───────── act four — the choice ───────── */
-  .choice { color: #F2D6B8; padding-block: clamp(64px, 9vw, 128px); }
+  .choice { color: #DEDEDC; padding-block: clamp(64px, 9vw, 128px); }
   .choice__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; color: #fff; max-width: 20ch; }
-  .choice__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #EECBA8; }
+  .choice__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #D1D1D1; }
 
   .opts { list-style: none; margin: clamp(34px, 4vw, 52px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
-  .opt { border: 1px solid rgba(255, 236, 214,.16); border-radius: var(--radius); background: #5A270E; transition: border-color .18s ease, transform .18s ease; }
+  .opt { border: 1px solid rgba(255, 255, 255,.16); border-radius: var(--radius); background: #1F1F1F; transition: border-color .18s ease, transform .18s ease; }
   .opt:hover { border-color: var(--accent); }
   .opt__link { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 22px; text-decoration: none; color: inherit; }
   .opt__product { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
   .opt__name { font-size: 25px; font-weight: 600; color: #fff; }
-  .opt__when { font-size: 15px; color: #EECBA8; line-height: 1.55; }
-  .opt__specs { margin: 6px 0 0; display: flex; gap: 26px; border-top: 1px solid rgba(255, 236, 214,.14); padding-top: 13px; }
-  .opt__specs dt { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #D9A176; }
+  .opt__when { font-size: 15px; color: #D1D1D1; line-height: 1.55; }
+  .opt__specs { margin: 6px 0 0; display: flex; gap: 26px; border-top: 1px solid rgba(255, 255, 255,.14); padding-top: 13px; }
+  .opt__specs dt { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #ADADAD; }
   .opt__specs dd { margin: 3px 0 0; font-size: 14.5px; color: #fff; }
   .opt__more { margin-top: auto; padding-top: 14px; font-size: 14.5px; font-weight: 600; color: var(--accent); }
-  .choice__foot { margin-top: 24px; font-size: 16px; color: #C98A5C; max-width: 58ch; }
+  .choice__foot { margin-top: 24px; font-size: 16px; color: #989898; max-width: 58ch; }
 
   /* ───────── act five — the process ───────── */
   /* Chapter five is the workshop chapter, so it gets a bench rather than the
@@ -638,19 +641,21 @@ const description =
      of light where the part sits. It also makes the factory photographs read
      far better than they do on white. */
   .proc {
-    background-color: #4A1E08;
+    background-color: #141414;
     background-image:
       var(--grain),
       radial-gradient(52% 46% at 74% 30%, rgba(240, 136, 32,.16) 0%, rgba(240, 136, 32,0) 68%),
-      repeating-linear-gradient(90deg, rgba(255, 236, 214,.035) 0 1px, transparent 1px 64px),
-      repeating-linear-gradient(0deg,  rgba(255, 236, 214,.028) 0 1px, transparent 1px 64px),
-      linear-gradient(180deg, #4A1E08 0%, #4A1E08 46%, #4A1E08 100%);
-    color: #EECBA8;
+      repeating-linear-gradient(90deg, rgba(255, 255, 255,.035) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(0deg,  rgba(255, 255, 255,.028) 0 1px, transparent 1px 64px),
+      linear-gradient(180deg, #141414 0%, #141414 46%, #141414 100%);
+    color: #D1D1D1;
     padding-block: clamp(64px, 9vw, 128px);
     position: relative;
   }
   .proc__h2 { color: #fff; }
-  .proc__viewport { position: relative; }
+  /* Sits outside .wrap so the desktop track can run edge to edge; everywhere
+     else it needs the page gutter back, or the steps touch the screen edges. */
+  .proc__viewport { position: relative; max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
   .proc__top { display: grid; gap: clamp(24px, 4vw, 48px); }
   .proc__piece {
     margin: 0;
@@ -665,10 +670,12 @@ const description =
     content: '';
     position: absolute;
     inset: -6% -2% -2%;
-    background: radial-gradient(52% 48% at 50% 46%, rgba(255, 238, 214,.14) 0%, rgba(255, 238, 214,0) 72%);
+    background: radial-gradient(52% 48% at 50% 46%, rgba(255, 255, 255,.14) 0%, rgba(255, 255, 255,0) 72%);
     pointer-events: none;
   }
-  .proc__piece :global(svg) { position: relative; filter: drop-shadow(0 22px 26px rgba(74, 30, 8,.6)); }
+  .proc__piece :global(svg) { position: relative; filter: drop-shadow(0 22px 26px rgba(20, 20, 20,.6)); }
+  /* the dimension callout is 9 drawing units; at phone width that rendered under 9px */
+  @media (max-width: 480px) { .proc__piece :global(svg text) { font-size: 11px; } }
   .cap-build { display: none; }
   .proc__piececap {
     position: relative;
@@ -676,17 +683,17 @@ const description =
     font-size: 10.5px;
     letter-spacing: .14em;
     text-transform: uppercase;
-    color: #D9A176;            /* 6.3:1 on the espresso bench */
+    color: #ADADAD;            /* 8.4:1 on the black bench */
     text-align: center;
   }
   /* The gauge is a scroll read-out; with no scroll timeline it says nothing. */
   .gauge { display: none; }
   .gauge__seg { position: relative; list-style: none; }
   .proc__h2 { position: relative; z-index: 1; font-size: var(--d2); letter-spacing: -.026em; line-height: 1.02; max-width: 20ch; }
-  .proc__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #D9A176; }
+  .proc__body { position: relative; z-index: 1; margin-top: 18px; max-width: 60ch; font-size: clamp(17px, 1.6vw, 19px); color: #ADADAD; }
 
   .steps { position: relative; list-style: none; margin: clamp(34px, 4vw, 52px) 0 0; padding: 0; display: grid; gap: 2px; }
-  .steps__line { position: absolute; left: 65px; top: 10px; bottom: 10px; width: 2px; background: rgba(255, 236, 214,.16); }
+  .steps__line { position: absolute; left: 65px; top: 10px; bottom: 10px; width: 2px; background: rgba(255, 255, 255,.16); }
   .steps__fill { display: block; width: 100%; height: 100%; background: var(--accent); transform: scaleY(1); transform-origin: 50% 0; }
   .step { position: relative; display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 20px; padding: 18px 0; align-items: start; }
   .step__media {
@@ -694,11 +701,14 @@ const description =
     aspect-ratio: 16 / 10;
     border-radius: var(--radius);
     overflow: hidden;
-    background: #4A1E08;
-    border: 1px solid rgba(255, 236, 214,.14);
+    background: #141414;
+    border: 1px solid rgba(255, 255, 255,.14);
   }
   .step__media :global(img),
   .step__media :global(svg) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* dimension callouts are drawn for the 340px desktop card; in a thumbnail
+     they shrink to a few pixels of noise */
+  .step__media :global(svg text) { display: none; }
   .step__n {
     position: absolute;
     left: 8px; bottom: 8px;
@@ -721,7 +731,7 @@ const description =
     margin-bottom: 6px;
   }
   .step__name { font-size: 20px; font-weight: 600; color: #fff; }
-  .step__detail { margin-top: 7px; font-size: 15.6px; color: #D9A176; max-width: 62ch; line-height: 1.55; }
+  .step__detail { margin-top: 7px; font-size: 15.6px; color: #ADADAD; max-width: 62ch; line-height: 1.55; }
 
   /* ───────── act six — proof ───────── */
   .proof { background: var(--ground); padding-block: clamp(64px, 9vw, 128px); }
@@ -754,7 +764,7 @@ const description =
     margin-top: 4px;
     border-radius: 2px;
     background: var(--accent);
-    box-shadow: inset 0 0 0 2px rgba(74, 30, 8, .18);
+    box-shadow: inset 0 0 0 2px rgba(20, 20, 20, .18);
   }
   .route__name { font-size: clamp(21px, 2.2vw, 27px); font-weight: 600; letter-spacing: -.014em; line-height: 1.1; }
   .route__name a { color: var(--ink); text-decoration: none; background-image: linear-gradient(var(--accent), var(--accent)); background-size: 0 2px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .2s ease; padding-bottom: 2px; }
@@ -826,7 +836,7 @@ const description =
     padding-top: clamp(28px, 3.5vw, 44px);
     border-top: 1px solid var(--line);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
     gap: clamp(22px, 3vw, 44px);
   }
   .tally__i { display: flex; flex-direction: column; gap: 6px; }
@@ -837,8 +847,22 @@ const description =
   .tally__l { font-size: 14.2px; color: var(--muted); line-height: 1.45; }
   /* the certificate is the one figure worth marking out */
   .tally__i--cert { padding-left: 18px; border-left: 3px solid var(--accent); }
+  /* phones: figures two to a row, the certificate on its own row below them */
+  @media (max-width: 560px) {
+    .tally { gap: 26px 20px; }
+    .tally__i--cert { grid-column: 1 / -1; }
+  }
 
   /* ───────── responsive ───────── */
+  @media (max-width: 859px) {
+    /* the closing line belongs to the stack above it, not to a new section */
+    .stack { padding-bottom: 28px; }
+  }
+  @media (max-width: 480px) {
+    /* a narrower thumbnail leaves the step text a readable measure */
+    .step { grid-template-columns: 96px minmax(0, 1fr); gap: 16px; }
+    .steps__line { left: 47px; }
+  }
   @media (max-width: 900px) {
     .dura__top, .mech { grid-template-columns: 1fr; }
     .open__grid { grid-template-columns: 1fr; min-height: 0; }
@@ -936,6 +960,18 @@ const description =
       .pull__w:nth-child(6) .pull__i { animation-range: cover 38% cover 56%; }
       .pull__w:nth-child(7) .pull__i { animation-range: cover 42% cover 60%; }
       .pull__w:nth-child(n+8) .pull__i { animation-range: cover 46% cover 64%; }
+      /* On a phone the quote wraps to several lines, which staggers it already;
+         the desktop ranges left the last words hidden past mid-screen. */
+      @media (max-width: 760px) {
+        .pull__w:nth-child(1) .pull__i { animation-range: cover 8% cover 24%; }
+        .pull__w:nth-child(2) .pull__i { animation-range: cover 10% cover 26%; }
+        .pull__w:nth-child(3) .pull__i { animation-range: cover 12% cover 28%; }
+        .pull__w:nth-child(4) .pull__i { animation-range: cover 14% cover 30%; }
+        .pull__w:nth-child(5) .pull__i { animation-range: cover 16% cover 32%; }
+        .pull__w:nth-child(6) .pull__i { animation-range: cover 18% cover 34%; }
+        .pull__w:nth-child(7) .pull__i { animation-range: cover 20% cover 36%; }
+        .pull__w:nth-child(n+8) .pull__i { animation-range: cover 22% cover 38%; }
+      }
 
       /* ── tally figures wipe up behind their own rule ── */
       .tally__v {
@@ -1089,6 +1125,29 @@ const description =
 
       }
 
+      /* ── phones: no exploded stack, so the six layers arrive one at a time,
+         each sliding in with its number as it reaches the reading line ── */
+      @media (max-width: 859px) {
+        .lyr {
+          animation: lyr-rise var(--ease-out) both;
+          animation-timeline: view();
+          animation-range: cover 4% cover 26%;
+        }
+        @keyframes lyr-rise {
+          from { opacity: .15; transform: translate3d(-14px, 0, 0); }
+          to   { opacity: 1;   transform: translate3d(0, 0, 0); }
+        }
+        .lyr__n {
+          animation: lyr-num var(--ease-out) both;
+          animation-timeline: view();
+          animation-range: cover 8% cover 28%;
+        }
+        @keyframes lyr-num {
+          from { transform: scale(.6); opacity: 0; }
+          to   { transform: scale(1); opacity: 1; }
+        }
+      }
+
       /* ── the process line draws itself ── */
       .steps__fill {
         transform: scaleY(0);
@@ -1144,7 +1203,7 @@ const description =
         }
         .cap-rest { display: none; }
         .cap-build { display: inline; }
-        .proc__piececap { text-align: right; margin-top: 10px; color: #D9A176; }
+        .proc__piececap { text-align: right; margin-top: 10px; color: #ADADAD; }
 
         /* seven segments, one per step, filling with the track */
         .gauge {
@@ -1165,8 +1224,8 @@ const description =
           width: 100%;
           height: 4px;
           border-radius: 2px;
-          background: rgba(255, 236, 214,.14);
-          box-shadow: inset 0 1px 1px rgba(74, 30, 8,.5);
+          background: rgba(255, 255, 255,.14);
+          box-shadow: inset 0 1px 1px rgba(20, 20, 20,.5);
           position: relative;
           overflow: hidden;
         }
@@ -1182,15 +1241,18 @@ const description =
         .gauge__n {
           font-size: 10px;
           letter-spacing: .1em;
-          color: #D9A176;          /* 6.3:1; was 3.7:1 at the old tan */
+          color: #ADADAD;          /* 6.3:1; was 3.7:1 at the old tan */
         }
         .proc__h2 { font-size: clamp(28px, 3.4vw, 42px); }
         .proc__body { margin-top: 14px; font-size: 17px; }
 
         .proc__viewport {
+          max-width: none;
+          margin-inline: 0;
+          padding-inline: 0;
           overflow: hidden;
-          -webkit-mask-image: linear-gradient(90deg, transparent 0, #4A1E08 5%, #4A1E08 95%, transparent 100%);
-          mask-image: linear-gradient(90deg, transparent 0, #4A1E08 5%, #4A1E08 95%, transparent 100%);
+          -webkit-mask-image: linear-gradient(90deg, transparent 0, #141414 5%, #141414 95%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #141414 5%, #141414 95%, transparent 100%);
         }
 
         .steps {
@@ -1249,18 +1311,19 @@ const description =
           flex-direction: column;
           gap: 0;
           padding: 0 0 18px;
-          background: linear-gradient(180deg, #5A270E 0%, #4A1E08 100%);
-          border: 1px solid rgba(255, 236, 214,.13);
+          background: linear-gradient(180deg, #1F1F1F 0%, #141414 100%);
+          border: 1px solid rgba(255, 255, 255,.13);
           border-radius: var(--radius);
           overflow: hidden;
-          box-shadow: 0 18px 34px -24px rgba(74, 30, 8,.9);
+          box-shadow: 0 18px 34px -24px rgba(20, 20, 20,.9);
           position: relative;
           opacity: 1;
         }
+        .step__media :global(svg text) { display: inline; }
         .step__media {
           aspect-ratio: 16 / 10;
           border: 0;
-          border-bottom: 1px solid rgba(255, 236, 214,.13);
+          border-bottom: 1px solid rgba(255, 255, 255,.13);
           border-radius: 0;
           width: 100%;
         }

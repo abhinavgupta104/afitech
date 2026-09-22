@@ -26,10 +26,6 @@ const faq = [
     q: 'Can you match an existing keypad?',
     a: 'Yes, and sending a physical sample is far more reliable than sending a specification. A sample lets us measure the dome force, match the colour under the right finish, and copy the tail and connector exactly.',
   },
-  {
-    q: 'Do you supply the connector as well?',
-    a: 'Yes. Connectors and wire harnesses are inside our ISO 9001:2015 certified scope, so the keypad and the loom it plugs into can be quoted and built together.',
-  },
 ];
 
 const extraSchema = [
@@ -65,21 +61,21 @@ const extraSchema = [
           {g.intro && <p class="specgroup__intro">{g.intro}</p>}
 
           <div class="specgroup__scroll">
-            <table class="spectable">
+            <table class="spectable" role="table">
               <caption class="visually-hidden">{g.title} specifications</caption>
-              <thead>
-                <tr>
-                  <th scope="col">Parameter</th>
-                  <th scope="col">Value</th>
-                  <th scope="col">Notes</th>
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th scope="col" role="columnheader">Parameter</th>
+                  <th scope="col" role="columnheader">Value</th>
+                  <th scope="col" role="columnheader">Notes</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody role="rowgroup">
                 {g.rows.map((r) => (
-                  <tr>
-                    <th scope="row">{r.parameter}</th>
-                    <td class="mono">{r.value}</td>
-                    <td class="spectable__note">{r.note ?? ''}</td>
+                  <tr role="row">
+                    <th scope="row" role="rowheader">{r.parameter}</th>
+                    <td class="mono" role="cell">{r.value}</td>
+                    <td class="spectable__note" role="cell">{r.note ?? ''}</td>
                   </tr>
                 ))}
               </tbody>
@@ -190,6 +186,21 @@ const extraSchema = [
   .spectable tbody tr:last-child th, .spectable tbody tr:last-child td { border-bottom: 0; }
   .spectable__note { color: var(--muted); font-size: 14px; }
 
+  /* Phones: a three-column table either scrolls sideways or crushes the values.
+     Each row becomes a block instead: parameter, value, note. The explicit
+     roles in the markup keep it a table to assistive tech once display changes. */
+  @media (max-width: 640px) {
+    .spectable { min-width: 0; }
+    .spectable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .spectable, .spectable tbody, .spectable tr, .spectable th, .spectable td { display: block; }
+    .spectable tbody tr { padding: 13px 16px; border-bottom: 1px solid var(--line-soft); }
+    .spectable tbody tr:last-child { border-bottom: 0; }
+    .spectable tbody th, .spectable tbody td { width: auto; padding: 0; border: 0; }
+    .spectable tbody td:nth-child(2) { width: auto; margin-top: 4px; font-size: 15px; font-weight: 600; color: var(--ink); }
+    .spectable__note { margin-top: 4px; }
+    .spectable__note:empty { display: none; }
+  }
+
   .options__grid {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: clamp(28px, 4vw, 56px); margin-top: 40px;
@@ -206,11 +217,11 @@ const extraSchema = [
   .rfq { background: var(--ink); color: #fff; }
   .rfq__grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: clamp(28px, 4vw, 64px); align-items: start; }
   .rfq__title { color: #fff; }
-  .rfq__lede { margin-top: 16px; color: #EECBA8; font-size: 17px; max-width: 48ch; }
+  .rfq__lede { margin-top: 16px; color: #D1D1D1; font-size: 17px; max-width: 48ch; }
   .rfq__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
   .rfq__list li {
     display: grid; grid-template-columns: 34px 1fr; gap: 14px;
-    padding: 14px 0; border-top: 1px solid #6B3115; color: #EECBA8; font-size: 16px;
+    padding: 14px 0; border-top: 1px solid #2E2E2E; color: #D1D1D1; font-size: 16px;
   }
   .rfq__n { color: var(--accent); font-size: 12.5px; padding-top: 4px; }
 

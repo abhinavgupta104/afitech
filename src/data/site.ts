@@ -87,7 +87,7 @@ export const footerNav = [
       { label: 'Embossed membrane keypads', href: '/embossed-membrane-keypad/' },
       { label: 'Graphic overlays', href: '/graphic-overlays/' },
       { label: 'PCB-backed keypads', href: '/pcb-backed-keypad/' },
-      { label: 'Connectors & wire harnesses', href: '/connectors-wire-harness/' },
+      { label: 'CNC key sheets & overlays', href: '/cnc-key-sheets/' },
     ],
   },
   {

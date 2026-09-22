@@ -47,7 +47,7 @@ const { eyebrow, title, lede, breadcrumbs = [] } = Astro.props;
     max-width: 62ch;
     margin-top: 18px;
     font-size: clamp(17px, 1.6vw, 19px);
-    color: #EECBA8;
+    color: #D1D1D1;
   }
 
   .ph__crumbs ol {
@@ -63,12 +63,12 @@ const { eyebrow, title, lede, breadcrumbs = [] } = Astro.props;
   .ph__crumbs li + li::before {
     content: '/';
     margin-right: 10px;
-    color: #874421;
+    color: #5a5a5a;
   }
   /* WCAG 2.5.8 wants 24px; the bare text link was 16px tall. Breadcrumbs are
      navigation, so the inline-text exception does not cover them. */
   .ph__crumbs a {
-    color: #C98A5C;
+    color: #989898;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -76,5 +76,5 @@ const { eyebrow, title, lede, breadcrumbs = [] } = Astro.props;
     padding-inline: 2px;
   }
   .ph__crumbs a:hover { color: #fff; text-decoration: underline; }
-  .ph__crumbs [aria-current='page'] { color: #FBEAD4; }
+  .ph__crumbs [aria-current='page'] { color: #EDEDEB; }
 </style>

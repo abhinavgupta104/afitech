@@ -1,0 +1,266 @@
+---
+/**
+ * One replacement part: every photo of it, the listed price and minimum order,
+ * the specification, and a WhatsApp enquiry with the part number filled in.
+ *
+ * No gallery script. The main photo is shown large and the rest as a grid;
+ * each opens full size on its own, which is what someone matching a worn sheet
+ * against a photo actually needs.
+ */
+import { Image, getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import CncCard from '../../components/CncCard.astro';
+import { cncParts, cncPhotos, cncTitle, inr, cncTrademarkNote } from '../../data/cnc-parts';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return cncParts.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const part = cncParts.find((p) => p.slug === Astro.params.slug)!;
+const title = cncTitle(part);
+const photos = cncPhotos(part.slug);
+const full = await Promise.all(photos.map((src) => getImage({ src, width: Math.min(src.width, 1000), format: 'webp' })));
+const path = `/cnc-key-sheets/${part.slug}/`;
+
+const alt = (i: number) =>
+  i === 0 ? `Replacement ${title} for ${part.system} machine controls` : `${title}, photo ${i + 1} of ${photos.length}`;
+
+/* Neighbours in the same group, wrapping, so every part links onward. */
+const group = cncParts.filter((p) => p.group === part.group);
+const at = group.indexOf(part);
+const related = Array.from({ length: Math.min(4, group.length - 1) }, (_, k) => group[(at + k + 1) % group.length]);
+
+const construction = part.specs.find((s) => s.label === 'Construction')?.value;
+const description = [
+  `Replacement ${part.kind} for ${part.system}${part.partNumber ? ` ${part.partNumber}` : ''}.`,
+  construction && `${construction}${part.specs.some((x) => x.value === 'Polyester') ? ', polyester' : ''}.`,
+  `${part.priceFrom ? 'From ' : ''}${inr(part.price)} per piece, minimum order ${part.moq}.`,
+  'Supplied from Pune.',
+].filter(Boolean).join(' ');
+
+const waText = encodeURIComponent(
+  `Hello AFI Technologies, I would like to order the ${title} (${part.system}). Quantity: `
+);
+
+const extraSchema = [
+  {
+    '@type': 'Product',
+    name: `${title} (replacement for ${part.system})`,
+    description: part.summary,
+    image: full.slice(0, 3).map((f) => new URL(f.src, site.url).href),
+    category: 'CNC machine key sheets and overlays',
+    brand: { '@type': 'Brand', name: site.name },
+    manufacturer: { '@id': `${site.url}/#organization` },
+    additionalProperty: [
+      ...(part.partNumber ? [{ '@type': 'PropertyValue', name: 'Replaces part number', value: `${part.system} ${part.partNumber}` }] : []),
+      ...part.specs.map((s) => ({ '@type': 'PropertyValue', name: s.label, value: s.value })),
+    ],
+    offers: {
+      '@type': 'Offer',
+      url: new URL(path, site.url).href,
+      priceCurrency: 'INR',
+      price: part.price,
+      eligibleQuantity: { '@type': 'QuantitativeValue', minValue: part.moq, unitText: 'piece' },
+      seller: { '@id': `${site.url}/#organization` },
+    },
+  },
+];
+---
+
+<Base
+  title={`${part.partNumber ? `${part.partNumber} ` : ''}${part.partNumber ? part.kind : `${part.system} ${part.kind}`} – Replacement for ${part.system} | ${site.name}`}
+  description={description}
+  path={path}
+  crumbLabel={part.partNumber ?? title}
+  breadcrumbs={[{ label: 'Products', href: '/products/' }, { label: 'CNC key sheets', href: '/cnc-key-sheets/' }]}
+  extraSchema={extraSchema}
+  ogType="product"
+>
+  <PageHeader
+    eyebrow={`Replacement for ${part.system}`}
+    title={title}
+    lede={part.summary}
+    breadcrumbs={[{ label: 'Products', href: '/products/' }, { label: 'CNC key sheets', href: '/cnc-key-sheets/' }]}
+  />
+
+  <section class="part">
+    <div class="wrap part__grid">
+      <div class="gal">
+        <a class="gal__main" href={full[0].src}>
+          <Image src={photos[0]} alt={alt(0)} widths={[480, 720, 960]} sizes="(max-width: 900px) 92vw, 640px" loading="eager" fetchpriority="high" />
+          <span class="gal__open" aria-hidden="true">Full size</span>
+        </a>
+        {photos.length > 1 && (
+          <ul class="gal__more" aria-label={`${photos.length - 1} more photos`}>
+            {photos.slice(1).map((src, k) => (
+              <li>
+                <a class="gal__thumb" href={full[k + 1].src}>
+                  <Image src={src} alt={alt(k + 1)} widths={[180, 320]} sizes="(max-width: 520px) 30vw, 150px" loading="lazy" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+        <p class="gal__note">{photos.length} {photos.length === 1 ? 'photo' : 'photos'}. Select one to open it full size.</p>
+      </div>
+
+      <div class="buy">
+        <div class="buy__box">
+          {part.partNumber && (
+            <p class="buy__pn">
+              <span class="buy__k">Replaces</span>
+              <span class="mono">{part.system} {part.partNumber}</span>
+            </p>
+          )}
+          <p class="buy__price">
+            <span class="buy__amt">{part.priceFrom && <small>From </small>}{inr(part.price)}</span>
+            <span class="buy__unit">per piece</span>
+          </p>
+          <p class="buy__moq">Minimum order <b>{part.moq} pieces</b></p>
+
+          <div class="buy__actions">
+            <a class="btn btn--primary" href={`https://wa.me/${site.whatsapp}?text=${waText}`} rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.2-.2-.5-.3Z"/></svg>
+              Order on WhatsApp
+            </a>
+            <a class="btn btn--ghost" href="/get-quote/">Request a quote</a>
+          </div>
+          <p class="buy__call">Or call <a href={`tel:${site.phoneHref}`}>{site.phone}</a>. Confirm stock and lead time when you enquire.</p>
+        </div>
+
+        <div class="spec">
+          <h2 class="spec__title">Specification</h2>
+          <dl class="spec__list">
+            {part.specs.map((s) => (
+              <div>
+                <dt>{s.label}</dt>
+                <dd>{s.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <p class="tm">{cncTrademarkNote}</p>
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="rel" aria-labelledby="rel-h">
+      <div class="wrap">
+        <div class="rel__head">
+          <h2 class="rel__title" id="rel-h">More {part.group === 'overlay' ? 'Doosan and Hwacheon parts' : part.group === 'soft-key' ? 'soft keys' : 'key sheets'}</h2>
+          <a class="rel__all" href="/cnc-key-sheets/">All {cncParts.length} parts &rarr;</a>
+        </div>
+        <ul class="rel__grid">
+          {related.map((p) => <li><CncCard part={p} /></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <CtaBand
+    title="Need a different key sheet?"
+    body="Send a photo of the panel and the number printed on the sheet, with the quantity you need."
+  />
+</Base>
+
+<style>
+  .part { background: var(--ground); }
+  .part__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(28px, 4vw, 60px);
+    align-items: start;
+  }
+
+  /* ── gallery ── */
+  .gal__main {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .gal__main :global(img) { position: absolute; inset: clamp(10px, 2vw, 24px); width: calc(100% - 2 * clamp(10px, 2vw, 24px)); height: calc(100% - 2 * clamp(10px, 2vw, 24px)); object-fit: contain; }
+  .gal__open {
+    position: absolute; right: 10px; bottom: 10px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    background: var(--ink); color: #EDEDEB; padding: 6px 10px; border-radius: 2px;
+    opacity: 0; transition: opacity .15s ease;
+  }
+  .gal__main:hover .gal__open, .gal__main:focus-visible .gal__open { opacity: 1; }
+
+  .gal__more {
+    list-style: none; margin: 12px 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(30%, 110px), 1fr)); gap: 10px;
+  }
+  .gal__thumb {
+    position: relative; display: block; aspect-ratio: 1;
+    background: #FFFFFF; border: 1px solid var(--line); border-radius: var(--radius);
+    transition: border-color .15s ease;
+  }
+  .gal__thumb:hover { border-color: var(--accent); }
+  .gal__thumb :global(img) { position: absolute; inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); object-fit: contain; }
+  .gal__note { margin-top: 12px; font-size: 13.5px; color: var(--muted); }
+
+  /* ── buy box ── */
+  .buy { display: grid; gap: 20px; position: sticky; top: 92px; }
+  .buy__box {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: clamp(20px, 2.6vw, 28px);
+  }
+  .buy__pn { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; margin-bottom: 14px; }
+  .buy__k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-ink); }
+  .buy__pn .mono { font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }
+  .buy__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .buy__amt { font-family: var(--font-display); font-size: clamp(40px, 5vw, 54px); font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+  .buy__amt small { font-size: 18px; font-weight: 600; color: var(--muted); letter-spacing: 0; }
+  .buy__unit { font-size: 16px; color: var(--muted); }
+  .buy__moq { margin-top: 8px; color: var(--ink-soft); }
+  .buy__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .buy__actions .btn { flex: 1 1 200px; }
+  .buy__call { margin-top: 14px; font-size: 14.5px; color: var(--muted); }
+
+  .spec__title {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--muted);
+  }
+  .spec__list { margin: 12px 0 0; border-top: 2px solid var(--ink); }
+  .spec__list > div {
+    display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 16px;
+    padding: 11px 0; border-bottom: 1px solid var(--line);
+  }
+  .spec__list dt { font-size: 14.5px; color: var(--muted); }
+  .spec__list dd { margin: 0; font-size: 15.5px; font-weight: 600; color: var(--ink); }
+
+  .tm { font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+
+  /* ── related ── */
+  .rel { background: var(--surface-2); }
+  .rel__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; }
+  .rel__title { font-size: clamp(24px, 3vw, 32px); }
+  .rel__all { font-size: 15.5px; font-weight: 600; min-height: 24px; display: inline-flex; align-items: center; }
+  .rel__grid {
+    list-style: none; margin: 24px 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 18px;
+  }
+
+  /* narrow: price and order buttons straight after the main photo, the rest
+     of the photos after them */
+  @media (max-width: 900px) {
+    .part__grid { grid-template-columns: 1fr; row-gap: 18px; }
+    .gal { display: contents; }
+    .gal__main { order: 1; }
+    .buy { order: 2; position: static; }
+    .gal__more { order: 3; margin-top: 0; }
+    .gal__note { order: 4; margin-top: -8px; }
+  }
+</style>

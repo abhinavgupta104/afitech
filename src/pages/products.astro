@@ -5,6 +5,11 @@ import PageHeader from '../components/PageHeader.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { catalogue } from '../data/products';
 import { site } from '../data/site';
+import { cncParts, cncPhotos } from '../data/cnc-parts';
+
+/** One of each kind, so the strip reads as a range rather than four similar sheets. */
+const sparesShown = ['a98l-0001-0298t', 'a98l-0005-0033kn', 'a98l-0001-0646d', 'doosan-cnc-machine-overlay']
+  .map((s) => cncParts.find((p) => p.slug === s)!);
 
 /** The comparison the old catalogue never offered. Buyers choose by behaviour. */
 const comparison = [
@@ -13,19 +18,18 @@ const comparison = [
   { slug: 'embossed-membrane-keypad', name: 'Embossed', feedback: 'Positional, by touch', force: '150–400 g', life: 'Up to 5M', domes: 'Optional', cost: 'Medium' },
   { slug: 'graphic-overlays', name: 'Graphic overlay', feedback: 'No switching', force: '—', life: '—', domes: 'No', cost: 'Lowest' },
   { slug: 'pcb-backed-keypad', name: 'PCB-backed', feedback: 'Metal dome snap', force: '250–400 g', life: '1M+', domes: 'Yes', cost: 'Highest' },
-  { slug: 'connectors-wire-harness', name: 'Connectors & harness', feedback: '—', force: '—', life: '—', domes: '—', cost: 'Per schedule' },
 ];
 ---
 
 <Base
   title={`Products | ${site.name}`}
-  description="Membrane keypads, graphic overlays, PCB-backed switch panels, embossed keypads and wire harnesses, manufactured to your drawing in Pune. Compare constructions and specifications."
+  description="Membrane keypads, graphic overlays, PCB-backed switch panels and embossed keypads, manufactured to your drawing in Pune. Compare constructions and specifications."
   path="/products/"
 >
   <PageHeader
     eyebrow="What we manufacture"
     title="Products"
-    lede="Six constructions. Which one you need depends on what the operator has to feel, what has to sit inside the panel, and what the environment will do to it."
+    lede="Five constructions. Which one you need depends on what the operator has to feel, what has to sit inside the panel, and what the environment will do to it."
   />
 
   <section class="cmp">
@@ -34,30 +38,30 @@ const comparison = [
       <p class="lede">Every figure here is explained in full on the <a href="/technicals/">technical page</a>.</p>
 
       <div class="cmp__scroll">
-        <table class="cmp__table">
+        <table class="cmp__table" role="table">
           <caption class="visually-hidden">
             AFI Technologies keypad constructions compared by operator feedback, actuation force,
             actuation life, use of metal domes and relative cost
           </caption>
-          <thead>
-            <tr>
-              <th scope="col">Construction</th>
-              <th scope="col">Operator feedback</th>
-              <th scope="col">Actuation force</th>
-              <th scope="col">Actuation life</th>
-              <th scope="col">Metal domes</th>
-              <th scope="col">Relative cost</th>
+          <thead role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader">Construction</th>
+              <th scope="col" role="columnheader">Operator feedback</th>
+              <th scope="col" role="columnheader">Actuation force</th>
+              <th scope="col" role="columnheader">Actuation life</th>
+              <th scope="col" role="columnheader">Metal domes</th>
+              <th scope="col" role="columnheader">Relative cost</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody role="rowgroup">
             {comparison.map((r) => (
-              <tr>
-                <th scope="row"><a href={`/${r.slug}/`}>{r.name}</a></th>
-                <td>{r.feedback}</td>
-                <td class="mono">{r.force}</td>
-                <td class="mono">{r.life}</td>
-                <td>{r.domes}</td>
-                <td>{r.cost}</td>
+              <tr role="row">
+                <th scope="row" role="rowheader"><a href={`/${r.slug}/`}>{r.name}</a></th>
+                <td role="cell" data-label="Operator feedback">{r.feedback}</td>
+                <td role="cell" data-label="Actuation force" class="mono">{r.force}</td>
+                <td role="cell" data-label="Actuation life" class="mono">{r.life}</td>
+                <td role="cell" data-label="Metal domes">{r.domes}</td>
+                <td role="cell" data-label="Relative cost">{r.cost}</td>
               </tr>
             ))}
           </tbody>
@@ -109,6 +113,28 @@ const comparison = [
     </div>
   </section>
 
+  <section class="spares" aria-labelledby="spares-h">
+    <div class="wrap spares__grid">
+      <div>
+        <p class="eyebrow">Replacement parts</p>
+        <h2 class="section-title" id="spares-h">CNC key sheets and overlays</h2>
+        <p class="lede">
+          {cncParts.length} replacement key sheets, soft keys and panel overlays for FANUC, Doosan and Hwacheon
+          machine controls, listed by part number with the price per piece.
+        </p>
+        <a class="btn btn--primary spares__btn" href="/cnc-key-sheets/">
+          Browse by part number
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 8h11m-4.5-4.5L13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <ul class="spares__shots" aria-hidden="true">
+        {sparesShown.map((p) => (
+          <li><Image src={cncPhotos(p.slug)[0]} alt="" widths={[200, 400]} sizes="(max-width: 800px) 42vw, 200px" loading="lazy" /></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <CtaBand />
 </Base>
 
@@ -130,6 +156,25 @@ const comparison = [
   .cmp__table tbody th { font-weight: 600; }
   .cmp__table tbody tr:last-child th, .cmp__table tbody tr:last-child td { border-bottom: 0; }
   .cmp__table td { color: var(--ink-soft); }
+
+  /* Phones: one card per construction, each figure under its own label,
+     instead of a table that showed two and a half columns and hid the rest. */
+  @media (max-width: 640px) {
+    .cmp__table { min-width: 0; }
+    .cmp__table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .cmp__table, .cmp__table tbody, .cmp__table tr, .cmp__table th, .cmp__table td { display: block; }
+    .cmp__table tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 18px; padding: 16px 18px; border-bottom: 1px solid var(--line-soft); }
+    .cmp__table tbody tr:last-child { border-bottom: 0; }
+    .cmp__table tbody th { grid-column: 1 / -1; padding: 0; border: 0; font-family: var(--font-display); font-size: 20px; }
+    .cmp__table tbody th a { display: inline-flex; min-height: 24px; align-items: center; }
+    .cmp__table td { padding: 0; border: 0; font-size: 15px; }
+    .cmp__table td::before {
+      content: attr(data-label);
+      content: attr(data-label) / "";
+      display: block; margin-bottom: 3px;
+      font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    }
+  }
 
   .range { background: var(--surface); }
   .range__list { list-style: none; margin: 40px 0 0; padding: 0; display: grid; gap: clamp(40px, 6vw, 80px); }
@@ -155,7 +200,18 @@ const comparison = [
   .item__specs dt { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
   .item__specs dd { margin: 3px 0 0; font-size: 16px; font-weight: 600; }
 
+  .spares { background: var(--ground); }
+  .spares__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 60px); align-items: center; }
+  .spares__btn { margin-top: 26px; }
+  .spares__shots { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .spares__shots li {
+    position: relative; aspect-ratio: 1;
+    background: #FFFFFF; border: 1px solid var(--line); border-radius: var(--radius);
+  }
+  .spares__shots :global(img) { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: contain; }
+
   @media (max-width: 800px) {
+    .spares__grid { grid-template-columns: 1fr; }
     .item, .item--flip { grid-template-columns: 1fr; gap: 22px; }
     .item--flip .item__media { order: 0; }
   }

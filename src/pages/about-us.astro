@@ -17,7 +17,7 @@ const values = [
   },
   {
     title: 'One part number, one supplier',
-    body: 'Overlay, switch, rigid board and the harness behind it are all within our certified scope. Sourcing them together removes the interfaces where first-article problems usually appear.',
+    body: 'Overlay, switch and rigid board are made in the same building under one quality system. Sourcing them together removes the interfaces where first-article problems usually appear.',
   },
   {
     title: 'The specification is public',
@@ -46,8 +46,8 @@ const values = [
     <div class="wrap story__grid">
       <div class="story__prose">
         <p class="story__lead">
-          AFI Technologies manufactures membrane keypads, graphic overlays, PCB-backed switch
-          panels and wire harnesses for equipment builders. Our parts end up on ventilators and
+          AFI Technologies manufactures membrane keypads, graphic overlays and PCB-backed switch
+          panels for equipment builders. Our parts end up on ventilators and
           weighing terminals, on crane load indicators and laboratory analysers — the interface
           between a machine and the person operating it.
         </p>
@@ -73,7 +73,7 @@ const values = [
           <div><dt>Location</dt><dd>{site.address.locality}, {site.address.city}</dd></div>
           <div><dt>Quality system</dt><dd>{cert.standard}</dd></div>
           <div><dt>Certificate</dt><dd class="mono">{cert.number}</dd></div>
-          <div><dt>Certified scope</dt><dd>Membrane keypads, PCB-based keypads, graphic overlays, connectors and wire harnesses</dd></div>
+          <div><dt>Products</dt><dd>Membrane keypads, PCB-backed keypads, graphic overlays and CNC key sheets</dd></div>
         </dl>
         <a class="btn btn--ghost factbox__cta" href="/certificates/">See the certificate</a>
       </aside>
@@ -130,18 +130,18 @@ const values = [
   .story__lead { font-size: 19.5px; line-height: 1.6; }
   .story__prose p + p { margin-top: 18px; color: var(--ink-soft); max-width: 64ch; }
 
-  .factbox { background: var(--ink); color: #EECBA8; border-radius: var(--radius); padding: clamp(20px, 3vw, 30px); }
+  .factbox { background: var(--ink); color: #D1D1D1; border-radius: var(--radius); padding: clamp(20px, 3vw, 30px); }
   .factbox__title {
     font-family: var(--font-mono); font-size: 11px; font-weight: 500;
-    letter-spacing: .16em; text-transform: uppercase; color: #C98A5C; margin-bottom: 18px;
+    letter-spacing: .16em; text-transform: uppercase; color: #989898; margin-bottom: 18px;
   }
   .factbox dl { margin: 0; }
-  .factbox dl > div { padding: 12px 0; border-top: 1px solid #6B3115; }
+  .factbox dl > div { padding: 12px 0; border-top: 1px solid #2E2E2E; }
   .factbox dl > div:first-child { border-top: 0; padding-top: 0; }
-  .factbox dt { font-size: 13px; color: #C98A5C; }
+  .factbox dt { font-size: 13px; color: #989898; }
   .factbox dd { margin: 3px 0 0; color: #fff; font-size: 15.5px; line-height: 1.45; }
-  .factbox__cta { margin-top: 22px; color: #fff; border-color: rgba(255, 236, 214,.35); width: 100%; }
-  .factbox__cta:hover { border-color: #fff; background: rgba(255, 236, 214,.08); color: #fff; }
+  .factbox__cta { margin-top: 22px; color: #fff; border-color: rgba(255, 255, 255,.35); width: 100%; }
+  .factbox__cta:hover { border-color: #fff; background: rgba(255, 255, 255,.08); color: #fff; }
 
   .values__grid {
     list-style: none; margin: 36px 0 0; padding: 0;

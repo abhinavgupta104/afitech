@@ -46,7 +46,7 @@ const layers = isLabel
 const labelY = [176, 196, 214, 236];
 const fillFor = (k: string) =>
   k === 'ink' ? '#9A5207'
-  : k === 'film' ? '#FDF0DF'
+  : k === 'film' ? '#F7F7F6'
   : k === 'adh' ? `url(#adh-${kind})`
   : `url(#pnl-${kind})`;
 ---
@@ -60,18 +60,18 @@ const fillFor = (k: string) =>
   <svg class="wsec__svg" viewBox="0 0 380 262" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <defs>
       <pattern id={`adh-${kind}`} width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-        <rect width="6" height="6" fill="#FDE9D2" />
+        <rect width="6" height="6" fill="#F0F0EE" />
         <line x1="0" y1="0" x2="0" y2="6" stroke="#F08820" stroke-width="1.4" />
       </pattern>
       <pattern id={`pnl-${kind}`} width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
-        <rect width="8" height="8" fill="#F2D6B8" />
-        <line x1="0" y1="0" x2="0" y2="8" stroke="#B87246" stroke-width="1" />
+        <rect width="8" height="8" fill="#DEDEDC" />
+        <line x1="0" y1="0" x2="0" y2="8" stroke="#838383" stroke-width="1" />
       </pattern>
     </defs>
 
     <!-- ── plan view ── -->
     <text class="t-cap" x="20" y="16">PLAN</text>
-    <rect x="120" y="24" width="140" height="72" rx="8" fill="#5A270E" />
+    <rect x="120" y="24" width="140" height="72" rx="8" fill="#1F1F1F" />
     <text class:list={['legend', isLabel && 'legend--wears']} x="190" y="68" text-anchor="middle">START</text>
 
     <!-- section line A–A through the key -->
@@ -83,11 +83,11 @@ const fillFor = (k: string) =>
     <!-- ── section A–A ── -->
     <text class="t-cap" x="20" y="126">SECTION A–A</text>
     <text class="t-cap t-cap--dim" x="276" y="126" text-anchor="end">NOT TO SCALE</text>
-    <line x1="20" y1="134" x2="276" y2="134" stroke="#F2D6B8" stroke-width="1" />
+    <line x1="20" y1="134" x2="276" y2="134" stroke="#DEDEDC" stroke-width="1" />
 
     {layers.map((l) => (
       <rect x="20" y={l.y} width="256" height={l.h} fill={fillFor(l.key)}
-        stroke={l.key === 'film' ? '#C98A5C' : 'none'} stroke-width="1" />
+        stroke={l.key === 'film' ? '#989898' : 'none'} stroke-width="1" />
     ))}
 
     {isLabel ? (
@@ -106,22 +106,22 @@ const fillFor = (k: string) =>
       <g>
         {/* the film takes the wear; the ink below it is untouched */}
         {[[48, 22], [96, 14], [150, 26], [204, 16], [244, 20]].map(([x, w]) => (
-          <line class="scratch" x1={x} y1="174.5" x2={x + w} y2="173" stroke="#B87246" stroke-width="1.3" stroke-linecap="round" />
+          <line class="scratch" x1={x} y1="174.5" x2={x + w} y2="173" stroke="#838383" stroke-width="1.3" stroke-linecap="round" />
         ))}
       </g>
     )}
 
     <!-- abrasion pad -->
     <g class="pad">
-      <path d="M8 152h8M4 158h12M8 164h8" stroke="#C98A5C" stroke-width="1.4" stroke-linecap="round" />
-      <rect x="20" y="146" width="50" height="24" rx="5" fill="#EECBA8" stroke="#A35F33" stroke-width="1.2" />
-      <path d="M28 150l34 16M38 150l24 11M48 150l14 6" stroke="#B87246" stroke-width="1" />
+      <path d="M8 152h8M4 158h12M8 164h8" stroke="#989898" stroke-width="1.4" stroke-linecap="round" />
+      <rect x="20" y="146" width="50" height="24" rx="5" fill="#D1D1D1" stroke="#707070" stroke-width="1.2" />
+      <path d="M28 150l34 16M38 150l24 11M48 150l14 6" stroke="#838383" stroke-width="1" />
     </g>
 
     {/* leaders to the layer labels */}
     {layers.map((l, i) => (
       <g>
-        <path d={`M276 ${l.y + l.h / 2} L288 ${labelY[i] - 3} L292 ${labelY[i] - 3}`} stroke="#C98A5C" stroke-width="1" />
+        <path d={`M276 ${l.y + l.h / 2} L288 ${labelY[i] - 3} L292 ${labelY[i] - 3}`} stroke="#989898" stroke-width="1" />
         <text class:list={['t-lead', l.key === 'ink' && 't-lead--ink']} x="296" y={labelY[i]}>{l.label}</text>
       </g>
     ))}
@@ -172,17 +172,17 @@ const fillFor = (k: string) =>
   }
   .wsec__svg { width: 100%; height: auto; display: block; overflow: visible; }
 
-  .t-cap { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; fill: #A35F33; }
-  .t-cap--dim { fill: #C98A5C; }
+  .t-cap { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; fill: #707070; }
+  .t-cap--dim { fill: #989898; }
   .t-sec { font-family: var(--font-mono); font-size: 12px; font-weight: 600; fill: #9A5207; }
-  .t-lead { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em; fill: #874421; }
+  .t-lead { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em; fill: #5a5a5a; }
   .t-lead--ink { fill: #9A5207; font-weight: 600; }
   .legend {
     font-family: var(--font-display);
     font-size: 23px;
     font-weight: 700;
     letter-spacing: .1em;
-    fill: #FDF0DF;
+    fill: #F7F7F6;
   }
 
   /* At rest the drawing shows the outcome: the label's ink already gone. */
@@ -212,6 +212,14 @@ const fillFor = (k: string) =>
   .chip--before { opacity: 0; }
 
   .wsec__note { font-size: 15px; color: var(--ink-soft); line-height: 1.55; }
+
+  /* At phone width the 380-unit drawing renders ~310px wide, which took the
+     drawing labels down to 8px. Sized up in drawing units so they land ~10px. */
+  @media (max-width: 560px) {
+    .t-cap { font-size: 13px; }
+    .t-lead { font-size: 12.5px; }
+    .t-sec { font-size: 14px; }
+  }
 
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://afitechnologies.co.in/sitemap-index.xml

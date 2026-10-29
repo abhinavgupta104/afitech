@@ -1,0 +1,91 @@
+# AFI Technologies — Apache configuration
+#
+# Only needed if the site is served from the existing cPanel/Apache host.
+# On Cloudflare Pages or Netlify this file is ignored and the equivalent
+# headers are set in the platform config instead.
+#
+# Sets the caching and security headers the static build expects, and retires
+# the paths left over from the previous CMS.
+
+# ---------------------------------------------------------------------------
+# Compression
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml application/xml
+</IfModule>
+
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json
+  AddOutputFilterByType BROTLI_COMPRESS image/svg+xml application/xml
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Caching
+#
+# Astro fingerprints everything under /_astro/, so those are immutable for a
+# year. HTML must revalidate so a content change is seen immediately.
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|woff2|woff|ttf|otf)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(webp|avif|png|jpg|jpeg|gif|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  <FilesMatch "\.(html|xml|json|txt)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  # -------------------------------------------------------------------------
+  # Security headers
+  # -------------------------------------------------------------------------
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+
+  # The site loads fonts from Google and posts the form to an external
+  # endpoint. Widen connect-src/form-action if the form service changes.
+  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io mailto:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
+
+  Header unset X-Powered-By
+  Header unset Server
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Canonical host and protocol
+# ---------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Force HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+  # Strip www — the old site already did this; keep it
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+  # Retire the WordPress surface. These paths no longer exist; 410 tells search
+  # engines they are gone for good rather than temporarily missing.
+  RewriteRule ^(wp-admin|wp-includes|wp-content|wp-login\.php|xmlrpc\.php|readme\.html) - [G,L]
+
+  # The default WordPress post that was still published
+  RewriteRule ^hello-world/?$ / [R=301,L]
+
+  # Connectors and wire harnesses are no longer listed as a product
+  RewriteRule ^connectors-wire-harness/?$ /products/ [R=301,L]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Error document
+# ---------------------------------------------------------------------------
+ErrorDocument 404 /404.html
+
+Options -Indexes

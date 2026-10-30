@@ -55,6 +55,9 @@ const waText = encodeURIComponent(
   .cta__actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
   .cta__actions .btn--ghost { background: var(--surface); }
   .cta__wa { font-size: 15px; }
+  @media (pointer: coarse) {
+    .cta__wa { display: inline-flex; align-items: center; min-height: 44px; }
+  }
 
   @media (max-width: 820px) {
     .cta__grid { grid-template-columns: 1fr; gap: 24px; }

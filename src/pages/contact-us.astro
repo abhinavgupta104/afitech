@@ -127,6 +127,9 @@ const mapQuery = encodeURIComponent(
   }
   .method__value--sm { font-size: clamp(19px, 2.3vw, 24px); word-break: break-word; }
   .method__value:hover { color: var(--accent-ink); text-decoration: underline; }
+  @media (pointer: coarse) {
+    .method__value { display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px; }
+  }
   .method__note { margin-top: 6px; font-size: 15px; color: var(--muted); }
   .method__cta { margin-top: 10px; }
 

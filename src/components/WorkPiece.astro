@@ -36,7 +36,8 @@ const KEYS = [
       <line x1="20" y1="186" x2="280" y2="186" />
       <path d="M20 182v8M280 182v8" />
     </g>
-    <text x="150" y="199" fill="#F08820" font-family="monospace" font-size="9" text-anchor="middle">260.0 ±0.15</text>
+    <!-- left of the tail, which covers x 130..170 once stage 7 lands -->
+    <text x="75" y="199" fill="#F08820" font-family="monospace" font-size="9" text-anchor="middle">260.0 ±0.15</text>
   </g>
 
   <!-- 2 · artwork: the printed face and its registration marks -->
@@ -104,7 +105,7 @@ const KEYS = [
      inside this component is fine. */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-      @media (min-width: 860px) {
+      @media (min-width: 860px) and (min-height: 600px) {
         .wp {
           animation: wp-in var(--ease-out) both;
           animation-timeline: --proc;

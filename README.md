@@ -3,9 +3,9 @@
 Rebuild of [afitechnologies.co.in](https://afitechnologies.co.in) — the website of a
 membrane keypad manufacturer in Kondhwa, Pune.
 
-Static site built with Astro. **No runtime JavaScript ships to the browser**; the
-homepage's scroll choreography is pure CSS scroll-driven animation, and the only
-script on the site is the mobile navigation toggle.
+Static site built with Astro. The homepage's scroll choreography is pure CSS
+scroll-driven animation; the only scripts on the site are the mobile navigation
+toggle and the quote form's validation.
 
 ## Running it
 
@@ -30,10 +30,10 @@ src/
   layouts/Base.astro
   pages/           one file per route
 public/
-  .htaccess        cache + security headers, for the existing Apache host only
+  .htaccess        cache + security headers, applied by Hostinger; Vercel ignores it
 ```
 
-Two rules worth keeping:
+Three rules worth keeping:
 
 1. **Facts are imported, never retyped.** The old site said "over 12 years" in
    seven places and "over 15 years" in five. Anything a visitor reads about the
@@ -41,6 +41,10 @@ Two rules worth keeping:
 2. **URLs are frozen.** Product slugs match the old WordPress paths exactly, so
    no inbound link or search ranking breaks in the migration. `trailingSlash` is
    set to `always` for the same reason.
+3. **Test scripts under the real security headers.** `.htaccess` sends
+   `script-src 'self'`, which blocks inline scripts, and `npm run preview` does
+   not send it. `astro.config.mjs` keeps every script in its own file for this
+   reason: inlined, the mobile menu stopped working on Hostinger and nowhere else.
 
 ## Accessibility and performance budget
 
@@ -51,12 +55,13 @@ Checked on every page at 1440px and 390px:
 | Contrast failures | 0 |
 | Tap targets under 24px | 0 |
 | Horizontal page scroll | none |
-| Runtime JavaScript | 0 files |
+| Runtime JavaScript | 2 small files |
 
 All scroll animation sits behind `@supports (animation-timeline: view())` **and**
 `prefers-reduced-motion: no-preference`. Without either, the page renders
 complete and static — the tall pinned sections collapse rather than becoming
-dead scroll space.
+dead scroll space. The pinned sections also need 600px of height, so a phone in
+landscape gets the same stacked layout as one held upright.
 
 ## Still needs the client to confirm
 

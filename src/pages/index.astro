@@ -854,7 +854,7 @@ const description =
   }
 
   /* ───────── responsive ───────── */
-  @media (max-width: 859px) {
+  @media (max-width: 859px), (max-height: 599px) {
     /* the closing line belongs to the stack above it, not to a new section */
     .stack { padding-bottom: 28px; }
   }
@@ -870,6 +870,11 @@ const description =
        was slicing the left-hand keypad in half */
     .open__media :global(img) { width: 100%; }
     .open__h1 { max-width: none; }
+  }
+  /* A phone held sideways is wide enough for the desktop type scale and far too
+     short for it: four lines of 78px filled the first screen on their own. */
+  @media (max-height: 599px) {
+    .open__h1 { font-size: clamp(42px, 13svh, 64px); }
   }
 
   /* ════════════════════════════════════════════════════════════
@@ -1001,8 +1006,10 @@ const description =
       }
       @keyframes cue-pulse { to { transform: scaleX(1.65); } }
 
-      /* ── the exploded stack (desktop only) ── */
-      @media (min-width: 860px) {
+      /* ── the exploded stack (desktop only) ──
+         Height matters as much as width here: a pinned stage is one screen tall,
+         so a phone in landscape keeps the stacked layout. */
+      @media (min-width: 860px) and (min-height: 600px) {
         .stack {
           height: 340svh;
           padding-block: 0;
@@ -1127,7 +1134,7 @@ const description =
 
       /* ── phones: no exploded stack, so the six layers arrive one at a time,
          each sliding in with its number as it reaches the reading line ── */
-      @media (max-width: 859px) {
+      @media (max-width: 859px), (max-height: 599px) {
         .lyr {
           animation: lyr-rise var(--ease-out) both;
           animation-timeline: view();
@@ -1167,7 +1174,7 @@ const description =
          A linear process read as a linear move. Desktop only: on a phone the
          default vertical timeline is the better read, and a horizontal track
          inside a pinned viewport is miserable on touch. */
-      @media (min-width: 860px) {
+      @media (min-width: 860px) and (min-height: 600px) {
         .proc {
           height: 420svh;
           padding-block: 0;

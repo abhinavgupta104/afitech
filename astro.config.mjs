@@ -11,4 +11,12 @@ export default defineConfig({
   integrations: [sitemap({ lastmod: new Date() })],
   image: { responsiveStyles: true },
   compressHTML: true,
+  vite: {
+    build: {
+      // public/.htaccess sends `script-src 'self'`, which blocks inline scripts,
+      // and Astro inlines small ones by default. Keep every script a file.
+      // Returning undefined leaves the stylesheet threshold at its default.
+      assetsInlineLimit: (file) => (file.endsWith('.js') ? false : undefined),
+    },
+  },
 });

@@ -263,4 +263,8 @@ const extraSchema = [
     .gal__more { order: 3; margin-top: 0; }
     .gal__note { order: 4; margin-top: -8px; }
   }
+  /* taller than a landscape phone, so pinning it would hide its lower half */
+  @media (max-height: 599px) {
+    .buy { position: static; }
+  }
 </style>

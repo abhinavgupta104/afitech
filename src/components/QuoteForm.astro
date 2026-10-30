@@ -227,6 +227,10 @@ const action = FORM_ENDPOINT || `mailto:${site.email}`;
     .qf { grid-template-columns: 1fr; }
     .qf__aside { position: static; }
   }
+  /* taller than a landscape phone, so pinning it would hide its lower half */
+  @media (max-height: 599px) {
+    .qf__aside { position: static; }
+  }
   @media (max-width: 560px) {
     .qf__grid { grid-template-columns: 1fr; }
   }

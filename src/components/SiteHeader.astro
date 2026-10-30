@@ -241,6 +241,7 @@ const isCurrent = (href: string) =>
   @media (max-width: 940px) {
     .hdr__toggle { display: inline-flex; }
     .hdr__nav {
+      display: none;
       flex-basis: 100%;
       flex-direction: column;
       align-items: stretch;
@@ -254,7 +255,10 @@ const isCurrent = (href: string) =>
       padding-inline: 6px;
       margin-inline: -6px;
     }
-    .hdr__nav[hidden] { display: none; }
+    /* Closed is the default here, not something the script has to do, so the
+       page never paints with the menu open and a failed script cannot leave it
+       covering the screen. */
+    .hdr__toggle[aria-expanded='true'] ~ .hdr__nav { display: flex; }
     .hdr__list { flex-direction: column; align-items: stretch; gap: 0; }
     .hdr__item > a {
       display: flex;
@@ -288,6 +292,14 @@ const isCurrent = (href: string) =>
     .hdr__cta { width: 100%; }
   }
 
+  /* With scripting off the toggle cannot work, so the links stay in the page
+     and the bar must not stick over them. */
+  @media (max-width: 940px) and (scripting: none) {
+    .hdr { position: static; }
+    .hdr__toggle { display: none; }
+    .hdr__nav { display: flex; }
+  }
+
   /* the accent hairline fades in once the page scrolls under the bar */
   @supports (animation-timeline: scroll()) {
     @media (prefers-reduced-motion: no-preference) {
@@ -302,29 +314,12 @@ const isCurrent = (href: string) =>
 </style>
 
 <script>
+  // Only flips the state. What that means for the layout is in the CSS above,
+  // so the desktop nav never depends on JavaScript having run.
   const toggle = document.getElementById('nav-toggle');
-  const panel = document.getElementById('primary-nav');
 
-  if (toggle && panel) {
-    const mq = window.matchMedia('(max-width: 940px)');
-
-    // Only hide the nav where the toggle is actually shown, so the desktop
-    // layout never depends on JavaScript having run.
-    const sync = () => {
-      if (mq.matches) {
-        panel.hidden = toggle.getAttribute('aria-expanded') !== 'true';
-      } else {
-        panel.hidden = false;
-      }
-    };
-
-    toggle.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!open));
-      sync();
-    });
-
-    mq.addEventListener('change', sync);
-    sync();
-  }
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+  });
 </script>

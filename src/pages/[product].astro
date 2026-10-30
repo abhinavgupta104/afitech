@@ -276,6 +276,10 @@ const extraSchema = [
     .body__side { position: static; }
     .intro__fig { order: -1; }
   }
+  /* taller than a landscape phone, so pinning it would hide its lower half */
+  @media (max-height: 599px) {
+    .body__side { position: static; }
+  }
   @media (max-width: 460px) {
     .rel__card { grid-template-columns: 1fr; }
     .rel__card img { max-width: 140px; }

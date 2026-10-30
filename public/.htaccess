@@ -52,6 +52,8 @@
 
   # The site loads fonts from Google and posts the form to an external
   # endpoint. Widen connect-src/form-action if the form service changes.
+  # script-src 'self' blocks inline scripts, which is why astro.config.mjs
+  # keeps every script in its own file.
   Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io mailto:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
 
   Header unset X-Powered-By

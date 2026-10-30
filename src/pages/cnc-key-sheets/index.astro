@@ -179,8 +179,10 @@ const extraSchema = [
     .index__table { min-width: 0; }
     .index__table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
     .index__table, .index__table tbody, .index__table tr, .index__table th, .index__table td { display: block; }
-    .index__table tbody tr { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; padding: 11px 14px; border-bottom: 1px solid var(--line-soft); }
+    .index__table tbody tr { position: relative; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; padding: 11px 14px; border-bottom: 1px solid var(--line-soft); }
     .index__table tbody tr:last-child { border-bottom: 0; }
+    /* the whole row is the target, not the 25px line of text inside it */
+    .index__table tbody th a::after { content: ''; position: absolute; inset: 0; }
     .index__table tbody th { flex-basis: 100%; }
     .index__table th, .index__table td { padding: 0; border: 0; }
     .index__table .num { text-align: left; }
